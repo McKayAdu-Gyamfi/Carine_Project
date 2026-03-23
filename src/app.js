@@ -11,6 +11,7 @@ import paymentsRouter from "./modules/payments/payments.routes.js";
 import complaintsRouter from "./modules/complaints/complaints.routes.js";
 import reviewsRouter from "./modules/reviews/reviews.routes.js";
 import usersRouter from "./modules/users/users.routes.js";
+import authRouter from "./modules/auth/auth.routes.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
@@ -22,6 +23,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Custom Auth Routes (Before Catch-All)
+app.use("/api/auth", authRouter);
 
 // Better Auth Route Handler
 app.all("/api/auth/*splat", toNodeHandler(auth));

@@ -1,4 +1,5 @@
 import { supabase } from "../../config/db.js";
+import * as amenitiesService from "../amenities/Amenities.service.js";
 
 // GET /api/hostels
 export const getHostels = async (req, res, next) => {
@@ -77,3 +78,44 @@ export const updateHostel = async (req, res, next) => {
     next(err);
   }
 };
+
+// HOSTEL AMENITIES
+
+// PUT /api/hostels/:id/amenities
+export const updateHostelAmenities = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { amenities } = req.body;
+    
+    const data = await amenitiesService.updateHostelAmenities(id, amenities);
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/hostels/:id/amenities
+export const addHostelAmenity = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    
+    const data = await amenitiesService.addHostelAmenity(id, name);
+    res.status(201).json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/hostels/:id/amenities/:amenityId
+export const removeHostelAmenity = async (req, res, next) => {
+  try {
+    const { amenityId } = req.params;
+    
+    await amenitiesService.removeHostelAmenity(amenityId);
+    res.json({ success: true, message: "Amenity removed" });
+  } catch (err) {
+    next(err);
+  }
+};
+

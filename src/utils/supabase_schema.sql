@@ -1,33 +1,79 @@
 -- Enums
 CREATE TYPE user_type AS ENUM ('STUDENT', 'HOSTEL_MANAGER', 'ADMIN');
-CREATE TYPE auth_provider AS ENUM ('LOCAL', 'MICROSOFT');
 CREATE TYPE room_type AS ENUM ('SINGLE', 'DOUBLE', 'SUITE');
 CREATE TYPE booking_status AS ENUM ('PENDING', 'CONFIRMED', 'CANCELLED', 'CHECKED_OUT');
 CREATE TYPE payment_status AS ENUM ('PENDING', 'PAID', 'FAILED');
 CREATE TYPE complaint_status AS ENUM ('OPEN', 'IN_PROGRESS', 'RESOLVED');
+CREATE TYPE amenity_name AS ENUM ('WIFI', 'AIR_CONDITIONING', 'RUNNING_WATER', 'KITCHEN_ACCESS', 'PARKING', 'GYM', 'LAUNDRY', 'STUDY_ROOM', 'RESERVED_1', 'RESERVED_2', 'RESERVED_3');
 
--- Extended User Table (Assuming Better Auth handles core 'user', we extend or rename it based on setup)
-CREATE TABLE IF NOT EXISTS "USERS" (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_type user_type NOT NULL DEFAULT 'STUDENT',
-    email VARCHAR UNIQUE NOT NULL,
-    password VARCHAR, -- Nullable if using OAuth
-    auth_provider auth_provider NOT NULL DEFAULT 'LOCAL',
-    provider_id VARCHAR, -- E.g., Azure AD ID
-    profile_complete BOOLEAN DEFAULT FALSE,
-    student_id VARCHAR, -- University issued ID
-    course VARCHAR,
-    current_room_id UUID, -- Nullable until assigned
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+-- ==========================================
+-- BETTER AUTH CORE TABLES & CUSTOM FIELDS
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS "user" (
+    "id" TEXT PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL UNIQUE,
+    "emailVerified" BOOLEAN NOT NULL,
+    "image" TEXT,
+    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    
+    -- Custom Fields explicitly tracked
+    "user_type" user_type NOT NULL DEFAULT 'STUDENT',
+    "profile_complete" BOOLEAN DEFAULT FALSE,
+    "student_id" TEXT,
+    "course" TEXT,
+    "current_room_id" UUID -- Foreign key to ROOM (Added after ROOM table is created)
 );
+
+CREATE TABLE IF NOT EXISTS "session" (
+    "id" TEXT PRIMARY KEY,
+    "expiresAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    "token" TEXT NOT NULL UNIQUE,
+    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    "ipAddress" TEXT,
+    "userAgent" TEXT,
+    "userId" TEXT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "account" (
+    "id" TEXT PRIMARY KEY,
+    "accountId" TEXT NOT NULL,
+    "providerId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "accessToken" TEXT,
+    "refreshToken" TEXT,
+    "idToken" TEXT,
+    "accessTokenExpiresAt" TIMESTAMP WITH TIME ZONE,
+    "refreshTokenExpiresAt" TIMESTAMP WITH TIME ZONE,
+    "scope" TEXT,
+    "password" TEXT,
+    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "verification" (
+    "id" TEXT PRIMARY KEY,
+    "identifier" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+    "createdAt" TIMESTAMP WITH TIME ZONE,
+    "updatedAt" TIMESTAMP WITH TIME ZONE
+);
+
+-- ==========================================
+-- BUSINESS TABLES
+-- ==========================================
+
 -- Hostel Table (Managed by a HOSTEL_MANAGER or ADMIN)
 CREATE TABLE IF NOT EXISTS "HOSTEL" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     hostel_name VARCHAR NOT NULL,
     location VARCHAR NOT NULL,
     total_rooms INT NOT NULL DEFAULT 0,
-    manager_id UUID REFERENCES "USERS"(id) ON DELETE SET NULL,
+    manager_id TEXT REFERENCES "user"("id") ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,11 +85,12 @@ CREATE TABLE IF NOT EXISTS "HOSTEL_IMAGE_URLS" (
     image_url VARCHAR NOT NULL
 );
 
--- Amenity Table (Lookup for general amenities)
-CREATE TABLE IF NOT EXISTS "AMENITY" (
+-- Hostel Amenity Table
+CREATE TABLE IF NOT EXISTS "HOSTEL_AMENITY" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR NOT NULL,
-    hostel_id UUID REFERENCES "HOSTEL"(id) ON DELETE CASCADE
+    hostel_id UUID REFERENCES "HOSTEL"(id) ON DELETE CASCADE,
+    name amenity_name NOT NULL,
+    UNIQUE(hostel_id, name)
 );
 
 -- Bank Account Table for Hostels
@@ -51,7 +98,7 @@ CREATE TABLE IF NOT EXISTS "BANK_ACCOUNT" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     account_number VARCHAR NOT NULL,
     bank_name VARCHAR NOT NULL,
-    manager_id UUID REFERENCES "USERS"(id) ON DELETE CASCADE,
+    manager_id TEXT REFERENCES "user"("id") ON DELETE CASCADE,
     hostel_id UUID REFERENCES "HOSTEL"(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -76,7 +123,7 @@ CREATE TABLE IF NOT EXISTS "ROOM" (
 );
 
 -- Add ForeignKey for User's current room now that ROOM exists
-ALTER TABLE "USERS" ADD CONSTRAINT fk_current_room FOREIGN KEY (current_room_id) REFERENCES "ROOM"(id) ON DELETE SET NULL;
+ALTER TABLE "user" ADD CONSTRAINT fk_current_room FOREIGN KEY (current_room_id) REFERENCES "ROOM"(id) ON DELETE SET NULL;
 
 -- Room Images Table
 CREATE TABLE IF NOT EXISTS "ROOM_IMAGE_URLS" (
@@ -85,11 +132,12 @@ CREATE TABLE IF NOT EXISTS "ROOM_IMAGE_URLS" (
     image_url VARCHAR NOT NULL
 );
 
--- Room Amenities Mapping Table
+-- Room Amenity Table
 CREATE TABLE IF NOT EXISTS "ROOM_AMENITY" (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     room_id UUID REFERENCES "ROOM"(id) ON DELETE CASCADE,
-    amenity_id UUID REFERENCES "AMENITY"(id) ON DELETE CASCADE,
-    PRIMARY KEY (room_id, amenity_id)
+    name amenity_name NOT NULL,
+    UNIQUE(room_id, name)
 );
 
 -- Review Table
@@ -97,7 +145,7 @@ CREATE TABLE IF NOT EXISTS "REVIEW" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     rating INT CHECK(rating >= 1 AND rating <= 5),
     comment TEXT,
-    student_id UUID REFERENCES "USERS"(id) ON DELETE SET NULL,
+    student_id TEXT REFERENCES "user"("id") ON DELETE SET NULL,
     hostel_id UUID REFERENCES "HOSTEL"(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -109,8 +157,7 @@ CREATE TABLE IF NOT EXISTS "BOOKING" (
     check_in_date TIMESTAMP WITH TIME ZONE NOT NULL,
     check_out_date TIMESTAMP WITH TIME ZONE NOT NULL,
     status booking_status NOT NULL DEFAULT 'PENDING',
-    total_amount DECIMAL(10,2) NOT NULL,
-    student_id UUID REFERENCES "USERS"(id) ON DELETE CASCADE,
+    student_id TEXT REFERENCES "user"("id") ON DELETE CASCADE,
     room_id UUID REFERENCES "ROOM"(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -132,8 +179,8 @@ CREATE TABLE IF NOT EXISTS "COMPLAINT" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content TEXT NOT NULL,
     status complaint_status NOT NULL DEFAULT 'OPEN',
-    student_id UUID REFERENCES "USERS"(id) ON DELETE CASCADE,
-    hostel_manager_id UUID REFERENCES "USERS"(id) ON DELETE SET NULL,
+    student_id TEXT REFERENCES "user"("id") ON DELETE CASCADE,
+    hostel_manager_id TEXT REFERENCES "user"("id") ON DELETE SET NULL,
     hostel_id UUID REFERENCES "HOSTEL"(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
