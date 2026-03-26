@@ -33,7 +33,6 @@ export const getBookingById = async (req, res, next) => {
       .from("BOOKING")
       .select(`
         *,
-        PAYMENT (*),
         ROOM (room_number, hostel_id, HOSTEL (hostel_name)),
         USERS:student_id (email, profile_complete)
       `)
