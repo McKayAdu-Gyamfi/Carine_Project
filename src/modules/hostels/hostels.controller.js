@@ -39,6 +39,9 @@ export const getHostelById = async (req, res, next) => {
   }
 };
 
+
+//  I will have to add more field to this create hostel like description and manager info
+
 // POST /api/hostels
 export const createHostel = async (req, res, next) => {
   try {

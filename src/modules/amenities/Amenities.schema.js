@@ -8,7 +8,10 @@ export const ValidAmenities = [
   "PARKING",
   "GYM",
   "LAUNDRY",
-  "STUDY_ROOM"
+  "STUDY_ROOM",
+  "TV",
+  "FRIDGE",
+  "MICROWAVE",
 ];
 
 export const updateAmenitiesSchema = z.object({

@@ -3,7 +3,7 @@ import { z } from "zod";
 export const createRoomSchema = z.object({
   body: z.object({
     room_number: z.string().min(1, "Room number is required"),
-    room_type: z.enum(["SINGLE", "DOUBLE", "SUITE"]),
+    room_type: z.enum(["SINGLE", "DOUBLE", "TRIPLE", "QUAD"]),
     price_per_bed: z.number().positive(),
     capacity: z.number().int().positive(),
     hostel_id: z.string().min(1, "Hostel ID is required"),
