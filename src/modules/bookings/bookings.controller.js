@@ -11,7 +11,11 @@ export const getBookings = async (req, res, next) => {
       USERS:student_id (email, profile_complete)
     `);
     
-    if (student_id) {
+    if (req.user.user_type === "STUDENT") {
+      // Students can only see their own bookings
+      query = query.eq("student_id", req.user.id);
+    } else if (student_id) {
+      // Managers/Admins can filter by student_id
       query = query.eq("student_id", student_id);
     }
 
