@@ -45,12 +45,12 @@ export const getHostelById = async (req, res, next) => {
 // POST /api/hostels
 export const createHostel = async (req, res, next) => {
   try {
-    const { hostel_name, location, total_rooms, manager_id } = req.body;
+    const { hostel_name, location, description, total_rooms, available_rooms, manager_id } = req.body;
     
     const { data, error } = await supabase
       .from("HOSTEL")
       .insert([
-        { hostel_name, location, total_rooms, manager_id, created_at: new Date(), updated_at: new Date() }
+        { hostel_name, location, description, total_rooms, available_rooms: available_rooms ?? 0, manager_id, created_at: new Date(), updated_at: new Date() }
       ])
       .select()
       .single();

@@ -62,16 +62,14 @@
 // src/config/betterauth.config.js
 import { betterAuth } from "better-auth";
 import { supabase }   from "../config/db.js";
+import pg from "pg";
 
 export const auth = betterAuth({
 
   // ── Tell BetterAuth to use your Supabase DB ──────────────
-  database: {
-    dialect: "postgresql",
-    // BetterAuth connects directly to Postgres — NOT via Supabase JS client
-    // Use the DIRECT connection string (port 5432), not the pooler
-    url: process.env.DATABASE_URL,
-  },
+  database: new pg.Pool({
+    connectionString: process.env.DATABASE_URL
+  }),
 
   // ── Email/Password — for managers and admins ─────────────
   emailAndPassword: {

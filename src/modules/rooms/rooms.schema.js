@@ -20,7 +20,7 @@ export const updateRoomSchema = z.object({
   }),
   body: z.object({
     room_number: z.string().optional(),
-    room_type: z.enum(["SINGLE", "DOUBLE", "SUITE"]).optional(),
+    room_type: z.enum(["SINGLE", "DOUBLE", "TRIPLE", "QUAD"]).optional(),
     price_per_bed: z.number().positive().optional(),
     capacity: z.number().int().positive().optional(),
     current_occupancy: z.number().int().min(0).optional(),

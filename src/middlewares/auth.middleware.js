@@ -1,5 +1,4 @@
 import { auth } from "../lib/auth.js";
-import { AppError } from "./errorHandler.js"; // Optional usage
 
 export const requireAuth = async (req, res, next) => {
   try {
