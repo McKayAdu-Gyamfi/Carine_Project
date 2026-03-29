@@ -4,14 +4,17 @@ import { supabase } from "../../config/db.js";
 // POST /api/auth/register
 export const registerManager = async (req, res, next) => {
   try {
-    const { email, password, user_type, name } = req.body;
+    const { email, password, user_type, name, bank_account_details } = req.body;
     
-    // 1. Call BetterAuth to create auth user
+    // 1. Call BetterAuth to create auth user & insert fields natively
     const response = await auth.api.signUpEmail({
       body: {
         email,
         password,
-        name: name || email.split("@")[0]
+        name: name || email.split("@")[0],
+        user_type, // "HOSTEL_MANAGER"
+        bank_account_details,
+        profile_complete: true
       }
     });
 
@@ -21,24 +24,7 @@ export const registerManager = async (req, res, next) => {
 
     const { user } = response;
 
-    // 2. Immediately update the new user in Supabase to specify type
-    // Since BetterAuth created the user row, we just mark them as HOSTEL_MANAGER
-    const { data: updatedUser, error } = await supabase
-      .from("user") // Ensure this matches actual table name, it might be 'USERS' based on controllers
-      .update({
-        user_type, // "HOSTEL_MANAGER"
-        profile_complete: true
-      })
-      .eq("id", user.id)
-      .select()
-      .single();
-
-    if (error) {
-      // Depending on the app, you may want to delete the user or log the error
-      throw error;
-    }
-
-    res.status(201).json({ success: true, data: updatedUser });
+    res.status(201).json({ success: true, data: user });
   } catch (err) {
     next(err);
   }

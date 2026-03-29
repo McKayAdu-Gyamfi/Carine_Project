@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS "user" (
     "profile_complete" BOOLEAN DEFAULT FALSE,
     "student_id" TEXT,
     "course" TEXT,
+    "bank_account_details" TEXT,
     "current_room_id" UUID -- Foreign key to ROOM (Added after ROOM table is created)
 );
 

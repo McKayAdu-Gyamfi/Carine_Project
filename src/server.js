@@ -1,11 +1,20 @@
 import "dotenv/config";
 import app from "./app.js";
 import { supabase } from "./config/db.js";
+import { dbPool } from "./lib/auth.js";
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
   console.log(`\n🚀 Server is running on http://localhost:${PORT}`);
+
+  try {
+    // Check Better Auth / Postgres Connection
+    await dbPool.query('SELECT 1');
+    console.log("✅ Better Auth Database (Postgres) is connected and operational.");
+  } catch (error) {
+    console.error("❌ Better Auth Database connection failed:", error.message);
+  }
 
   try {
     // Check Supabase Connection (using a simple auth api call or selecting a single row from a known table)
