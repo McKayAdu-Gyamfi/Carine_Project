@@ -76,36 +76,28 @@ export const auth = betterAuth({
     enabled: true,
   },
 
-  // ── Google OAuth — for students ──────────────────────────
+  // ── Microsoft OAuth — for students ───────────────────────
   socialProviders: {
-    google: {
-      clientId:     process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    },
-    /*
     microsoft: {
       clientId:     process.env.MICROSOFT_CLIENT_ID,
       clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
       tenantId:     process.env.MICROSOFT_TENANT_ID,
     },
-    */
   },
 
-  // ── Extract student data after first Google login ────────
+  // ── Extract student data after first Microsoft login ─────
   callbacks: {
     async onSignUp({ user, account, profile }) {
-      if (account.providerId === "google") {
+      if (account.providerId === "microsoft") {
 
         // Validate school email domain
-        // if (!user.email.endsWith(process.env.ALLOWED_EMAIL_DOMAIN)) {
-        //   throw new Error("Please use your school Google account");
-        // }
+        if (!user.email.endsWith(process.env.ALLOWED_EMAIL_DOMAIN)) {
+          throw new Error("Please use your school Microsoft account");
+        }
 
-        // Google OAuth doesn't natively expose employeeId/department without extra Directory API scopes.
-        // We set these to null so the specific fields are marked as incomplete, 
-        // requiring the student to manually complete their profile using the dedicated patch endpoint later.
-        const student_id = null;
-        const course     = null;
+        // Extract student fields from Azure AD profile
+        const student_id = profile.employeeId || null;
+        const course     = profile.department  || null;
 
         // Update the user row with your custom fields
         // using your Supabase JS client
