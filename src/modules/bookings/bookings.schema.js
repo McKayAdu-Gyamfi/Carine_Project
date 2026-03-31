@@ -4,8 +4,6 @@ export const createBookingSchema = z.object({
   body: z.object({
     check_in_date: z.string().datetime(),
     check_out_date: z.string().datetime(),
-    total_amount: z.number().positive(),
-    student_id: z.string().min(1, "Student ID is required"),
     room_id: z.string().min(1, "Room ID is required")
   })
 });

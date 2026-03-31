@@ -1,4 +1,5 @@
 import { auth } from "../lib/auth.js";
+import { supabase } from "../config/db.js";
 
 export const requireAuth = async (req, res, next) => {
   try {
@@ -22,11 +23,37 @@ export const requireRole = (role) => {
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
-    // Admin can also access routes that require specific roles if preferred,
-    // but strict matching per requirements:
-    if (req.user.user_type !== role && req.user.user_type !== "ADMIN") {
+    
+    // Strict matching per requirements:
+    if (req.user.user_type !== role) {
       return res.status(403).json({ success: false, message: "Forbidden: insufficient permissions" });
     }
     next();
   };
+};
+
+export const requireCompleteProfile = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const { data: user, error } = await supabase
+      .from("user")
+      .select("profile_complete")
+      .eq("id", req.user.id)
+      .single();
+
+    if (error || !user) {
+      return res.status(401).json({ success: false, message: "User not found" });
+    }
+
+    if (!user.profile_complete && req.user.user_type === "STUDENT") {
+      return res.status(403).json({ success: false, message: "Please complete your profile before making a booking." });
+    }
+
+    next();
+  } catch (err) {
+    next(err);
+  }
 };

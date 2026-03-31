@@ -24,7 +24,7 @@ export const updateMe = async (userId, updates, userType) => {
   if (userType === "HOSTEL_MANAGER") {
     // Managers can't change their type or see student fields
     const { user_type, student_id, course, profile_complete, ...safeUpdates } = updates;
-    
+
     // safeUpdates.updated_at = new Date(); // If using updated_at auto-updates
 
     const { data, error } = await supabase
@@ -33,30 +33,30 @@ export const updateMe = async (userId, updates, userType) => {
       .eq("id", userId)
       .select()
       .single();
-      
+
     if (error) throw new UserServiceError(error.message, 400);
     return data;
   }
-  
+
   if (userType === "STUDENT") {
     const current = await supabase
       .from("user")
       .select("student_id, course")
       .eq("id", userId)
       .single();
-      
+
     if (current.error) throw new UserServiceError(current.error.message, 400);
-      
+
     const merged = { ...current.data, ...updates };
     const profileComplete = !!(merged.student_id && merged.course);
-    
+
     const { data, error } = await supabase
       .from("user")
       .update({ ...updates, profile_complete: profileComplete })
       .eq("id", userId)
       .select()
       .single();
-      
+
     if (error) throw new UserServiceError(error.message, 400);
     return data;
   }
@@ -69,7 +69,7 @@ export const updateMe = async (userId, updates, userType) => {
     .eq("id", userId)
     .select()
     .single();
-    
+
   if (error) throw new UserServiceError(error.message, 400);
   return data;
 };
@@ -139,7 +139,7 @@ import { auth } from "../../lib/auth.js"; // Needs auth to create user
 
 export const createAdmin = async (adminDetails) => {
   const { email, password, name } = adminDetails;
-  
+
   // Create user via BetterAuth
   const response = await auth.api.signUpEmail({
     body: {

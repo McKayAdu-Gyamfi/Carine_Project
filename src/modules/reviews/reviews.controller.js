@@ -4,9 +4,9 @@ import { supabase } from "../../config/db.js";
 export const getReviews = async (req, res, next) => {
   try {
     const { hostel_id } = req.query;
-    
+
     let query = supabase.from("REVIEW").select("*, USERS:student_id (email)");
-    
+
     if (hostel_id) query = query.eq("hostel_id", hostel_id);
 
     const { data, error } = await query;
@@ -26,7 +26,7 @@ export const createReview = async (req, res, next) => {
       created_at: new Date(),
       updated_at: new Date()
     };
-    
+
     const { data, error } = await supabase
       .from("REVIEW")
       .insert([payload])

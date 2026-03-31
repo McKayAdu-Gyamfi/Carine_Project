@@ -88,7 +88,7 @@ export const auth = betterAuth({
   // ── Extract student data after first Microsoft login ─────
   callbacks: {
     async onSignUp({ user, account, profile }) {
-      if (account.providerId === "microsoft") {
+      if (account && account.providerId === "microsoft") {
 
         // Validate school email domain
         if (!user.email.endsWith(process.env.ALLOWED_EMAIL_DOMAIN)) {
@@ -96,8 +96,8 @@ export const auth = betterAuth({
         }
 
         // Extract student fields from Azure AD profile
-        const student_id = profile.employeeId || null;
-        const course     = profile.department  || null;
+        const student_id = profile?.employeeId || null;
+        const course     = profile?.department  || null;
 
         // Update the user row with your custom fields
         // using your Supabase JS client
@@ -110,6 +110,12 @@ export const auth = betterAuth({
             profile_complete: !!(student_id && course),
           })
           .eq("id", user.id);
+      } else {
+        // Block email/password signups that use the student domain
+        const allowedDomain = process.env.ALLOWED_EMAIL_DOMAIN || "@ashesi.edu.gh";
+        if (user.email.endsWith(allowedDomain)) {
+          throw new Error("Students must sign in with Microsoft");
+        }
       }
     },
   },
