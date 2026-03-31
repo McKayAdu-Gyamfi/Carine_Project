@@ -54,7 +54,7 @@ export const getBookingById = async (req, res, next) => {
 // POST /api/bookings
 export const createBooking = async (req, res, next) => {
   try {
-    const { check_in_date, check_out_date, room_id } = req.body;
+    const { check_in_date, check_out_date, room_id, student_id } = req.body;
 
     // Check room availability
     const { data: room, error: roomError } = await supabase
@@ -71,14 +71,15 @@ export const createBooking = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Room is fully occupied and not available for booking" });
     }
 
-    // Force student_id to be the authenticated user's ID
-    const student_id = req.user.id;
+    // Force student_id to be the authenticated user's ID if role is STUDENT
+    // Otherwise allow Manager/Admin to specify student_id
+    const final_student_id = req.user.user_type === "STUDENT" ? req.user.id : student_id;
 
     const payload = {
       check_in_date,
       check_out_date,
       room_id,
-      student_id,
+      student_id: final_student_id,
       status: "PENDING",
       created_at: new Date(),
       updated_at: new Date()
