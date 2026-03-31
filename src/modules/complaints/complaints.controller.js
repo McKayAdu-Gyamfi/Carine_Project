@@ -4,13 +4,13 @@ import { supabase } from "../../config/db.js";
 export const getComplaints = async (req, res, next) => {
   try {
     const { hostel_id, student_id } = req.query;
-    
+
     let query = supabase.from("COMPLAINT").select(`
       *,
       USERS:student_id (email, profile_complete),
       HOSTEL (hostel_name)
     `);
-    
+
     if (hostel_id) query = query.eq("hostel_id", hostel_id);
     if (student_id) query = query.eq("student_id", student_id);
 
@@ -27,7 +27,7 @@ export const getComplaints = async (req, res, next) => {
 export const getComplaintById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    
+
     const { data, error } = await supabase
       .from("COMPLAINT")
       .select("*, USERS:student_id (email, profile_complete)")
@@ -51,7 +51,7 @@ export const createComplaint = async (req, res, next) => {
       created_at: new Date(),
       updated_at: new Date()
     };
-    
+
     const { data, error } = await supabase
       .from("COMPLAINT")
       .insert([payload])
@@ -70,7 +70,7 @@ export const updateComplaintStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     const { data, error } = await supabase
       .from("COMPLAINT")
       .update({ status, updated_at: new Date() })

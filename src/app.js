@@ -20,14 +20,14 @@ app.use(cors({
   origin: "http://localhost:3000",
   credentials: true,
 }));
+// Better Auth Route Handler (must be before body parsers)
+app.all("/api/auth/*splat", toNodeHandler(auth));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Custom Auth Routes (Before Catch-All)
+// Custom Auth Routes
 app.use("/api/auth", authRouter);
-
-// Better Auth Route Handler
-app.all("/api/auth/*splat", toNodeHandler(auth));
 
 // Application Routes
 app.use("/api/hostels", hostelsRouter);

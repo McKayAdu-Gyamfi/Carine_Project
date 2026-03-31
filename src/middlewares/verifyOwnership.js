@@ -2,7 +2,7 @@ import { supabase } from "../config/db.js";
 
 export const verifyHostelOwnership = async (req, res, next) => {
   try {
-    const hostelId = req.params.id;
+    const hostelId = req.params.hostelId || req.params.id;
     const userId = req.user.id;
 
     const { data: hostel, error } = await supabase

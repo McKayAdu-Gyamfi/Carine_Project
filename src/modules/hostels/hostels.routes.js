@@ -12,7 +12,7 @@ router.get("/", controllers.getHostels);
 router.get("/:id", controllers.getHostelById);
 
 // Optionally, you might attach authentication middlewares here in the future
-router.post("/", requireAuth, requireRole("ADMIN"), validateRequest(createHostelSchema), controllers.createHostel);
+router.post("/", requireAuth, requireRole("HOSTEL_MANAGER"), validateRequest(createHostelSchema), controllers.createHostel);
 router.patch("/:id", requireAuth, verifyHostelOwnership, validateRequest(updateHostelSchema), controllers.updateHostel);
 
 // Amenities routes
