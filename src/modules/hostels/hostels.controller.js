@@ -27,7 +27,7 @@ export const getHostelById = async (req, res, next) => {
         *,
         ROOM (*),
         HOSTEL_IMAGE_URLS (*),
-        AMENITY (*)
+        HOSTEL_AMENITY (*)
       `)
       .eq("id", id)
       .single();
@@ -116,9 +116,9 @@ export const updateHostelAmenities = async (req, res, next) => {
 export const addHostelAmenity = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { amenities } = req.body;
 
-    const data = await amenitiesService.addHostelAmenity(id, name);
+    const data = await amenitiesService.addHostelAmenities(id, amenities);
     res.status(201).json({ success: true, data });
   } catch (err) {
     next(err);

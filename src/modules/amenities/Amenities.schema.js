@@ -22,6 +22,6 @@ export const updateAmenitiesSchema = z.object({
 
 export const addAmenitySchema = z.object({
   body: z.object({
-    name: z.enum(ValidAmenities)
+    amenities: z.array(z.enum(ValidAmenities)).min(1)
   })
 });

@@ -16,6 +16,7 @@ export const registerManager = async (req, res, next) => {
     });
 
     if (response.error) {
+      console.error("[Auth Controller - registerManager] BetterAuth Error:", response.error.message);
       return res.status(400).json({ success: false, message: response.error.message });
     }
 
@@ -35,11 +36,84 @@ export const registerManager = async (req, res, next) => {
 
     if (error) {
       // Depending on the app, you may want to delete the user or log the error
+      console.error("[Auth Controller - registerManager] Supabase Error:", error);
       throw error;
     }
 
+    console.log("[Auth Controller - registerManager] Success for user:", updatedUser?.id);
     res.status(201).json({ success: true, data: updatedUser });
   } catch (err) {
+    console.error("[Auth Controller - registerManager] Catch Error:", err);
+    next(err);
+  }
+};
+
+// POST /api/auth/sign-up/email
+export const signUp = async (req, res, next) => {
+  try {
+    const { email, password, name } = req.body;
+    const response = await auth.api.signUpEmail({
+      body: { email, password, name: name || email.split("@")[0] },
+      asResponse: true
+    });
+    
+    // Pass cookies & headers from Better Auth response back to Express
+    response.headers.forEach((value, key) => {
+      res.append(key, value);
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (response.status >= 400) console.error("[Auth] Sign Up error:", data);
+    else console.log("[Auth] Sign Up success for:", email);
+
+    res.status(response.status).json(data);
+  } catch (err) {
+    console.error("[Auth Controller - signUp] Error:", err);
+    next(err);
+  }
+};
+
+// POST /api/auth/sign-in/email
+export const signIn = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const response = await auth.api.signInEmail({
+      body: { email, password },
+      asResponse: true
+    });
+    
+    response.headers.forEach((value, key) => {
+      res.append(key, value);
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (response.status >= 400) console.error("[Auth] Sign In error:", data);
+    else console.log("[Auth] Sign In success for:", email);
+
+    res.status(response.status).json(data);
+  } catch (err) {
+    console.error("[Auth Controller - signIn] Error:", err);
+    next(err);
+  }
+};
+
+// POST /api/auth/sign-out
+export const signOut = async (req, res, next) => {
+  try {
+    const response = await auth.api.signOut({
+      headers: req.headers,
+      asResponse: true
+    });
+    
+    response.headers.forEach((value, key) => {
+      res.append(key, value);
+    });
+
+    const data = await response.json().catch(() => ({}));
+    console.log("[Auth] Sign Out complete");
+    res.status(response.status).json(data);
+  } catch (err) {
+    console.error("[Auth Controller - signOut] Error:", err);
     next(err);
   }
 };
