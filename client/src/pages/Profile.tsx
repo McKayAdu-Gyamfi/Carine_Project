@@ -1,11 +1,16 @@
 import { Grid3X3, ShieldCheck, ChevronRight, Moon, LogOut, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
+import tanko_hostel_1 from "../assets/Tanko_4.png";
+
 
 export default function Profile() {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === "dark";
-  const userAvatar = localStorage.getItem("userAvatar");
+  const userAvatar = localStorage.getItem("userAvatar") || "👤";
+  const userBio = localStorage.getItem("userBio") || "Jus a chill person merhnnnn...";
+  const storedPrefs = localStorage.getItem("userPrefs");
+  const userPrefs = storedPrefs ? JSON.parse(storedPrefs) : ["Air-Conditioned", "Wi-Fi Included", "Ensuite Bathroom"];
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground pb-24 font-sans select-none overflow-x-hidden">
@@ -15,50 +20,44 @@ export default function Profile() {
         
         {/* Menu Icon */}
         <div className="flex justify-end mb-8">
-          <Grid3X3 className="w-6 h-6 text-foreground/80 hover:text-primary transition-colors cursor-pointer" />
-        </div>
-        
-        {/* Avatar */}
-        <div className="w-9 h-9 rounded-full overflow-hidden border border-border shadow-sm flex items-center justify-center bg-accent">
-          {userAvatar ? (
-            <span className="text-[20px] leading-none">{userAvatar}</span>
-          ) : (
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Avatar" className="w-full h-full object-cover" />
-          )}
+          <Link to="/settings" className="block focus:outline-none">
+            <Grid3X3 className="w-6 h-6 text-foreground/80 hover:text-primary transition-colors cursor-pointer" />
+          </Link>
         </div>
         
         {/* Name & Edit */}
         <div className="flex justify-center mb-5">
-          <div className="relative w-[120px] h-[120px] rounded-full p-1 bg-gradient-to-br from-primary/60 to-primary/10 shadow-[0_15px_40px_rgba(59,130,246,0.3)] dark:shadow-[0_15px_40px_rgba(59,130,246,0.15)] flex items-center justify-center">
+          <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center">
             <div className="w-full h-full rounded-full border-[4px] border-background overflow-hidden bg-accent flex items-center justify-center">
-              {userAvatar ? (
-                 <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
-              ) : (
-                 <img 
-                   src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80" 
-                   alt="Sarah" 
-                   className="w-full h-full object-cover" 
-                 />
-              )}
+              <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
             </div>
           </div>
         </div>
         
         <div className="text-center mb-6">
           <h1 className="text-[28px] font-bold mb-1 tracking-tight">Sarah Adjei</h1>
-          <button className="text-primary font-medium text-[13px] hover:underline transition-all cursor-pointer">Edit Profile</button>
+          <Link to="/edit-profile" className="text-primary font-medium text-[13px] hover:underline transition-all cursor-pointer inline-block">Edit Profile</Link>
         </div>
         
         {/* Bio */}
-        <p className="text-center text-muted-foreground text-[13px] px-4 mb-8 leading-relaxed max-w-[300px] mx-auto">
-          Level 300 Computer Science student. Looking for a quiet, AC-equipped room near campus for the upcoming semester. Safe travels! ✨
+        <p className="text-center text-muted-foreground text-[13px] px-6 mb-4 leading-relaxed max-w-[320px] mx-auto">
+          {userBio}
         </p>
+
+        {/* Room Preferences Tags */}
+        <div className="flex flex-wrap items-center justify-center gap-2 max-w-[320px] mx-auto mb-8">
+          {userPrefs.map((pref: string) => (
+            <span key={pref} className="px-3 py-1.5 rounded-full border border-border/80 text-[11px] font-extrabold text-foreground/70 bg-transparent">
+              {pref}
+            </span>
+          ))}
+        </div>
         
         {/* 3-Column Stats */}
         <div className="flex justify-center items-center divide-x divide-border/60 text-center mb-4">
           <div className="px-5 w-auto">
             <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">University</p>
-            <p className="text-[13px] font-semibold text-foreground/90">UG, Legon</p>
+            <p className="text-[13px] font-semibold text-foreground/90">Ashesi University</p>
           </div>
           <div className="px-5 w-auto">
             <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">Status</p>
@@ -95,7 +94,7 @@ export default function Profile() {
         
         <div className="flex items-center justify-between mb-5 pt-8 px-1">
           <h3 className="text-[13px] font-extrabold text-foreground uppercase tracking-[0.08em]">Your Bookings</h3>
-          <button className="text-primary text-[13px] font-bold hover:underline cursor-pointer">Edit &gt;</button>
+          <Link to="/manage-bookings" className="text-primary text-[13px] font-bold hover:underline cursor-pointer">Edit &gt;</Link>
         </div>
         
         {/* Horizontal Booking Cards */}
@@ -105,7 +104,7 @@ export default function Profile() {
           <Link to="/hostel-details" className="block outline-none shrink-0 w-[240px]">
             <div className="bg-card rounded-[24px] overflow-hidden shadow-md border border-border/40 hover:shadow-xl transition-all group">
                <div className="h-[140px] relative overflow-hidden bg-muted">
-                 <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=600&h=300" className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Unity Hall" />
+                 <img src={tanko_hostel_1} className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Unity Hall" />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                  <div className="absolute bottom-3 left-3">
                    <span className="bg-background/95 backdrop-blur-md text-foreground px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">In-Progress</span>
@@ -113,7 +112,7 @@ export default function Profile() {
                </div>
                <div className="p-4 bg-card">
                   <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">Sem 1 2024</p>
-                  <h4 className="font-bold text-[15px] truncate">Unity Hall • Room 402B</h4>
+                  <h4 className="font-bold text-[15px] truncate">Tanko Hostel • Room 402B</h4>
                </div>
             </div>
           </Link>
@@ -139,13 +138,13 @@ export default function Profile() {
         <div className="mt-6 flex flex-col space-y-3 px-1">
           
           {/* Account Settings */}
-          <button className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[24px] shadow-sm border border-border/40 hover:bg-accent/50 transition-colors cursor-pointer">
+          <Link to="/settings" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[24px] shadow-sm border border-border/40 hover:bg-accent/50 transition-colors cursor-pointer block outline-none">
             <div className="flex items-center space-x-4">
               <Settings className="w-5 h-5 text-muted-foreground" />
               <span className="font-semibold text-[15px]">Account Settings</span>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </button>
+          </Link>
           
           {/* Dark Mode Toggle */}
           <div 

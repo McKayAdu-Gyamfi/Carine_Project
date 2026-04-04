@@ -1,4 +1,4 @@
-import { Home, Compass, Bookmark, MessageSquare, User } from "lucide-react";
+import { Home, Compass, Bookmark, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +10,6 @@ export default function BottomNav() {
     { name: "Home", path: "/", icon: Home },
     { name: "Explore", path: "/explore", icon: Compass },
     { name: "Saved", path: "/saved", icon: Bookmark },
-    { name: "Chats", path: "/chats", icon: MessageSquare },
     { name: "Profile", path: "/profile", icon: User },
   ];
 
