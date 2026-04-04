@@ -1,0 +1,237 @@
+# Postman API Testing Guide & Payload Templates
+
+This file contains the JSON payload templates and URLs you can copy/paste directly into **Postman** to rapidly test your backend APIs.
+
+---
+
+## Base URL Configuration
+Make sure you set your base URL in Postman (e.g., using a variable `{{base_url}}`):
+- Local: `http://localhost:3000`
+
+---
+
+## 1. 🔐 Authentication (`/api/auth/*`)
+
+> **Note**: BetterAuth handles Auth inherently. All requests must have `Content-Type: application/json`.
+
+### A. Sign Up (Student)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/auth/sign-up/email`
+- **Body** (Raw JSON):
+```json
+{
+  "email": "john.doe@ashesi.edu.gh",
+  "password": "SecurePassword123!",
+  "name": "John Doe"
+}
+```
+*(This automatically triggers the database hook, setting them to `STUDENT` and `profile_complete: false`)*
+
+### B. Sign Up (Manager)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/auth/sign-up/email`
+- **Body** (Raw JSON):
+```json
+{
+  "email": "manager@external.com",
+  "password": "ManagerPassword123!",
+  "name": "Jane Doe Manager"
+}
+```
+
+### C. Sign In
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/auth/sign-in/email`
+- **Body** (Raw JSON):
+```json
+{
+  "email": "john.doe@ashesi.edu.gh",
+  "password": "SecurePassword123!"
+}
+```
+*(After logging in, BetterAuth sets a session cookie automatically. Ensure Postman is capturing cookies!)*
+
+---
+
+## 2. 👤 Users (`/api/users`)
+
+### A. Get Current User Profile (Me)
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/users/me`
+- **Body**: None
+*(Extracts user ID automatically from your session cookie)*
+
+### B. Complete Student Profile
+- **Method**: `PATCH`
+- **URL**: `{{base_url}}/api/users/me/profile-complete`
+- **Body** (Raw JSON):
+```json
+{
+  "student_id": "12345678",
+  "course": "Computer Science"
+}
+```
+
+---
+
+## 3. 🏢 Hostels (`/api/hostels`)
+
+### A. Get All Hostels
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/hostels`
+- **Body**: None
+
+### B. Get Single Hostel By ID
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/hostels/{{hostel_id}}`
+- **Body**: None
+
+### C. Create a New Hostel (Requires Manager/Admin)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/hostels`
+- **Body** (Raw JSON):
+```json
+{
+  "hostel_name": "Premium Student Lodge",
+  "location": "Berekuso, Accra",
+  "description": "A wonderful lodge for Ashesi Students",
+  "total_rooms": 20,
+  "available_rooms": 20
+}
+```
+
+### B. Add Hostel Amenities (Bulk)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/hostels/{{hostel_id}}/amenities`
+- **Body** (Raw JSON):
+```json
+{
+  "amenities": ["WIFI", "TV"]
+}
+```
+
+---
+
+## 4. 🛏️ Rooms (`/api/rooms`)
+
+### A. Get All Rooms (Optional ?hostel_id filter)
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/rooms?hostel_id={{hostel_id}}`
+- **Body**: None
+
+### B. Get Single Room By ID
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/rooms/{{room_id}}`
+- **Body**: None
+
+### C. Create a New Room (Requires Manager/Admin)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/rooms`
+- **Body** (Raw JSON):
+```json
+{
+  "room_number": "A101",
+  "room_type": "SINGLE",
+  "price_per_bed": 500.00,
+  "capacity": 1,
+  "hostel_id": "{{replace_with_actual_hostel_id}}",
+  "length": 12.5,
+  "width": 10.0,
+  "height": 9.0,
+  "tour_url": ""
+}
+```
+
+### B. Add Room Amenities (Bulk)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/rooms/{{room_id}}/amenities`
+- **Body** (Raw JSON):
+```json
+{
+  "amenities": ["AIR_CONDITIONING", "FRIDGE"]
+}
+```
+
+---
+
+## 5. 📅 Bookings (`/api/bookings`)
+
+### A. Get My Bookings (Student)
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/bookings`
+- **Body**: None
+*(The backend automatically detects you are a student and filters the list to only your bookings)*
+
+### B. Get All Bookings (Admin/Manager)
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/bookings`
+- **Body**: None
+
+### C. Create a Booking (Requires Auth)
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/bookings`
+- **Body** (Raw JSON):
+```json
+{
+  "check_in_date": "2026-09-01T12:00:00Z",
+  "check_out_date": "2027-05-30T12:00:00Z",
+  "room_id": "{{replace_with_actual_room_id}}",
+  "student_id": "{{replace_with_student_id_if_manager}}"
+}
+```
+*(If you are authenticated as a STUDENT, the system overrides `student_id` natively)*
+
+### B. Update Booking Status
+- **Method**: `PATCH`
+- **URL**: `{{base_url}}/api/bookings/{{booking_id}}`
+- **Body** (Raw JSON):
+```json
+{
+  "status": "CONFIRMED"
+}
+```
+*(Status options: `PENDING`, `CONFIRMED`, `CANCELLED`, `CHECKED_OUT`)*
+
+---
+
+## 6. 💬 Complaints (`/api/complaints`)
+
+### A. Get All Complaints
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/complaints`
+- **Body**: None
+
+### B. Submit a Complaint
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/complaints`
+- **Body** (Raw JSON):
+```json
+{
+  "content": "The AC in my room is leaking.",
+  "student_id": "{{replace_with_student_id_if_manager}}",
+  "hostel_id": "{{replace_with_hostel_id}}"
+}
+```
+
+---
+
+## 7. ⭐ Reviews (`/api/reviews`)
+
+### A. Get All Reviews (Optional ?hostel_id filter)
+- **Method**: `GET`
+- **URL**: `{{base_url}}/api/reviews?hostel_id={{hostel_id}}`
+- **Body**: None
+
+### B. Submit a Rating
+- **Method**: `POST`
+- **URL**: `{{base_url}}/api/reviews`
+- **Body** (Raw JSON):
+```json
+{
+  "rating": 5,
+  "comment": "Had an amazing stay here! Clean and quiet.",
+  "student_id": "{{replace_with_student_id_if_manager}}",
+  "hostel_id": "{{replace_with_hostel_id}}"
+}
+```
+*(Remember: The backend will reject this unless the student has an existing `CONFIRMED` or `CHECKED_OUT` booking for this specific hostel!)*

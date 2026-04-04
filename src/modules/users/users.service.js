@@ -79,15 +79,26 @@ export const completeProfile = async (userId, data) => {
   const { student_id, course } = data;
   const profileComplete = !!(student_id && course);
 
+  console.log(`[DEBUG completeProfile] Attempting to update userId: "${userId}"`);
+  
+  // Debug SELECT to see if Supabase client can see the row
+  const { data: checkData, error: checkError } = await supabase.from('user').select('id').eq('id', userId);
+  console.log(`[DEBUG completeProfile] Pre-update SELECT check:`, checkData, `Error:`, checkError);
+
   const { data: updatedUser, error } = await supabase
     .from("user")
     .update({ student_id, course, profile_complete: profileComplete })
     .eq("id", userId)
-    .select()
-    .single();
+    .select();
+
+  console.log(`[DEBUG completeProfile] Update Result:`, updatedUser, `Error:`, error);
 
   if (error) throw new UserServiceError(error.message, 400);
-  return updatedUser;
+  if (!updatedUser || updatedUser.length === 0) {
+    throw new UserServiceError("User profile not found in database", 404);
+  }
+  
+  return updatedUser[0];
 };
 
 export const getMyHostels = async (userId) => {

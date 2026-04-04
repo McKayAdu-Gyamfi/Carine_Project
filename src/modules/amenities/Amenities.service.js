@@ -37,12 +37,16 @@ export const updateHostelAmenities = async (hostelId, amenities) => {
   return [];
 };
 
-export const addHostelAmenity = async (hostelId, name) => {
+export const addHostelAmenities = async (hostelId, amenities) => {
+  const amenitiesToInsert = amenities.map(name => ({
+    hostel_id: hostelId,
+    name
+  }));
+  
   const { data, error } = await supabase
     .from("HOSTEL_AMENITY")
-    .insert({ hostel_id: hostelId, name })
-    .select()
-    .single();
+    .insert(amenitiesToInsert)
+    .select();
     
   if (error) throw new AmenityServiceError(error.message, 400);
   return data;
@@ -87,12 +91,16 @@ export const updateRoomAmenities = async (roomId, amenities) => {
   return [];
 };
 
-export const addRoomAmenity = async (roomId, name) => {
+export const addRoomAmenities = async (roomId, amenities) => {
+  const amenitiesToInsert = amenities.map(name => ({
+    room_id: roomId,
+    name
+  }));
+  
   const { data, error } = await supabase
     .from("ROOM_AMENITY")
-    .insert({ room_id: roomId, name })
-    .select()
-    .single();
+    .insert(amenitiesToInsert)
+    .select();
     
   if (error) throw new AmenityServiceError(error.message, 400);
   return data;
