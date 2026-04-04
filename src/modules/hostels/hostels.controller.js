@@ -27,7 +27,7 @@ export const getHostelById = async (req, res, next) => {
         *,
         ROOM (*),
         HOSTEL_IMAGE_URLS (*),
-        AMENITY (*)
+        HOSTEL_AMENITY (*)
       `)
       .eq("id", id)
       .single();
