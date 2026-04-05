@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
 import { Input } from "@/components/ui/input";
 
+import { TygerAvatar } from 'tyger-avatar';
+
 const AVATARS = [
-  "🦊", "🐺", "🦝", "🐼", "🐸", "🌞", "🐻‍❄️", 
-  "🐢", "🦅", "🦉", "🐤", "🐙", "🦌", "🐶", 
-  "🐪", "🐯", "🐧", "⛄", "🐻", "🌍", "💀", 
-  "🦄", "🐉", "🐱", "🐭", "🐰", "🧟", "🐴",
-  "🦘", "👹", "👾", "🦖"
+  "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
+  "TrFranklin", "TrImran", "TrMaria", "TrRachel", "TrShamila", 
+  "TrAlex", "TrFelix", "TrEnrique", "TrSophia", "TrHarry", 
+  "TrHelen", "TrStu", "TrNancy", "TrChad"
 ];
 
 export default function Login() {
@@ -42,13 +43,13 @@ export default function Login() {
               <button 
                 key={idx}
                 onClick={() => setSelectedAvatar(avatar)}
-                className={`aspect-square flex items-center justify-center text-4xl rounded-lg transition-all duration-300 cursor-pointer ${
+                className={`aspect-square flex items-center justify-center p-1 rounded-lg transition-all duration-300 cursor-pointer overflow-hidden ${
                   selectedAvatar === avatar 
                     ? 'bg-primary ring-2 ring-primary ring-offset-2 ring-offset-background scale-105 z-10 shadow-lg' 
                     : 'bg-muted hover:bg-accent hover:scale-105'
                 }`}
               >
-                {avatar}
+                <TygerAvatar name={avatar as any} size="xl" />
               </button>
             ))}
           </div>

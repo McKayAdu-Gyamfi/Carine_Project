@@ -1,6 +1,7 @@
 import { Grid3X3, ShieldCheck, ChevronRight, Moon, LogOut, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
+import { TygerAvatar } from 'tyger-avatar';
 import tanko_hostel_1 from "../assets/Tanko_4.png";
 
 
@@ -27,9 +28,15 @@ export default function Profile() {
         
         {/* Name & Edit */}
         <div className="flex justify-center mb-5">
-          <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center">
-            <div className="w-full h-full rounded-full border-[4px] border-background overflow-hidden bg-accent flex items-center justify-center">
-              <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
+          <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center bg-gradient-to-br from-primary/60 to-primary/10 shadow-[0_15px_40px_rgba(59,130,246,0.3)] dark:shadow-[0_15px_40px_rgba(59,130,246,0.15)]">
+            <div className="w-full h-full rounded-full border-[4px] border-background overflow-hidden bg-accent flex items-center justify-center p-2">
+              {userAvatar?.startsWith("Tr") ? (
+                <TygerAvatar name={userAvatar as any} size="3xl" />
+              ) : userAvatar?.startsWith("http") ? (
+                <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
+              )}
             </div>
           </div>
         </div>

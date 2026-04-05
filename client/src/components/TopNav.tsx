@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/ModeToggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import { TygerAvatar } from 'tyger-avatar';
 
 interface TopNavProps {
   rightAction?: ReactNode;
@@ -18,16 +18,15 @@ export default function TopNav({ rightAction }: TopNavProps) {
         {rightAction}
         <ModeToggle />
         <Link to="/profile">
-          <Avatar className="w-10 h-10 ring-2 ring-background flex items-center justify-center bg-accent shadow-md cursor-pointer hover:opacity-80 transition-opacity">
-            {userAvatar ? (
-              <span className="text-2xl leading-none">{userAvatar}</span>
+          <div className="w-10 h-10 ring-2 ring-background flex items-center justify-center bg-accent shadow-md cursor-pointer hover:opacity-80 transition-opacity rounded-full overflow-hidden p-0.5">
+            {userAvatar?.startsWith("Tr") ? (
+               <TygerAvatar name={userAvatar as any} size="lg" />
+            ) : userAvatar?.startsWith("http") ? (
+               <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
             ) : (
-              <>
-                <AvatarImage src="https://i.pravatar.cc/100?img=5" />
-                <AvatarFallback>S</AvatarFallback>
-              </>
+               <span className="text-2xl leading-none">{userAvatar || "👤"}</span>
             )}
-          </Avatar>
+          </div>
         </Link>
       </div>
     </header>

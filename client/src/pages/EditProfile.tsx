@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronLeft, Camera, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { TygerAvatar } from 'tyger-avatar';
 
 const PREFERENCES = [
   "Quiet / Low Noise",
@@ -52,8 +53,14 @@ export default function EditProfile() {
         {/* Avatar Edit */}
         <div className="flex flex-col items-center mb-8">
           <div className="relative w-[100px] h-[100px] mb-4">
-            <div className="w-full h-full rounded-full overflow-hidden bg-accent flex items-center justify-center border-2 border-border shadow-md">
-              <span className="text-[50px] leading-none mb-1">{userAvatar}</span>
+            <div className="w-full h-full rounded-full overflow-hidden bg-accent flex items-center justify-center border-2 border-border shadow-md p-1">
+              {userAvatar?.startsWith("Tr") ? (
+                <TygerAvatar name={userAvatar as any} size="3xl" />
+              ) : userAvatar?.startsWith("http") ? (
+                <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+              ) : (
+                <span className="text-[50px] leading-none mb-1">{userAvatar}</span>
+              )}
             </div>
             <button className="absolute bottom-0 right-0 w-8 h-8 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center border-2 border-background shadow-lg transition-colors cursor-pointer">
               <Camera className="w-4 h-4 text-primary-foreground" />
