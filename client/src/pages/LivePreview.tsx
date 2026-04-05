@@ -35,7 +35,7 @@ export default function LivePreview() {
         <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors">
           <Maximize className="w-5 h-5" />
         </button>
-        <Link to="/hostel-details" className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors">
+        <Link to="/explore" className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors">
           <X className="w-5 h-5" />
         </Link>
       </div>
@@ -106,7 +106,7 @@ export default function LivePreview() {
              
              <button className="bg-primary hover:bg-primary/90 transition-transform active:scale-95 px-6 py-3 rounded-full text-primary-foreground font-bold text-sm shadow-lg shadow-primary/30 mr-2 text-center h-full flex flex-col justify-center leading-tight">
                 <span>Book</span>
-                <span>Unity Hall</span>
+                <span>Dufie Annex</span>
              </button>
           </div>
 

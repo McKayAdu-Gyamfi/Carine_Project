@@ -1,4 +1,4 @@
-import { Bell, Search, SlidersHorizontal, TrendingUp, Tag, MapPin, Star } from "lucide-react";
+import { Bell, Search, SlidersHorizontal, TrendingUp, MapPin, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -6,9 +6,7 @@ import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import FilterModal from "@/components/FilterModal";
 import { useState } from "react";
-import dufie_annex_1 from "../assets/Dufie_Annex_1.png";
-import tanko_hostel_1 from "../assets/Tanko_4.png";
-import new_hosanna from "../assets/New Hosanna_1.png";
+import { MOST_POPULAR, NEARBY_PLACES } from "../data/hostels";
 
 export default function Home() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -22,8 +20,8 @@ export default function Home() {
         {/* Background Room Image with Fade */}
         <div className="absolute inset-0 z-0">
           <img 
-            src={dufie_annex_1}
-            alt="Dufie Platinum" 
+            src={MOST_POPULAR[0]?.image}
+            alt="Hero Background" 
             className="w-full h-full object-cover opacity-100 dark:opacity-40 transition-opacity"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background" />
@@ -48,18 +46,6 @@ export default function Home() {
               <SlidersHorizontal className="w-6 h-6 text-primary-foreground" />
             </button>
           </div>
-
-          {/* Filters */}
-          <div className="flex items-center space-x-4 overflow-x-auto pb-2 scrollbar-none">
-            <button className="flex items-center space-x-2 bg-primary px-5 py-2.5 rounded-full whitespace-nowrap shadow-[0_0_20px_rgba(59,130,246,0.35)] shrink-0 transition-transform active:scale-95">
-              <TrendingUp className="w-4 h-4 text-primary-foreground" />
-              <span className="text-sm font-medium text-primary-foreground">Trending</span>
-            </button>
-            <button className="flex items-center space-x-2 bg-card/80 backdrop-blur-sm border border-border px-5 py-2.5 rounded-full whitespace-nowrap shrink-0 hover:bg-accent transition-all active:scale-95">
-              <Tag className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-foreground/90">Under GHS 500</span>
-            </button>
-          </div>
         </div>
       </section>
 
@@ -73,76 +59,43 @@ export default function Home() {
         <ScrollArea className="w-full whitespace-nowrap">
           <div className="flex w-max space-x-4 px-4 pb-4 pt-1">
             
-            {/* Featured Card 1 */}
-            <Link to="/hostel-details" className="block outline-none">
-              <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
-                <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
-                  <img src={dufie_annex_1} alt="Dufie Annex" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                    <span className="text-xs font-semibold text-white">4.8</span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 shadow-sm">
-                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-none font-medium text-[10px] px-2 py-0.5 backdrop-blur-md">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
-                      AVAILABLE
-                    </Badge>
-                  </div>
-                </div>
-                <div className="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h4 className="font-bold text-foreground text-[16px] truncate mb-1 group-hover:text-primary transition-colors">Dufie Annex</h4>
-                    <div className="flex items-center text-muted-foreground text-xs">
-                      <MapPin className="w-3 h-3 mr-1 shrink-0" />
-                      <span className="truncate">Berekuso, Eastern Region</span>
+            {MOST_POPULAR.map((hostel) => (
+              <Link to="/explore" key={hostel.id} className="block outline-none">
+                <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
+                  <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
+                    <img src={hostel.image} alt={hostel.name} className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
+                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                      <span className="text-xs font-semibold text-white">4.8</span>
+                    </div>
+                    <div className="absolute bottom-3 left-3 shadow-sm">
+                      <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-none font-medium text-[10px] px-2 py-0.5 backdrop-blur-md">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
+                        AVAILABLE
+                      </Badge>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between mt-2">
+                  <div className="p-4 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
-                      <p className="font-bold text-foreground text-lg">GHS 7,000<span className="text-xs font-normal text-muted-foreground">/sem</span></p>
+                      <h4 className="font-bold text-foreground text-[16px] truncate mb-1 group-hover:text-primary transition-colors">{hostel.name}</h4>
+                      <div className="flex items-center text-muted-foreground text-xs">
+                        <MapPin className="w-3 h-3 mr-1 shrink-0" />
+                        <span className="truncate">{hostel.location}</span>
+                      </div>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md shrink-0">
-                      <TrendingUp className="w-4 h-4 text-primary-foreground rotate-45" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Featured Card 2 */}
-            <Link to="/hostel-details" className="block outline-none">
-              <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
-                <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
-                  <img src={tanko_hostel_1} alt="Tanko Hostel" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
-                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                    <span className="text-xs font-semibold text-white">4.9</span>
-                  </div>
-                  <div className="absolute bottom-3 left-3 shadow-sm">
-                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-none font-medium text-[10px] px-2 py-0.5 backdrop-blur-md">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
-                      AVAILABLE
-                    </Badge>
-                  </div>
-                </div>
-                <div className="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h4 className="font-bold text-foreground text-[16px] truncate mb-1 group-hover:text-primary transition-colors">Tanko Hostel</h4>
-                    <div className="flex items-center text-muted-foreground text-xs">
-                      <MapPin className="w-3 h-3 mr-1 shrink-0" />
-                      <span className="truncate">Berekuso, Eastern Region</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-2">
-                    <div>
-                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
-                      <p className="font-bold text-foreground text-lg">GHS 7,100<span className="text-xs font-normal text-muted-foreground">/sem</span></p>
+                    <div className="flex items-center justify-between mt-2">
+                      <div>
+                        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
+                        <p className="font-bold text-foreground text-lg">GHS {hostel.price}<span className="text-xs font-normal text-muted-foreground">/sem</span></p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md shrink-0">
+                        <TrendingUp className="w-4 h-4 text-primary-foreground rotate-45" />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
 
           </div>
           <ScrollBar orientation="horizontal" className="hidden" />
@@ -154,45 +107,26 @@ export default function Home() {
         <h3 className="text-xl font-bold text-foreground mb-4">Recommended for you</h3>
         <div className="space-y-3">
           
-          {/* List item 1 */}
-          <div className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
-            <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
-              <img src={new_hosanna} alt="New Hosanna" className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
-            </div>
-            <div className="flex-1 ml-4 py-0.5 flex flex-col justify-between overflow-hidden">
-              <div>
-                <h4 className="font-bold text-foreground text-[16px] truncate">New Hosanna</h4>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-wide truncate">4 Mins walk to campus</p>
+          {NEARBY_PLACES.map((hostel) => (
+            <div key={hostel.id} className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
+              <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
+                <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
               </div>
-              <div className="flex items-center justify-between">
-                <p className="font-bold text-primary text-[15px]">GHS 6,500<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
-                <div className="flex items-center space-x-1">
-                  <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                  <span className="text-sm font-medium text-foreground">4.0</span>
+              <div className="flex-1 ml-4 py-0.5 flex flex-col justify-between overflow-hidden">
+                <div>
+                  <h4 className="font-bold text-foreground text-[16px] truncate">{hostel.name}</h4>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-wide truncate">{hostel.distance} away</p>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="font-bold text-primary text-[15px]">GHS {hostel.price}<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+                    <span className="text-sm font-medium text-foreground">4.2</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* List item 2 */}
-          <div className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
-            <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
-              <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=200&h=200" alt="Blue Haven" className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
-            </div>
-            <div className="flex-1 ml-4 py-0.5 flex flex-col justify-between overflow-hidden">
-              <div>
-                <h4 className="font-bold text-foreground text-[16px] truncate">Blue Haven</h4>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-wide truncate">Near shuttle stop</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="font-bold text-primary text-[15px]">GHS 550<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
-                <div className="flex items-center space-x-1">
-                  <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                  <span className="text-sm font-medium text-foreground">4.2</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
 
         </div>
       </section>

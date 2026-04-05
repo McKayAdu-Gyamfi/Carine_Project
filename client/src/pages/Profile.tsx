@@ -108,10 +108,10 @@ export default function Profile() {
         <div className="flex space-x-4 overflow-x-auto hide-scrollbar pb-6 px-1">
           
           {/* Booking Card 1 */}
-          <Link to="/hostel-details" className="block outline-none shrink-0 w-[240px]">
+          <Link to="/explore" className="block outline-none shrink-0 w-[240px]">
             <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group">
                <div className="h-[140px] relative overflow-hidden bg-muted">
-                 <img src={tanko_hostel_1} className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Unity Hall" />
+                 <img src={tanko_hostel_1} className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Dufie Annex" />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                  <div className="absolute bottom-3 left-3">
                    <span className="bg-background/95 backdrop-blur-md text-foreground px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">In-Progress</span>

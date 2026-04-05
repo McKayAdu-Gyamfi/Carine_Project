@@ -1,26 +1,28 @@
-import dufie_annex_1 from "../assets/Dufie_Annex_1.png";
+const images = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, import: 'default' });
+
+export const getImage = (filename: string): string => {
+  return (images[`../assets/${filename}`] as string) || '';
+};
 
 export const MOST_POPULAR = [
   { 
     id: '1', 
     name: 'Dufie Annex', 
-    location: 'Ayeduase, Kumasi', 
+    location: 'Berekuso, Eastern Region', 
     distance: '1.2 km', 
-    price: 450, 
-    priceFreq: 'per month',
-    image: dufie_annex_1, 
+    price: 7000, 
+    priceFreq: 'per semester',
+    image: getImage('Dufie_Annex_1.png'), 
     gallery: [
-      dufie_annex_1,
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=400&h=400",
-      "https://images.unsplash.com/photo-1502672260266-1c1de2d9d0cb?auto=format&fit=crop&q=80&w=400&h=400",
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&q=80&w=400&h=400"
+      getImage('Dufie_Annex_1.png'),
+      getImage('Dufie_Annex_2.png')
     ],
     desc: "Experience the layout and natural lighting of your future home. This premium hostel offers a combination of aesthetics and state-of-the-art facilities including max security, 24/7 water supply, and unlimited WiFi." 
   },
   { 
     id: '2', 
-    name: 'Independence Hall', 
-    location: 'Main Campus', 
+    name: 'Dufie Platinum', 
+    location: 'High Five', 
     distance: '0.5 km', 
     price: 380, 
     priceFreq: 'per month',

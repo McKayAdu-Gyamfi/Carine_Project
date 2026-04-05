@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
-import HostelDetails from "./pages/HostelDetails";
 import LivePreview from "./pages/LivePreview";
 import Booking from "./pages/Booking";
 import Login from "./pages/Login";
@@ -38,7 +37,6 @@ export default function App() {
         <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
         <Route path="/manage-bookings" element={<ProtectedRoute><ManageBookings /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-        <Route path="/hostel-details" element={<ProtectedRoute><HostelDetails /></ProtectedRoute>} />
         <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />

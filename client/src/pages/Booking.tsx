@@ -9,7 +9,7 @@ export default function Booking() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-8 pb-4 sticky top-0 z-50 bg-background/90 backdrop-blur-md">
         <div className="flex items-center space-x-3">
-          <Link to="/hostel-details" className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border text-foreground shadow-sm hover:bg-muted transition-colors">
+          <Link to="/explore" className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border text-foreground shadow-sm hover:bg-muted transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <h1 className="text-xl font-bold text-foreground">Complete Booking</h1>
@@ -47,7 +47,7 @@ export default function Booking() {
             <div className="flex items-center space-x-2 mb-1">
               <Badge className="bg-primary/10 text-primary border-none text-[8px] px-1.5 py-0">Executive SingleStudio</Badge>
             </div>
-            <h3 className="font-bold text-foreground text-sm">Unity Hall</h3>
+            <h3 className="font-bold text-foreground text-sm">Dufie Annex</h3>
             <p className="text-xs text-muted-foreground mt-0.5">1 Bed • Private Bath</p>
           </div>
         </Card>

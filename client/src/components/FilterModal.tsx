@@ -40,7 +40,7 @@ export default function FilterModal({ isOpen, onClose }: FilterModalProps) {
       
       {/* Bottom Sheet Modal */}
       <div 
-        className={`fixed bottom-0 left-0 w-full z-[110] bg-background border-t border-border rounded-t-[32px] p-6 pb-12 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${isOpen ? "translate-y-0" : "translate-y-full"}`}
+        className={`fixed bottom-0 left-0 w-full z-[110] bg-background/50 dark:bg-background/40 backdrop-blur-xl border-t border-border/50 rounded-t-[32px] p-6 pb-12 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_-10px_40px_rgba(0,0,0,0.15)] ${isOpen ? "translate-y-0" : "translate-y-full"}`}
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-foreground">Filters</h2>
@@ -105,7 +105,7 @@ export default function FilterModal({ isOpen, onClose }: FilterModalProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center space-x-3 pt-4 mt-2 border-t border-border/50 bg-background">
+        <div className="flex items-center space-x-3 pt-4 mt-2 border-t border-border/50">
           <button 
              onClick={() => { setSelectedAmenities([]); setDistance(5); }}
              className="px-6 py-4 font-bold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"

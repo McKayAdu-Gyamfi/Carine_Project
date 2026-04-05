@@ -41,12 +41,12 @@ export default function Explore() {
             <input 
               type="text" 
               placeholder="Search address, or near you" 
-              className="w-full h-14 bg-card rounded-2xl pl-12 pr-4 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary shadow-sm border border-border"
+              className="w-full h-14 bg-card rounded-lg pl-12 pr-4 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary shadow-sm border border-border"
             />
           </div>
           <button 
             onClick={() => setIsFilterOpen(true)}
-            className="w-14 h-14 flex items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-md transition-transform active:scale-95"
+            className="w-14 h-14 flex items-center justify-center bg-primary text-primary-foreground rounded-lg shadow-md transition-transform active:scale-95"
           >
             <SlidersHorizontal className="w-5 h-5" />
           </button>
@@ -64,9 +64,9 @@ export default function Explore() {
               <div 
                 key={hostel.id} 
                 onClick={() => setSelectedHostel(hostel)}
-                className="shrink-0 w-[240px] bg-card rounded-[32px] p-3 shadow-md border border-border cursor-pointer hover:shadow-xl transition-all group"
+                className="shrink-0 w-[240px] bg-card rounded-[10px] p-3 shadow-md border border-border cursor-pointer hover:shadow-xl transition-all group"
               >
-                <div className="relative w-full h-[240px] rounded-[24px] overflow-hidden mb-3">
+                <div className="relative w-full h-[240px] rounded-[10px] overflow-hidden mb-3">
                   <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <button 
                     onClick={(e) => handleSave(e, hostel.id)}
@@ -100,9 +100,9 @@ export default function Explore() {
               <div 
                 key={hostel.id} 
                 onClick={() => setSelectedHostel(hostel)}
-                className="shrink-0 w-[220px] bg-card rounded-3xl p-2.5 flex items-center shadow-sm border border-border cursor-pointer hover:shadow-md transition-all gap-3"
+                className="shrink-0 w-[220px] bg-card rounded-lg p-2.5 flex items-center shadow-sm border border-border cursor-pointer hover:shadow-md transition-all gap-3"
               >
-                <img src={hostel.image} alt={hostel.name} className="w-16 h-16 rounded-2xl object-cover" />
+                <img src={hostel.image} alt={hostel.name} className="w-16 h-16 rounded-lg object-cover" />
                 <div className="flex-1 overflow-hidden">
                   <h3 className="font-bold text-sm text-foreground truncate">{hostel.name}</h3>
                   <p className="text-muted-foreground text-[10px] font-medium mb-1 truncate">{hostel.location}</p>
@@ -158,17 +158,22 @@ export default function Explore() {
             </div>
 
             {/* Content Scrollable Area */}
-            <div className="flex-1 overflow-y-auto hide-scrollbar px-6 pb-28 pt-4">
+            <div className="flex-1 overflow-y-auto hide-scrollbar px-6 pb-28 z-20 relative -mt-16 pt-2">
               
               {/* Title Card Overlay-like visual */}
-              <div className="bg-card w-full -mt-20 relative z-10 rounded-[32px] p-6 shadow-xl border border-border mb-6">
+              <div className="bg-card w-full rounded-[32px] p-6 shadow-xl border border-border mb-6 relative">
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h2 className="text-2xl font-bold text-foreground mb-1">{selectedHostel.name}</h2>
-                    <div className="flex items-center text-muted-foreground text-sm font-medium">
-                      <MapPin className="w-4 h-4 mr-1 opacity-70" />
-                      <span>{selectedHostel.location}</span>
-                    </div>
+                    <a 
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedHostel.name} ${selectedHostel.location}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-muted-foreground text-sm font-medium hover:text-primary transition-colors cursor-pointer group"
+                    >
+                      <MapPin className="w-4 h-4 mr-1 opacity-70 group-hover:opacity-100" />
+                      <span className="underline decoration-dotted underline-offset-2">{selectedHostel.location}</span>
+                    </a>
                   </div>
                   <div className="flex flex-col items-center justify-center w-12 h-12 rounded-full bg-primary/10 border border-primary/20 text-primary">
                     <Send className="w-5 h-5" />
@@ -209,10 +214,10 @@ export default function Explore() {
             </div>
 
             {/* Bottom Sticky Action Bar */}
-            <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-background via-background to-transparent border-t border-border/10">
+            <div className="p-4 bg-background border-t border-border shrink-0 z-30 pb-8">
               <button 
                 onClick={() => navigate('/booking')}
-                className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl shadow-[0_8px_30px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-transform text-lg"
+                className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-transform text-lg"
               >
                 Book Now
               </button>
