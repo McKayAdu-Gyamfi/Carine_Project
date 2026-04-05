@@ -28,7 +28,7 @@ export default function Profile() {
         
         {/* Name & Edit */}
         <div className="flex justify-center mb-5">
-          <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center bg-gradient-to-br from-primary/60 to-primary/10 shadow-[0_15px_40px_rgba(59,130,246,0.3)] dark:shadow-[0_15px_40px_rgba(59,130,246,0.15)]">
+          <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center bg-gradient-to-br from-primary/60 to-primary/10 shadow dark:shadow">
             <div className="w-full h-full rounded-full border-[4px] border-background overflow-hidden bg-accent flex items-center justify-center p-2">
               {userAvatar?.startsWith("Tr") ? (
                 <TygerAvatar name={userAvatar as any} size="3xl" />
@@ -80,7 +80,7 @@ export default function Profile() {
 
       {/* Overlapping Verification Card */}
       <div className="px-5 -mt-8 relative z-20 mb-8">
-        <div className="bg-card border border-border/50 rounded-[28px] p-5 shadow-xl flex items-center justify-between hover:shadow-2xl transition-shadow cursor-pointer">
+        <div className="bg-card border border-border/50 rounded-[10px] p-5 flex items-center justify-between hover:shadow-sm transition-shadow cursor-pointer">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center bg-primary/5 shrink-0">
               <ShieldCheck className="w-6 h-6 text-primary" />
@@ -109,7 +109,7 @@ export default function Profile() {
           
           {/* Booking Card 1 */}
           <Link to="/hostel-details" className="block outline-none shrink-0 w-[240px]">
-            <div className="bg-card rounded-[24px] overflow-hidden shadow-md border border-border/40 hover:shadow-xl transition-all group">
+            <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group">
                <div className="h-[140px] relative overflow-hidden bg-muted">
                  <img src={tanko_hostel_1} className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Unity Hall" />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -126,7 +126,7 @@ export default function Profile() {
           
           {/* Booking Card 2 */}
           <Link to="/explore" className="block outline-none shrink-0 w-[240px]">
-             <div className="bg-card rounded-[24px] overflow-hidden shadow-md border border-border/40 hover:shadow-xl transition-all group opacity-80 hover:opacity-100">
+             <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group opacity-80 hover:opacity-100">
                <div className="h-[140px] relative overflow-hidden bg-muted flex items-center justify-center border-b border-border/40">
                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-muted-foreground/40 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
                     <span className="text-xl text-muted-foreground/50 group-hover:text-primary transition-colors">+</span>
@@ -145,7 +145,7 @@ export default function Profile() {
         <div className="mt-6 flex flex-col space-y-3 px-1">
           
           {/* Account Settings */}
-          <Link to="/settings" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[24px] shadow-sm border border-border/40 hover:bg-accent/50 transition-colors cursor-pointer block outline-none">
+          <Link to="/settings" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-accent/50 transition-colors cursor-pointer block outline-none">
             <div className="flex items-center space-x-4">
               <Settings className="w-5 h-5 text-muted-foreground" />
               <span className="font-semibold text-[15px]">Account Settings</span>
@@ -155,7 +155,7 @@ export default function Profile() {
           
           {/* Dark Mode Toggle */}
           <div 
-            className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[24px] shadow-sm border border-border/40 cursor-pointer hover:bg-accent/50 transition-colors"
+            className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={() => setTheme(isDarkMode ? "light" : "dark")}
           >
             <div className="flex items-center space-x-4">
@@ -168,7 +168,7 @@ export default function Profile() {
           </div>
           
           {/* Sign Out */}
-          <Link to="/login" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[24px] shadow-sm border border-border/40 hover:bg-red-500/10 transition-colors group">
+          <Link to="/login" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-red-500/10 transition-colors group">
             <div className="flex items-center space-x-4">
               <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-500 transition-colors" />
               <span className="font-bold text-[15px] text-red-400 group-hover:text-red-500 transition-colors">Sign Out</span>

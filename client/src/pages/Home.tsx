@@ -35,7 +35,7 @@ export default function Home() {
           <h2 className="text-[28px] font-bold text-primary leading-[1.1] mb-8">Find your perfect<br/>room</h2>
 
           {/* Search */}
-          <div className="flex items-center bg-white/10 dark:bg-black/20 backdrop-blur-2xl border border-white/30 dark:border-white/10 rounded-[22px] p-1.5 mb-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]">
+          <div className="flex items-center bg-white/10 dark:bg-black/20 backdrop-blur-2xl border border-white/30 dark:border-white/10 rounded-[10px] p-1.5 mb-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]">
             <Search className="w-6 h-6 text-primary ml-3 shrink-0" />
             <Input 
               placeholder="Search hostels" 
@@ -43,7 +43,7 @@ export default function Home() {
             />
             <button 
               onClick={() => setIsFilterOpen(true)}
-              className="h-12 w-12 bg-primary rounded-[16px] flex items-center justify-center shrink-0 shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform active:scale-95"
+              className="h-12 w-12 bg-primary rounded-[10px] flex items-center justify-center shrink-0 shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform active:scale-95"
             >
               <SlidersHorizontal className="w-6 h-6 text-primary-foreground" />
             </button>
@@ -75,7 +75,7 @@ export default function Home() {
             
             {/* Featured Card 1 */}
             <Link to="/hostel-details" className="block outline-none">
-              <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-2xl overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
+              <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
                 <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
                   <img src={dufie_annex_1} alt="Dufie Annex" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
@@ -112,7 +112,7 @@ export default function Home() {
 
             {/* Featured Card 2 */}
             <Link to="/hostel-details" className="block outline-none">
-              <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-2xl overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
+              <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
                 <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
                   <img src={tanko_hostel_1} alt="Tanko Hostel" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
@@ -155,7 +155,7 @@ export default function Home() {
         <div className="space-y-3">
           
           {/* List item 1 */}
-          <div className="bg-card border border-border rounded-2xl flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
+          <div className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
             <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
               <img src={new_hosanna} alt="New Hosanna" className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
             </div>
@@ -175,7 +175,7 @@ export default function Home() {
           </div>
 
           {/* List item 2 */}
-          <div className="bg-card border border-border rounded-2xl flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
+          <div className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
             <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
               <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=200&h=200" alt="Blue Haven" className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
             </div>

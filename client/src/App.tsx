@@ -12,12 +12,20 @@ import SettingsPage from "./pages/Settings";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/theme-provider";
 
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = localStorage.getItem("userAvatar") !== null;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
 export default function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Router>
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/profile" element={<Profile />} />
@@ -25,12 +33,12 @@ export default function App() {
         
         {/* Full-screen routes without bottom nav */}
         <Route path="/login" element={<Login />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/manage-bookings" element={<ManageBookings />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/hostel-details" element={<HostelDetails />} />
-        <Route path="/live-preview" element={<LivePreview />} />
-        <Route path="/booking" element={<Booking />} />
+        <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+        <Route path="/manage-bookings" element={<ProtectedRoute><ManageBookings /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+        <Route path="/hostel-details" element={<ProtectedRoute><HostelDetails /></ProtectedRoute>} />
+        <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
+        <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

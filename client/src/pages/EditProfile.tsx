@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, Camera, Check } from "lucide-react";
+import { ChevronLeft, Pencil, Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { TygerAvatar } from 'tyger-avatar';
 
@@ -11,9 +11,17 @@ const PREFERENCES = [
   "Backup Generator"
 ];
 
+const AVATARS = [
+  "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
+  "TrFranklin", "TrImran", "TrMaria", "TrRachel", "TrShamila", 
+  "TrAlex", "TrFelix", "TrEnrique", "TrSophia", "TrHarry", 
+  "TrHelen", "TrStu", "TrNancy", "TrChad"
+];
+
 export default function EditProfile() {
   const navigate = useNavigate();
-  const userAvatar = localStorage.getItem("userAvatar");
+  const [userAvatar, setUserAvatar] = useState<string>(localStorage.getItem("userAvatar") || "TrFelix");
+  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
   const [selectedPrefs, setSelectedPrefs] = useState<string[]>([
     "Air-Conditioned", 
     "Wi-Fi Included", 
@@ -31,6 +39,7 @@ export default function EditProfile() {
   const handleSave = () => {
     localStorage.setItem("userBio", bio);
     localStorage.setItem("userPrefs", JSON.stringify(selectedPrefs));
+    localStorage.setItem("userAvatar", userAvatar);
     navigate(-1);
   };
 
@@ -62,8 +71,11 @@ export default function EditProfile() {
                 <span className="text-[50px] leading-none mb-1">{userAvatar}</span>
               )}
             </div>
-            <button className="absolute bottom-0 right-0 w-8 h-8 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center border-2 border-background shadow-lg transition-colors cursor-pointer">
-              <Camera className="w-4 h-4 text-primary-foreground" />
+            <button 
+              onClick={() => setIsAvatarPickerOpen(true)}
+              className="absolute bottom-0 right-0 w-8 h-8 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center border-2 border-background shadow-lg transition-colors cursor-pointer"
+            >
+              <Pencil className="w-4 h-4 text-primary-foreground" />
             </button>
           </div>
         </div>
@@ -75,7 +87,7 @@ export default function EditProfile() {
             <input 
               type="text" 
               defaultValue="Sarah Adjei"
-              className="w-full h-12 bg-card border border-border/60 rounded-xl px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
+              className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
             />
           </div>
 
@@ -84,7 +96,7 @@ export default function EditProfile() {
             <input 
               type="text" 
               defaultValue="Ashesi University"
-              className="w-full h-12 bg-card border border-border/60 rounded-xl px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
+              className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
             />
           </div>
           
@@ -94,7 +106,7 @@ export default function EditProfile() {
               <input 
                 type="text" 
                 defaultValue="Computer Science"
-                className="w-full h-12 bg-card border border-border/60 rounded-xl px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
+                className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
               />
             </div>
             <div className="space-y-2 w-28">
@@ -102,7 +114,7 @@ export default function EditProfile() {
               <input 
                 type="text" 
                 defaultValue="300"
-                className="w-full h-12 bg-card border border-border/60 rounded-xl px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm text-center"
+                className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm text-center"
               />
             </div>
           </div>
@@ -112,7 +124,7 @@ export default function EditProfile() {
             <textarea 
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="w-full h-24 py-3 bg-card border border-border/60 rounded-xl px-4 font-medium text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all resize-none leading-relaxed shadow-sm"
+              className="w-full h-24 py-3 bg-card border border-border/60 rounded-lg px-4 font-medium text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all resize-none leading-relaxed shadow-sm"
             />
           </div>
 
@@ -149,6 +161,37 @@ export default function EditProfile() {
 
         </div>
       </div>
+
+      {/* Avatar Picker Overlay */}
+      {isAvatarPickerOpen && (
+        <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-[100] flex flex-col p-6 overflow-y-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-[20px] font-bold tracking-tight mt-10">Choose Avatar</h2>
+            <button onClick={() => setIsAvatarPickerOpen(false)} className="p-2 bg-muted rounded-full hover:bg-accent mt-10">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="grid grid-cols-4 gap-4 pb-12">
+            {AVATARS.map((av, idx) => (
+              <button 
+                key={idx}
+                onClick={() => {
+                  setUserAvatar(av);
+                  setIsAvatarPickerOpen(false);
+                }}
+                className={`aspect-square flex items-center justify-center p-1 rounded-xl transition-all duration-300 cursor-pointer overflow-hidden ${
+                  userAvatar === av 
+                    ? 'bg-primary ring-2 ring-primary ring-offset-2 ring-offset-background scale-105 z-10 shadow-lg' 
+                    : 'bg-muted/50 hover:bg-accent border border-border/40'
+                }`}
+              >
+                <TygerAvatar name={av as any} size="xl" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
