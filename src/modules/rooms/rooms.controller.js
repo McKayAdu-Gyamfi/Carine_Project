@@ -136,9 +136,9 @@ export const updateRoomAmenities = async (req, res, next) => {
 export const addRoomAmenity = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { amenities } = req.body;
 
-    const data = await amenitiesService.addRoomAmenity(id, name);
+    const data = await amenitiesService.addRoomAmenities(id, amenities);
     res.status(201).json({ success: true, data });
   } catch (err) {
     next(err);

@@ -34,7 +34,7 @@ This document lists all active API endpoints identified in the project, organize
 
 ## ⭐ Reviews (`/api/reviews`)
 - `GET /` : Get reviews **(Public)**
-- `POST /` : Submit a review **(Public)** *(Note: Consider adding requireAuth to this route later!)*
+- `POST /` : Submit a review **(Requires Auth)**
 
 ## 👤 Users (`/api/users`)
 - `GET /me` : View current user profile **(Requires Auth)**
@@ -47,4 +47,4 @@ This document lists all active API endpoints identified in the project, organize
 - `PATCH /:id` : Admin manual override update for a user **(Requires Auth, Role: ADMIN)**
 
 ## 🔐 Auth (`/api/auth/*`)
-Handled by the **BetterAuth** module. Contains a comprehensive suite of automatic signup, signin, and Microsoft SSO endpoints. There are also custom authentication endpoints mapped under the `/api/auth` sub-router.
+Handled by the **BetterAuth** module. Consists of standard Email & Password functionality for robust and unified authentication (`/api/auth/sign-in`, `/api/auth/sign-up`). Microsoft SSO has been officially removed; all users now leverage local email authentication dynamically resolving user roles (`STUDENT`, `HOSTEL_MANAGER`, `ADMIN`).
