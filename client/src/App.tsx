@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import ManageBookings from "./pages/ManageBookings";
 import SettingsPage from "./pages/Settings";
+import Saved from "./pages/Saved";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./components/theme-provider";
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/saved" element={<Saved />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
         

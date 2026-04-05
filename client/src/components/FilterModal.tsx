@@ -8,7 +8,7 @@ interface FilterModalProps {
 
 export default function FilterModal({ isOpen, onClose }: FilterModalProps) {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [distance, setDistance] = useState("any");
+  const [distance, setDistance] = useState<number>(5);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -66,17 +66,24 @@ export default function FilterModal({ isOpen, onClose }: FilterModalProps) {
 
           {/* Distance */}
           <div>
-            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Distance to Campus</h3>
-            <div className="grid grid-cols-2 gap-3">
-               {["Any", "< 5 mins", "5 - 15 mins", "15+ mins"].map(dist => (
-                 <button 
-                   key={dist}
-                   onClick={() => setDistance(dist)}
-                   className={`h-10 rounded-xl text-sm font-semibold transition-colors border cursor-pointer ${distance === dist ? 'bg-primary border-primary text-primary-foreground shadow-md' : 'bg-card border-border text-foreground hover:border-primary/50'}`}
-                 >
-                   {dist}
-                 </button>
-               ))}
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">Distance to Campus</h3>
+              <span className="text-sm font-bold text-primary">{distance} km</span>
+            </div>
+            <div className="pt-2">
+              <input 
+                type="range" 
+                min="0.5" 
+                max="10" 
+                step="0.5" 
+                value={distance} 
+                onChange={(e) => setDistance(parseFloat(e.target.value))}
+                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary" 
+              />
+              <div className="flex justify-between text-xs text-muted-foreground mt-2 font-medium">
+                <span>0.5 km</span>
+                <span>10+ km</span>
+              </div>
             </div>
           </div>
 
@@ -100,7 +107,7 @@ export default function FilterModal({ isOpen, onClose }: FilterModalProps) {
         {/* Action Buttons */}
         <div className="flex items-center space-x-3 pt-4 mt-2 border-t border-border/50 bg-background">
           <button 
-             onClick={() => { setSelectedAmenities([]); setDistance("any"); }}
+             onClick={() => { setSelectedAmenities([]); setDistance(5); }}
              className="px-6 py-4 font-bold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             Clear
