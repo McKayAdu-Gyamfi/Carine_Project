@@ -111,11 +111,15 @@ export default function EditProfile() {
             </div>
             <div className="space-y-2 w-28">
               <label className="text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground ml-1">Level</label>
-              <input 
-                type="text" 
+              <select 
                 defaultValue="300"
-                className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm text-center"
-              />
+                className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
+              >
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
+              </select>
             </div>
           </div>
 

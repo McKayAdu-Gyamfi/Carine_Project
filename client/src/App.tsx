@@ -10,6 +10,10 @@ import ManageBookings from "./pages/ManageBookings";
 import SettingsPage from "./pages/Settings";
 import Saved from "./pages/Saved";
 import Layout from "./components/Layout";
+import ManagerLayout from "./components/ManagerLayout";
+import ManagerDashboard from "./pages/manager/ManagerDashboard";
+import ManagerProperties from "./pages/manager/ManagerProperties";
+import ManagerBookings from "./pages/manager/ManagerBookings";
 import { ThemeProvider } from "./components/theme-provider";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -30,6 +34,13 @@ export default function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/profile" element={<Profile />} />
+        </Route>
+
+        {/* Manager Routes */}
+        <Route element={<ProtectedRoute><ManagerLayout /></ProtectedRoute>}>
+          <Route path="/manager" element={<ManagerDashboard />} />
+          <Route path="/manager/properties" element={<ManagerProperties />} />
+          <Route path="/manager/bookings" element={<ManagerBookings />} />
         </Route>
         
         {/* Full-screen routes without bottom nav */}

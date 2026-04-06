@@ -144,6 +144,15 @@ export default function Profile() {
         {/* Settings Links */}
         <div className="mt-6 flex flex-col space-y-3 px-1">
           
+          {/* Switch to Manager Settings */}
+          <Link to="/manager" className="flex items-center justify-between w-full px-5 py-4 bg-primary/10 rounded-[10px] shadow-sm border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer block outline-none group">
+            <div className="flex items-center space-x-4">
+              <ShieldCheck className="w-5 h-5 text-primary" />
+              <span className="font-bold text-[15px] text-primary">Switch to Manager View</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
+          </Link>
+          
           {/* Account Settings */}
           <Link to="/settings" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-accent/50 transition-colors cursor-pointer block outline-none">
             <div className="flex items-center space-x-4">

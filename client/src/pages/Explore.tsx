@@ -1,4 +1,5 @@
-import { Search, MapPin, Heart, ChevronLeft, Send, SlidersHorizontal } from "lucide-react";
+import { Search, MapPin, Heart, ChevronLeft, Send, SlidersHorizontal, Star } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { useState } from "react";
@@ -12,7 +13,25 @@ export default function Explore() {
     return saved ? JSON.parse(saved) : [];
   });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilters, setActiveFilters] = useState({ minPrice: 0, maxPrice: 50000, distance: 10, amenities: [] as string[] });
   const navigate = useNavigate();
+
+  const filteredPopular = MOST_POPULAR.filter(h => {
+    if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (h.startingPrice < activeFilters.minPrice || h.startingPrice > activeFilters.maxPrice) return false;
+    if (parseFloat(h.distance) > activeFilters.distance) return false;
+    if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
+    return true;
+  });
+
+  const filteredNearby = NEARBY_PLACES.filter(h => {
+    if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (h.startingPrice < activeFilters.minPrice || h.startingPrice > activeFilters.maxPrice) return false;
+    if (parseFloat(h.distance) > activeFilters.distance) return false;
+    if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
+    return true;
+  });
 
   const handleSave = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -41,6 +60,8 @@ export default function Explore() {
             <input 
               type="text" 
               placeholder="Search address, or near you" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full h-14 bg-card rounded-lg pl-12 pr-4 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary shadow-sm border border-border"
             />
           </div>
@@ -60,7 +81,8 @@ export default function Explore() {
           </div>
           
           <div className="flex overflow-x-auto hide-scrollbar -mx-5 px-5 space-x-5 pb-5">
-            {MOST_POPULAR.map((hostel) => (
+            {filteredPopular.length === 0 && <p className="text-muted-foreground text-sm py-4">No popular hostels match your search.</p>}
+            {filteredPopular.map((hostel) => (
               <div 
                 key={hostel.id} 
                 onClick={() => setSelectedHostel(hostel)}
@@ -68,19 +90,30 @@ export default function Explore() {
               >
                 <div className="relative w-full h-[240px] rounded-[10px] overflow-hidden mb-3">
                   <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  <button 
-                    onClick={(e) => handleSave(e, hostel.id)}
-                    className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md transition-colors"
-                  >
-                    <Heart className={`w-4 h-4 ${savedHostels.includes(hostel.id) ? 'fill-white text-white' : 'text-white'}`} />
-                  </button>
+                    <button 
+                      onClick={(e) => handleSave(e, hostel.id)}
+                      className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md transition-colors"
+                    >
+                      <Heart className={`w-4 h-4 ${savedHostels.includes(hostel.id) ? 'fill-white text-white' : 'text-white'}`} />
+                    </button>
+                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
+                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                      <span className="text-xs font-semibold text-white">{hostel.rating.toFixed(1)}</span>
+                    </div>
+                    <div className="absolute bottom-3 left-3 shadow-sm">
+                      <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                        {hostel.availability}
+                      </Badge>
+                    </div>
                 </div>
                 <div className="px-2 pb-2">
                   <h3 className="font-bold text-base text-foreground mb-1 truncate">{hostel.name}</h3>
                   <p className="text-muted-foreground text-xs font-medium mb-3 truncate">{hostel.location}</p>
-                  <div className="flex items-baseline">
-                    <span className="text-primary font-bold text-lg">GHS {hostel.price}</span>
-                    <span className="text-muted-foreground text-xs font-medium ml-1">/ {hostel.priceFreq}</span>
+                  <div className="flex items-baseline mt-1">
+                    <span className="text-muted-foreground text-[10px] uppercase font-bold mr-1">Starts from</span>
+                    <span className="text-primary font-bold text-lg">GHS {hostel.startingPrice}</span>
+                    <span className="text-muted-foreground text-[10px] font-medium ml-1">/{hostel.priceFreq.replace('per ', '')}</span>
                   </div>
                 </div>
               </div>
@@ -91,12 +124,12 @@ export default function Explore() {
         {/* Nearby Place */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-foreground">Nearby Place</h2>
-            <button className="text-sm font-bold text-primary">See All</button>
+            <h2 className="text-xl font-bold text-foreground">Closer to campus</h2>
           </div>
           
           <div className="flex overflow-x-auto hide-scrollbar -mx-5 px-5 space-x-4 pb-5">
-            {NEARBY_PLACES.map((hostel) => (
+            {filteredNearby.length === 0 && <p className="text-muted-foreground text-sm py-4">No nearby hostels match your search.</p>}
+            {filteredNearby.map((hostel) => (
               <div 
                 key={hostel.id} 
                 onClick={() => setSelectedHostel(hostel)}
@@ -106,9 +139,15 @@ export default function Explore() {
                 <div className="flex-1 overflow-hidden">
                   <h3 className="font-bold text-sm text-foreground truncate">{hostel.name}</h3>
                   <p className="text-muted-foreground text-[10px] font-medium mb-1 truncate">{hostel.location}</p>
-                  <div className="flex items-baseline">
-                    <span className="text-primary font-bold text-sm">GHS {hostel.price}</span>
-                    <span className="text-muted-foreground text-[10px] font-medium ml-1">/ mo</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-baseline">
+                      <span className="text-primary font-bold text-sm">GHS {hostel.startingPrice}</span>
+                      <span className="text-muted-foreground text-[9px] font-medium ml-1">/{hostel.priceFreq.replace('per ', '')}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                      <span className="text-xs font-medium text-foreground">{hostel.rating.toFixed(1)}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -119,7 +158,12 @@ export default function Explore() {
       </div>
 
       {/* Filter Modal */}
-      <FilterModal isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+      <FilterModal 
+        isOpen={isFilterOpen} 
+        onClose={() => setIsFilterOpen(false)} 
+        onApplyFilters={setActiveFilters}
+        initialFilters={activeFilters}
+      />
 
       {/* Sliding Details Overlay */}
       {/* Dimmed Background */}
@@ -181,9 +225,15 @@ export default function Explore() {
                   </div>
                 </div>
                 
-                <div className="mt-4 flex items-baseline">
-                  <span className="text-primary font-bold text-2xl">GHS {selectedHostel.price}</span>
-                  <span className="text-muted-foreground text-sm font-medium ml-1">/ {selectedHostel.priceFreq}</span>
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="flex items-baseline">
+                    <span className="text-primary font-bold text-2xl">GHS {selectedHostel.startingPrice}</span>
+                    <span className="text-muted-foreground text-xs font-medium ml-1">/{selectedHostel.priceFreq.replace('per ', '')}</span>
+                  </div>
+                  <div className="flex items-center space-x-1 bg-yellow-400/20 px-2 py-1 rounded-lg">
+                    <Star className="w-4 h-4 text-yellow-600 fill-yellow-600" />
+                    <span className="text-sm font-bold text-yellow-700">{selectedHostel.rating.toFixed(1)}</span>
+                  </div>
                 </div>
               </div>
 

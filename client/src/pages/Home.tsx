@@ -1,30 +1,56 @@
-import { Bell, Search, SlidersHorizontal, TrendingUp, MapPin, Star } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Bell, TrendingUp, MapPin, Star } from "lucide-react";
+// import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import FilterModal from "@/components/FilterModal";
-import { useState } from "react";
-import { MOST_POPULAR, NEARBY_PLACES } from "../data/hostels";
+import { useState, useEffect } from "react";
+import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
 
 export default function Home() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  const carouselImages = ALL_HOSTELS
+    .filter(h => !h.name.toLowerCase().includes('evandy') && !h.name.toLowerCase().includes('gaza'))
+    .map(h => h.image);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % carouselImages.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [carouselImages.length]);
+
   return (
     <div className="flex flex-col min-h-screen bg-background pb-6 transition-colors">
       {/* Top App Bar */}
       <TopNav rightAction={<Bell className="w-6 h-6 text-muted-foreground transition-colors hover:text-foreground hidden sm:block" />} />
 
       {/* Hero Section */}
-      <section className="relative px-4 pt-24 pb-8 mb-4">
-        {/* Background Room Image with Fade */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={MOST_POPULAR[0]?.image}
-            alt="Hero Background" 
-            className="w-full h-full object-cover opacity-100 dark:opacity-40 transition-opacity"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background" />
+      <section className="relative px-4 pt-24 pb-8 mb-4 overflow-hidden">
+        {/* Background Room Image with Fade Carousel */}
+        <div className="absolute inset-0 z-0 bg-background pointer-events-none">
+          {carouselImages.map((img, idx) => {
+            const isCurrent = heroIndex === idx;
+            const isFading = idx === (heroIndex - 1 + carouselImages.length) % carouselImages.length;
+            
+            // Render only current and fading out image to save DOM composite overhead
+            if (!isCurrent && !isFading) return null;
+            
+            return (
+              <img 
+                key={idx}
+                src={img}
+                alt="Hero Background" 
+                loading={idx === 0 ? "eager" : "lazy"}
+                style={{ willChange: 'opacity' }}
+                className={`absolute inset-0 w-full h-full object-cover dark:opacity-40 transition-opacity duration-[2000ms] ease-in-out ${isCurrent ? 'opacity-100' : 'opacity-0'}`}
+              />
+            );
+          })}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background" />
         </div>
         
         <div className="relative z-10">
@@ -33,6 +59,7 @@ export default function Home() {
           <h2 className="text-[28px] font-bold text-primary leading-[1.1] mb-8">Find your perfect<br/>room</h2>
 
           {/* Search */}
+          {/* 
           <div className="flex items-center bg-white/10 dark:bg-black/20 backdrop-blur-2xl border border-white/30 dark:border-white/10 rounded-[10px] p-1.5 mb-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]">
             <Search className="w-6 h-6 text-primary ml-3 shrink-0" />
             <Input 
@@ -46,6 +73,11 @@ export default function Home() {
               <SlidersHorizontal className="w-6 h-6 text-primary-foreground" />
             </button>
           </div>
+          */}
+
+          <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground font-bold rounded-xl shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform active:scale-95 mb-6 text-[15px]">
+            Explore More
+          </Link>
         </div>
       </section>
 
@@ -66,12 +98,12 @@ export default function Home() {
                     <img src={hostel.image} alt={hostel.name} className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
                       <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                      <span className="text-xs font-semibold text-white">4.8</span>
+                      <span className="text-xs font-semibold text-white">{hostel.rating.toFixed(1)}</span>
                     </div>
                     <div className="absolute bottom-3 left-3 shadow-sm">
-                      <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-none font-medium text-[10px] px-2 py-0.5 backdrop-blur-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
-                        AVAILABLE
+                      <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                        {hostel.availability}
                       </Badge>
                     </div>
                   </div>
@@ -86,7 +118,7 @@ export default function Home() {
                     <div className="flex items-center justify-between mt-2">
                       <div>
                         <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
-                        <p className="font-bold text-foreground text-lg">GHS {hostel.price}<span className="text-xs font-normal text-muted-foreground">/sem</span></p>
+                        <p className="font-bold text-foreground text-lg">GHS {hostel.startingPrice}<span className="text-xs font-normal text-muted-foreground">/{hostel.priceFreq.replace('per ', '')}</span></p>
                       </div>
                       <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md shrink-0">
                         <TrendingUp className="w-4 h-4 text-primary-foreground rotate-45" />
@@ -118,10 +150,10 @@ export default function Home() {
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-wide truncate">{hostel.distance} away</p>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p className="font-bold text-primary text-[15px]">GHS {hostel.price}<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
+                  <p className="font-bold text-primary text-[15px]">GHS {hostel.startingPrice}<span className="text-xs font-normal text-muted-foreground">/{hostel.priceFreq.replace('per ', '')}</span></p>
                   <div className="flex items-center space-x-1">
                     <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                    <span className="text-sm font-medium text-foreground">4.2</span>
+                    <span className="text-sm font-medium text-foreground">{hostel.rating.toFixed(1)}</span>
                   </div>
                 </div>
               </div>
@@ -132,7 +164,12 @@ export default function Home() {
       </section>
 
       {/* Filter Options Modal */}
-      <FilterModal isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+      <FilterModal 
+        isOpen={isFilterOpen} 
+        onClose={() => setIsFilterOpen(false)} 
+        onApplyFilters={() => {}} 
+        initialFilters={{ minPrice: 0, maxPrice: 50000, distance: 10, amenities: [] }}
+      />
 
     </div>
   );
