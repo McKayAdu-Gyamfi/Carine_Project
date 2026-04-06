@@ -149,11 +149,10 @@ export default function Home() {
                   <h4 className="font-bold text-foreground text-[16px] truncate">{hostel.name}</h4>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-wide truncate">{hostel.distance} away</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <p className="font-bold text-primary text-[15px]">GHS {hostel.startingPrice}<span className="text-xs font-normal text-muted-foreground">/{hostel.priceFreq.replace('per ', '')}</span></p>
-                  <div className="flex items-center space-x-1">
-                    <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                    <span className="text-sm font-medium text-foreground">{hostel.rating.toFixed(1)}</span>
+                <div className="flex items-center justify-end">
+                  <div className="flex items-center space-x-1 bg-yellow-400/20 px-2 py-1 rounded-lg">
+                    <Star className="w-3.5 h-3.5 text-yellow-600 fill-yellow-600" />
+                    <span className="text-sm font-bold text-yellow-700">{hostel.rating.toFixed(1)}</span>
                   </div>
                 </div>
               </div>
@@ -168,7 +167,7 @@ export default function Home() {
         isOpen={isFilterOpen} 
         onClose={() => setIsFilterOpen(false)} 
         onApplyFilters={() => {}} 
-        initialFilters={{ minPrice: 0, maxPrice: 50000, distance: 10, amenities: [] }}
+        initialFilters={{ distance: 10, amenities: [] }}
       />
 
     </div>

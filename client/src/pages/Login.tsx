@@ -30,6 +30,11 @@ export default function Login() {
     }
   };
 
+  const handleManagerLogin = () => {
+    localStorage.setItem("userAvatar", "manager-admin");
+    navigate("/manager");
+  };
+
   if (step === "avatar") {
     return (
       <div className="flex flex-col min-h-screen bg-background text-foreground p-6 justify-center items-center select-none animate-in fade-in slide-in-from-bottom-8 duration-500">
@@ -132,7 +137,7 @@ export default function Login() {
 
         {/* Management Buttons */}
         <div className="grid grid-cols-2 gap-4 mt-8 pt-8 border-t border-border/50">
-          <button className="h-12 bg-card border border-border rounded-lg flex items-center justify-center space-x-2 font-bold text-[11px] hover:bg-accent transition-colors shadow-sm cursor-pointer text-muted-foreground hover:text-foreground">
+          <button onClick={handleManagerLogin} className="h-12 bg-card border border-border rounded-lg flex items-center justify-center space-x-2 font-bold text-[11px] hover:bg-accent transition-colors shadow-sm cursor-pointer text-muted-foreground hover:text-foreground">
             <Shield className="w-4 h-4" />
             <span>Manager</span>
           </button>

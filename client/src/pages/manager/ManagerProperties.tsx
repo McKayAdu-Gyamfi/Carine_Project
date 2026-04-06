@@ -18,7 +18,7 @@ export default function ManagerProperties() {
 
       <div className="px-5 space-y-5">
         {properties.map((prop) => (
-          <div key={prop.id} className="bg-card border border-border/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow relative">
+          <div key={prop.id} className="bg-card border border-border/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow relative">
             <div className="h-32 relative">
               <img src={prop.image} className="w-full h-[120%] object-cover -mt-[5%]" alt="Property" />
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
@@ -33,8 +33,8 @@ export default function ManagerProperties() {
             
             <div className="p-4 flex flex-col space-y-4">
               <div className="flex justify-between items-center text-sm font-semibold">
-                <span className="text-muted-foreground uppercase tracking-widest text-[10px]">Base Price</span>
-                <span className="text-foreground">GHS {prop.startingPrice} <span className="text-xs text-muted-foreground font-normal">/{prop.priceFreq.replace('per ', '')}</span></span>
+                <span className="text-muted-foreground uppercase tracking-widest text-[10px]">Distance</span>
+                <span className="text-foreground">{prop.distance} from Campus</span>
               </div>
               <div className="flex justify-between items-center text-sm font-semibold border-t border-border/40 pt-3">
                 <span className="text-muted-foreground uppercase tracking-widest text-[10px]">Occupancy</span>

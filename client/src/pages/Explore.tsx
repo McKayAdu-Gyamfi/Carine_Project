@@ -14,12 +14,11 @@ export default function Explore() {
   });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilters, setActiveFilters] = useState({ minPrice: 0, maxPrice: 50000, distance: 10, amenities: [] as string[] });
+  const [activeFilters, setActiveFilters] = useState({ distance: 10, amenities: [] as string[] });
   const navigate = useNavigate();
 
   const filteredPopular = MOST_POPULAR.filter(h => {
     if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (h.startingPrice < activeFilters.minPrice || h.startingPrice > activeFilters.maxPrice) return false;
     if (parseFloat(h.distance) > activeFilters.distance) return false;
     if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
     return true;
@@ -27,7 +26,6 @@ export default function Explore() {
 
   const filteredNearby = NEARBY_PLACES.filter(h => {
     if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (h.startingPrice < activeFilters.minPrice || h.startingPrice > activeFilters.maxPrice) return false;
     if (parseFloat(h.distance) > activeFilters.distance) return false;
     if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
     return true;
@@ -140,10 +138,6 @@ export default function Explore() {
                   <h3 className="font-bold text-sm text-foreground truncate">{hostel.name}</h3>
                   <p className="text-muted-foreground text-[10px] font-medium mb-1 truncate">{hostel.location}</p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-baseline">
-                      <span className="text-primary font-bold text-sm">GHS {hostel.startingPrice}</span>
-                      <span className="text-muted-foreground text-[9px] font-medium ml-1">/{hostel.priceFreq.replace('per ', '')}</span>
-                    </div>
                     <div className="flex items-center space-x-1">
                       <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                       <span className="text-xs font-medium text-foreground">{hostel.rating.toFixed(1)}</span>
@@ -226,10 +220,6 @@ export default function Explore() {
                 </div>
                 
                 <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-baseline">
-                    <span className="text-primary font-bold text-2xl">GHS {selectedHostel.startingPrice}</span>
-                    <span className="text-muted-foreground text-xs font-medium ml-1">/{selectedHostel.priceFreq.replace('per ', '')}</span>
-                  </div>
                   <div className="flex items-center space-x-1 bg-yellow-400/20 px-2 py-1 rounded-lg">
                     <Star className="w-4 h-4 text-yellow-600 fill-yellow-600" />
                     <span className="text-sm font-bold text-yellow-700">{selectedHostel.rating.toFixed(1)}</span>

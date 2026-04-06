@@ -25,10 +25,10 @@ export default function ManagerBookings() {
             <input 
               type="text" 
               placeholder="Search tenant..." 
-              className="w-full h-10 bg-card rounded-xl pl-9 pr-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-border/60"
+              className="w-full h-10 bg-card rounded-lg pl-9 pr-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-border/60"
             />
           </div>
-          <button className="w-10 h-10 bg-card rounded-xl border border-border/60 flex items-center justify-center shadow-sm">
+          <button className="w-10 h-10 bg-card rounded-lg border border-border/60 flex items-center justify-center shadow-sm">
             <Filter className="w-4 h-4 text-foreground" />
           </button>
         </div>
@@ -55,7 +55,7 @@ export default function ManagerBookings() {
         )}
         
         {filteredBookings.map(b => (
-          <div key={b.id} className="bg-card border border-border/60 rounded-2xl p-4 shadow-sm relative group overflow-hidden">
+          <div key={b.id} className="bg-card border border-border/60 rounded-xl p-4 shadow-sm relative group overflow-hidden">
             {b.status === "Pending" && (
                <div className="absolute top-0 right-0 p-2 opacity-5">
                  <Clock className="w-16 h-16 text-amber-500" />
@@ -73,11 +73,11 @@ export default function ManagerBookings() {
 
               {b.status === "Pending" && (
                 <div className="flex items-center space-x-3 mt-4 border-t border-border/40 pt-3">
-                  <button className="flex-1 flex items-center justify-center space-x-1.5 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 py-2.5 rounded-xl font-bold text-xs transition-colors">
+                  <button className="flex-1 flex items-center justify-center space-x-1.5 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 py-2.5 rounded-lg font-bold text-xs transition-colors">
                      <CheckCircle2 className="w-4 h-4" />
                      <span>Approve</span>
                   </button>
-                  <button className="flex-1 flex items-center justify-center space-x-1.5 bg-red-500/10 text-red-600 hover:bg-red-500/20 py-2.5 rounded-xl font-bold text-xs transition-colors">
+                  <button className="flex-1 flex items-center justify-center space-x-1.5 bg-red-500/10 text-red-600 hover:bg-red-500/20 py-2.5 rounded-lg font-bold text-xs transition-colors">
                      <XCircle className="w-4 h-4" />
                      <span>Decline</span>
                   </button>

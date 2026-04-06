@@ -4,15 +4,13 @@ import { X } from "lucide-react";
 interface FilterModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApplyFilters: (filters: { minPrice: number; maxPrice: number; distance: number; amenities: string[] }) => void;
-  initialFilters: { minPrice: number; maxPrice: number; distance: number; amenities: string[] };
+  onApplyFilters: (filters: { distance: number; amenities: string[] }) => void;
+  initialFilters: { distance: number; amenities: string[] };
 }
 
 export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFilters }: FilterModalProps) {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialFilters.amenities);
   const [distance, setDistance] = useState<number>(initialFilters.distance);
-  const [minPrice, setMinPrice] = useState<number>(initialFilters.minPrice);
-  const [maxPrice, setMaxPrice] = useState<number>(initialFilters.maxPrice);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -21,8 +19,6 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
       // Sync state when opened
       setSelectedAmenities(initialFilters.amenities);
       setDistance(initialFilters.distance);
-      setMinPrice(initialFilters.minPrice);
-      setMaxPrice(initialFilters.maxPrice);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -41,8 +37,6 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
 
   const handleApply = () => {
     onApplyFilters({ 
-      minPrice: minPrice || 0, 
-      maxPrice: maxPrice || 50000, 
       distance, 
       amenities: selectedAmenities 
     });
@@ -69,31 +63,6 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
         </div>
 
         <div className="space-y-6 max-h-[60vh] overflow-y-auto hide-scrollbar pb-6 relative">
-          {/* Price Range */}
-          <div>
-            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Price Range (GHS)</h3>
-            <div className="flex items-center space-x-4">
-              <div className="flex-1">
-                <input 
-                  type="number" 
-                  placeholder="Min" 
-                  value={minPrice || ""}
-                  onChange={(e) => setMinPrice(Number(e.target.value))}
-                  className="w-full h-12 bg-card border border-border rounded-xl px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder:text-muted-foreground" 
-                />
-              </div>
-              <div className="text-muted-foreground font-bold">-</div>
-              <div className="flex-1">
-                <input 
-                  type="number" 
-                  placeholder="Max" 
-                  value={maxPrice || ""}
-                  onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="w-full h-12 bg-card border border-border rounded-xl px-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder:text-muted-foreground" 
-                />
-              </div>
-            </div>
-          </div>
 
           {/* Distance */}
           <div>
@@ -138,7 +107,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
         {/* Action Buttons */}
         <div className="flex items-center space-x-3 pt-4 mt-2 border-t border-border/50">
           <button 
-             onClick={() => { setSelectedAmenities([]); setDistance(5); setMinPrice(0); setMaxPrice(50000); }}
+             onClick={() => { setSelectedAmenities([]); setDistance(5); }}
              className="px-6 py-4 font-bold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             Clear
