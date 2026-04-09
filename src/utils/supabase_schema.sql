@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS "user" (
     "profile_complete" BOOLEAN DEFAULT FALSE,
     "student_id" TEXT,
     "course" TEXT,
-    "current_room_id" UUID -- Foreign key to ROOM (Added after ROOM table is created)
+    "current_room_id" UUID, -- Foreign key to ROOM (Added after ROOM table is created)
+    "payment_details" TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "session" (
@@ -73,6 +74,7 @@ CREATE TABLE IF NOT EXISTS "HOSTEL" (
     description TEXT,
     total_rooms INT NOT NULL DEFAULT 0,
     available_rooms INT NOT NULL DEFAULT 0,
+    distance_from_campus DECIMAL(5,2),
     manager_id TEXT REFERENCES "user"("id") ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

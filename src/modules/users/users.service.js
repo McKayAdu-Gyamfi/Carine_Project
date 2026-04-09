@@ -101,6 +101,28 @@ export const completeProfile = async (userId, data) => {
   return updatedUser[0];
 };
 
+export const completeManagerProfile = async (userId, data) => {
+  const { payment_details } = data;
+  const profileComplete = !!payment_details;
+
+  console.log(`[DEBUG completeManagerProfile] Attempting to update userId: "${userId}"`);
+
+  const { data: updatedUser, error } = await supabase
+    .from("user")
+    .update({ payment_details, profile_complete: profileComplete })
+    .eq("id", userId)
+    .select();
+
+  console.log(`[DEBUG completeManagerProfile] Update Result:`, updatedUser, `Error:`, error);
+
+  if (error) throw new UserServiceError(error.message, 400);
+  if (!updatedUser || updatedUser.length === 0) {
+    throw new UserServiceError("User profile not found in database", 404);
+  }
+  
+  return updatedUser[0];
+};
+
 export const getMyHostels = async (userId) => {
   // Assuming a manager can have many hostels assigned to them where manager_id = id
   const { data, error } = await supabase

@@ -14,7 +14,6 @@ export const registerManager = async (req, res, next) => {
         name: name || email.split("@")[0]
       }
     });
-
     if (response.error) {
       console.error("[Auth Controller - registerManager] BetterAuth Error:", response.error.message);
       return res.status(400).json({ success: false, message: response.error.message });
@@ -28,7 +27,7 @@ export const registerManager = async (req, res, next) => {
       .from("user") // Ensure this matches actual table name, it might be 'USERS' based on controllers
       .update({
         user_type, // "HOSTEL_MANAGER"
-        profile_complete: true
+        profile_complete: false // Requires manager to upload payment details later
       })
       .eq("id", user.id)
       .select()
@@ -47,7 +46,6 @@ export const registerManager = async (req, res, next) => {
     next(err);
   }
 };
-
 // POST /api/auth/sign-up/email
 export const signUp = async (req, res, next) => {
   try {

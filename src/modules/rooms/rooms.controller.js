@@ -1,15 +1,32 @@
 import { supabase } from "../../config/db.js";
 import * as amenitiesService from "../amenities/Amenities.service.js";
+import { uploadImageToSupabase } from "../../utils/supabaseStorage.js";
 
 // GET /api/rooms?hostel_id=123
 export const getRooms = async (req, res, next) => {
   try {
-    const { hostel_id } = req.query;
+    const { hostel_id, min_price, max_price, room_type, is_available } = req.query;
 
     let query = supabase.from("ROOM").select("*, HOSTEL!inner(hostel_name)");
 
     if (hostel_id) {
       query = query.eq("hostel_id", hostel_id);
+    }
+    
+    if (min_price && !isNaN(Number(min_price))) {
+      query = query.gte("price_per_bed", Number(min_price));
+    }
+    
+    if (max_price && !isNaN(Number(max_price))) {
+      query = query.lte("price_per_bed", Number(max_price));
+    }
+    
+    if (room_type) {
+      query = query.eq("room_type", room_type);
+    }
+    
+    if (is_available !== undefined && is_available !== "") {
+      query = query.eq("is_available", is_available === "true");
     }
 
     const { data, error } = await query;
@@ -157,3 +174,39 @@ export const removeRoomAmenity = async (req, res, next) => {
   }
 };
 
+// POST /api/rooms/:id/images
+export const uploadRoomImages = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ success: false, message: "No images provided" });
+    }
+
+    const uploadedUrls = [];
+
+    // Upload each file to Supabase Storage
+    for (const file of req.files) {
+      const publicUrl = await uploadImageToSupabase(file, 'standard_images', `rooms/${id}`);
+      uploadedUrls.push(publicUrl);
+    }
+
+    // Prepare records for database insertion
+    const imageRecords = uploadedUrls.map(url => ({
+      room_id: id,
+      image_url: url
+    }));
+
+    // Insert URLs into the database
+    const { data, error } = await supabase
+      .from("ROOM_IMAGE_URLS")
+      .insert(imageRecords)
+      .select();
+
+    if (error) throw error;
+
+    res.status(201).json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
