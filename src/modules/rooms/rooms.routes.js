@@ -23,4 +23,10 @@ router.delete("/:id/amenities/:amenityId", requireAuth, verifyRoomOwnership, con
 // Image upload route
 router.post("/:id/images", requireAuth, verifyRoomOwnership, uploadMiddleware.array("images", 10), controllers.uploadRoomImages);
 
+// Delete room tour scene route
+router.delete("/:id/tours/:sceneId", requireAuth, verifyRoomOwnership, controllers.deleteRoomTourScene);
+
+// Create room tour scene from frontend result
+router.post("/:id/tours", requireAuth, verifyRoomOwnership, controllers.createRoomTourScene);
+
 export default router;

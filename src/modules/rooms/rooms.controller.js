@@ -48,6 +48,7 @@ export const getRoomById = async (req, res, next) => {
       .select(`
         *,
         ROOM_IMAGE_URLS (*),
+        ROOM_TOUR_SCENES (*),
         ROOM_AMENITY (*),
         HOSTEL (hostel_name, location)
       `)
@@ -206,6 +207,53 @@ export const uploadRoomImages = async (req, res, next) => {
     if (error) throw error;
 
     res.status(201).json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE /api/rooms/:id/tours/:sceneId
+export const deleteRoomTourScene = async (req, res, next) => {
+  try {
+    const { sceneId } = req.params;
+
+    // Delete the scene from the database
+    const { error } = await supabase
+      .from("ROOM_TOUR_SCENES")
+      .delete()
+      .eq("id", sceneId);
+
+    if (error) throw error;
+
+    res.json({ success: true, message: "Tour scene deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/rooms/:id/tours
+export const createRoomTourScene = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { scene_name, scene_config_url } = req.body;
+
+    if (!scene_name || !scene_config_url) {
+      return res.status(400).json({ success: false, message: "scene_name and scene_config_url are required" });
+    }
+
+    const { data: sceneData, error: sceneError } = await supabase
+      .from("ROOM_TOUR_SCENES")
+      .insert([{
+        room_id: id,
+        scene_name: scene_name,
+        scene_config_url: scene_config_url
+      }])
+      .select()
+      .single();
+
+    if (sceneError) throw sceneError;
+
+    res.status(201).json({ success: true, data: sceneData });
   } catch (err) {
     next(err);
   }
