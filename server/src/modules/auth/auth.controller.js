@@ -1,11 +1,11 @@
-import { auth } from "../../lib/auth.js";
+import { auth } from "../../../auth.js";
 import { supabase } from "../../config/db.js";
 
 // POST /api/auth/register
 export const registerManager = async (req, res, next) => {
   try {
     const { email, password, user_type, name } = req.body;
-    
+
     // 1. Call BetterAuth to create auth user
     const response = await auth.api.signUpEmail({
       body: {
@@ -54,7 +54,7 @@ export const signUp = async (req, res, next) => {
       body: { email, password, name: name || email.split("@")[0] },
       asResponse: true
     });
-    
+
     // Pass cookies & headers from Better Auth response back to Express
     response.headers.forEach((value, key) => {
       res.append(key, value);
@@ -79,7 +79,7 @@ export const signIn = async (req, res, next) => {
       body: { email, password },
       asResponse: true
     });
-    
+
     response.headers.forEach((value, key) => {
       res.append(key, value);
     });
@@ -102,7 +102,7 @@ export const signOut = async (req, res, next) => {
       headers: req.headers,
       asResponse: true
     });
-    
+
     response.headers.forEach((value, key) => {
       res.append(key, value);
     });

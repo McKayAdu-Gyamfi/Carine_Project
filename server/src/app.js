@@ -3,7 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { toNodeHandler } from "better-auth/node";
 
-import { auth } from "./lib/auth.js";
+import { auth } from "../auth.js";
 import hostelsRouter from "./modules/hostels/hostels.routes.js";
 import roomsRouter from "./modules/rooms/rooms.routes.js";
 import bookingsRouter from "./modules/bookings/bookings.routes.js";

@@ -1,4 +1,4 @@
-import { auth } from "../lib/auth.js";
+import { auth } from "../../auth.js";
 import { supabase } from "../config/db.js";
 
 export const requireAuth = async (req, res, next) => {
@@ -6,12 +6,12 @@ export const requireAuth = async (req, res, next) => {
     const session = await auth.api.getSession({
       headers: req.headers,
     });
-    
+
     if (!session || !session.user) {
       console.error("[Auth Middleware - requireAuth] Error: Unauthorized (no session)");
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
-    
+
     console.log("[Auth Middleware - requireAuth] Success for user:", session.user.id);
     req.user = session.user;
     next();
@@ -26,7 +26,7 @@ export const requireRole = (role) => {
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
-    
+
     // Strict matching per requirements:
     if (req.user.user_type !== role) {
       console.error(`[Auth Middleware - requireRole] Error: User type ${req.user.user_type} does not match required role ${role}`);

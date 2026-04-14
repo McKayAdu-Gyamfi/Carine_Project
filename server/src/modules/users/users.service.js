@@ -80,7 +80,7 @@ export const completeProfile = async (userId, data) => {
   const profileComplete = !!(student_id && course);
 
   console.log(`[DEBUG completeProfile] Attempting to update userId: "${userId}"`);
-  
+
   // Debug SELECT to see if Supabase client can see the row
   const { data: checkData, error: checkError } = await supabase.from('user').select('id').eq('id', userId);
   console.log(`[DEBUG completeProfile] Pre-update SELECT check:`, checkData, `Error:`, checkError);
@@ -97,7 +97,7 @@ export const completeProfile = async (userId, data) => {
   if (!updatedUser || updatedUser.length === 0) {
     throw new UserServiceError("User profile not found in database", 404);
   }
-  
+
   return updatedUser[0];
 };
 
@@ -119,7 +119,7 @@ export const completeManagerProfile = async (userId, data) => {
   if (!updatedUser || updatedUser.length === 0) {
     throw new UserServiceError("User profile not found in database", 404);
   }
-  
+
   return updatedUser[0];
 };
 
@@ -168,7 +168,7 @@ export const adminUpdateUser = async (id, updates) => {
 };
 
 // Flow 3: ADMIN creates another ADMIN 
-import { auth } from "../../lib/auth.js"; // Needs auth to create user
+import { auth } from "../../../auth.js"; // Needs auth to create user
 
 export const createAdmin = async (adminDetails) => {
   const { email, password, name } = adminDetails;
