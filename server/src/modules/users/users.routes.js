@@ -5,7 +5,8 @@ import {
   updateUserProfileSchema, 
   completeProfileSchema, 
   adminUpdateUserSchema,
-  createAdminSchema
+  createAdminSchema,
+  completeManagerProfileSchema
 } from "./users.schema.js";
 import { requireAuth, requireRole } from "../../middlewares/auth.middleware.js";
 
@@ -25,6 +26,14 @@ router.patch(
 );
 
 // MANAGER-ONLY ROUTE
+router.patch(
+  "/me/manager-profile-complete",
+  requireAuth,
+  requireRole("HOSTEL_MANAGER"),
+  validateRequest(completeManagerProfileSchema),
+  controllers.completeManagerProfile
+);
+
 router.get(
   "/me/hostels",
   requireAuth,

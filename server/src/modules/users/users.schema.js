@@ -6,7 +6,8 @@ export const updateUserProfileSchema = z.object({
     current_room_id: z.string().optional(),
     student_id: z.string().optional(), // School issued student ID
     name: z.string().optional(), // Common
-    phone: z.string().optional() // Example additional fields
+    phone: z.string().optional(), // Example additional fields
+    payment_details: z.string().optional() // Manager specific
   })
 });
 
@@ -14,6 +15,12 @@ export const completeProfileSchema = z.object({
   body: z.object({
     course: z.string({ required_error: "Course is required" }),
     student_id: z.string({ required_error: "Student ID is required" }),
+  })
+});
+
+export const completeManagerProfileSchema = z.object({
+  body: z.object({
+    payment_details: z.string({ required_error: "Payment details are required" })
   })
 });
 
@@ -32,6 +39,7 @@ export const adminUpdateUserSchema = z.object({
     current_room_id: z.string().optional(),
     student_id: z.string().optional(),
     user_type: z.enum(["STUDENT", "HOSTEL_MANAGER", "ADMIN"]).optional(),
-    name: z.string().optional()
+    name: z.string().optional(),
+    payment_details: z.string().optional()
   })
 });

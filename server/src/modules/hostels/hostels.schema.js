@@ -13,6 +13,7 @@ export const createHostelSchema = z.object({
     description: z.string().optional(),
     total_rooms: z.number().int().min(1).default(1),
     available_rooms: z.number().int().min(0).default(0),
+    distance_from_campus: z.number().nonnegative().optional(),
     // manager_id relates to Better Auth users table
     manager_id: z.string().optional()
   })
@@ -28,6 +29,7 @@ export const updateHostelSchema = z.object({
     description: z.string().optional(),
     total_rooms: z.number().int().optional(),
     available_rooms: z.number().int().min(0).optional(),
+    distance_from_campus: z.number().nonnegative().optional(),
     manager_id: z.string().optional()
   })
 });
