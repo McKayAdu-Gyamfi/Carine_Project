@@ -10,6 +10,7 @@ This document lists all active API endpoints identified in the project, organize
 - `PUT /:id/amenities` : Bulk update amenities **(Requires Auth, Hostel Owner)**
 - `POST /:id/amenities` : Add single amenity **(Requires Auth, Hostel Owner)**
 - `DELETE /:id/amenities/:amenityId` : Delete amenity **(Requires Auth, Hostel Owner)**
+- `POST /:id/images` : Upload hostel images to Supabase (up to 10) **(Requires Auth, Hostel Owner)**
 
 ## 🛏️ Rooms (`/api/rooms`)
 - `GET /` : Get all rooms **(Public)**
@@ -19,6 +20,9 @@ This document lists all active API endpoints identified in the project, organize
 - `PUT /:id/amenities` : Bulk update room amenities **(Requires Auth, Room Owner)**
 - `POST /:id/amenities` : Add single room amenity **(Requires Auth, Room Owner)**
 - `DELETE /:id/amenities/:amenityId` : Delete room amenity **(Requires Auth, Room Owner)**
+- `POST /:id/images` : Upload room images to Supabase (up to 10) **(Requires Auth, Room Owner)**
+- `POST /:id/tours` : Store a room tour scene (dynamically links panoramas for Frontend merging) **(Requires Auth, Room Owner)**
+- `DELETE /:id/tours/:sceneId` : Delete a room tour scene **(Requires Auth, Room Owner)**
 
 ## 📅 Bookings (`/api/bookings`)
 - `GET /` : View all bookings (Filtered automatically for Students) **(Requires Auth)**

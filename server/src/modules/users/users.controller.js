@@ -40,6 +40,19 @@ export const completeProfile = async (req, res, next) => {
   }
 };
 
+// PATCH /api/users/me/manager-profile-complete
+export const completeManagerProfile = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const data = await usersService.completeManagerProfile(userId, req.body);
+    console.log(`[Users Controller - completeManagerProfile] Success for user ${userId}`);
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error("[Users Controller - completeManagerProfile] Error:", err);
+    next(err);
+  }
+};
+
 // GET /api/users/me/hostels
 export const getMyHostels = async (req, res, next) => {
   try {

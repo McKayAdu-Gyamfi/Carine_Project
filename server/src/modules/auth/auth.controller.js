@@ -1,11 +1,11 @@
-import { auth } from "../../lib/auth.js";
+import { auth } from "../../../auth.js";
 import { supabase } from "../../config/db.js";
 
 // POST /api/auth/register
 export const registerManager = async (req, res, next) => {
   try {
     const { email, password, user_type, name } = req.body;
-    
+
     // 1. Call BetterAuth to create auth user
     const response = await auth.api.signUpEmail({
       body: {
@@ -14,7 +14,6 @@ export const registerManager = async (req, res, next) => {
         name: name || email.split("@")[0]
       }
     });
-
     if (response.error) {
       console.error("[Auth Controller - registerManager] BetterAuth Error:", response.error.message);
       return res.status(400).json({ success: false, message: response.error.message });
@@ -28,7 +27,7 @@ export const registerManager = async (req, res, next) => {
       .from("user") // Ensure this matches actual table name, it might be 'USERS' based on controllers
       .update({
         user_type, // "HOSTEL_MANAGER"
-        profile_complete: true
+        profile_complete: false // Requires manager to upload payment details later
       })
       .eq("id", user.id)
       .select()
@@ -47,7 +46,6 @@ export const registerManager = async (req, res, next) => {
     next(err);
   }
 };
-
 // POST /api/auth/sign-up/email
 export const signUp = async (req, res, next) => {
   try {
@@ -56,7 +54,7 @@ export const signUp = async (req, res, next) => {
       body: { email, password, name: name || email.split("@")[0] },
       asResponse: true
     });
-    
+
     // Pass cookies & headers from Better Auth response back to Express
     response.headers.forEach((value, key) => {
       res.append(key, value);
@@ -81,7 +79,7 @@ export const signIn = async (req, res, next) => {
       body: { email, password },
       asResponse: true
     });
-    
+
     response.headers.forEach((value, key) => {
       res.append(key, value);
     });
@@ -104,7 +102,7 @@ export const signOut = async (req, res, next) => {
       headers: req.headers,
       asResponse: true
     });
-    
+
     response.headers.forEach((value, key) => {
       res.append(key, value);
     });

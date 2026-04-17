@@ -22,6 +22,9 @@ export const auth = betterAuth({
       },
       profile_complete: {
         type: "boolean",
+      },
+      payment_details: {
+        type: "string",
       }
     }
   },
@@ -42,7 +45,8 @@ export const auth = betterAuth({
             // Alternatively, other domains can be auto-assigned HOSTEL_MANAGER or default to unverified
             // Defaulting to HOSTEL_MANAGER based on legacy config fallback unless otherwise specified
             user.user_type = "HOSTEL_MANAGER";
-            user.profile_complete = true;
+            // Set to false initially, requires completion
+            user.profile_complete = false;
           }
           return { data: user };
         }

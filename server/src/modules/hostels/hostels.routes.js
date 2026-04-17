@@ -5,6 +5,7 @@ import { createHostelSchema, updateHostelSchema } from "./hostels.schema.js";
 import { updateAmenitiesSchema, addAmenitySchema } from "../amenities/Amenities.schema.js";
 import { requireAuth, requireRole } from "../../middlewares/auth.middleware.js";
 import { verifyHostelOwnership } from "../../middlewares/verifyOwnership.js";
+import { uploadMiddleware } from "../../middlewares/upload.middleware.js";
 
 const router = Router();
 
@@ -19,5 +20,8 @@ router.patch("/:id", requireAuth, verifyHostelOwnership, validateRequest(updateH
 router.put("/:id/amenities", requireAuth, verifyHostelOwnership, validateRequest(updateAmenitiesSchema), controllers.updateHostelAmenities);
 router.post("/:id/amenities", requireAuth, verifyHostelOwnership, validateRequest(addAmenitySchema), controllers.addHostelAmenity);
 router.delete("/:id/amenities/:amenityId", requireAuth, verifyHostelOwnership, controllers.removeHostelAmenity);
+
+// Image upload route
+router.post("/:id/images", requireAuth, verifyHostelOwnership, uploadMiddleware.array("images", 10), controllers.uploadHostelImages);
 
 export default router;
