@@ -1,20 +1,28 @@
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
-import Explore from "./pages/Explore";
-import LivePreview from "./pages/LivePreview";
-import Booking from "./pages/Booking";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import EditProfile from "./pages/EditProfile";
-import ManageBookings from "./pages/ManageBookings";
-import SettingsPage from "./pages/Settings";
-import Saved from "./pages/Saved";
 import Layout from "./components/Layout";
 import ManagerLayout from "./components/ManagerLayout";
-import ManagerDashboard from "./pages/manager/ManagerDashboard";
-import ManagerProperties from "./pages/manager/ManagerProperties";
-import ManagerBookings from "./pages/manager/ManagerBookings";
 import { ThemeProvider } from "./components/theme-provider";
+
+const Home = React.lazy(() => import("./pages/Home"));
+const Explore = React.lazy(() => import("./pages/Explore"));
+const LivePreview = React.lazy(() => import("./pages/LivePreview"));
+const Booking = React.lazy(() => import("./pages/Booking"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Profile = React.lazy(() => import("./pages/Profile"));
+const EditProfile = React.lazy(() => import("./pages/EditProfile"));
+const ManageBookings = React.lazy(() => import("./pages/ManageBookings"));
+const SettingsPage = React.lazy(() => import("./pages/Settings"));
+const Saved = React.lazy(() => import("./pages/Saved"));
+const ManagerDashboard = React.lazy(() => import("./pages/manager/ManagerDashboard"));
+const ManagerProperties = React.lazy(() => import("./pages/manager/ManagerProperties"));
+const ManagerBookings = React.lazy(() => import("./pages/manager/ManagerBookings"));
+
+const ScreenLoader = () => (
+  <div className="flex h-screen w-full items-center justify-center bg-background">
+    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem("userAvatar") !== null;
@@ -28,6 +36,7 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Router>
+      <Suspense fallback={<ScreenLoader />}>
       <Routes>
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="/" element={<Home />} />
@@ -52,6 +61,7 @@ export default function App() {
         <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      </Suspense>
     </Router>
     </ThemeProvider>
   );

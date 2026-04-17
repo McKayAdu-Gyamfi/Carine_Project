@@ -41,7 +41,7 @@ export default function Saved() {
                 className="w-full bg-card rounded-3xl p-3 shadow-md border border-border flex items-center justify-between group"
               >
                 <div className="flex items-center space-x-4">
-                  <img src={hostel.image} alt={hostel.name} className="w-20 h-20 rounded-2xl object-cover shadow-sm" />
+                  <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-20 h-20 rounded-2xl object-cover shadow-sm" />
                   <div className="flex flex-col">
                     <h3 className="font-bold text-base text-foreground mb-1">{hostel.name}</h3>
                     <div className="flex items-center text-muted-foreground text-xs font-medium mb-1">

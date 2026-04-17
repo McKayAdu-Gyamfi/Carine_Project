@@ -95,7 +95,7 @@ export default function Home() {
               <Link to="/explore" key={hostel.id} className="block outline-none">
                 <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
                   <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
-                    <img src={hostel.image} alt={hostel.name} className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
+                    <img src={hostel.image} alt={hostel.name} loading="lazy" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
                       <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
                       <span className="text-xs font-semibold text-white">{hostel.rating.toFixed(1)}</span>
@@ -142,7 +142,7 @@ export default function Home() {
           {NEARBY_PLACES.map((hostel) => (
             <div key={hostel.id} className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
               <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
-                <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
+                <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
               </div>
               <div className="flex-1 ml-4 py-0.5 flex flex-col justify-between overflow-hidden">
                 <div>

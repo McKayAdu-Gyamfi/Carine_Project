@@ -33,7 +33,7 @@ export default function Profile() {
               {userAvatar?.startsWith("Tr") ? (
                 <TygerAvatar name={userAvatar as any} size="3xl" />
               ) : userAvatar?.startsWith("http") ? (
-                <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover" />
+                <img src={userAvatar} alt="Avatar" loading="lazy" className="w-full h-full object-cover" />
               ) : (
                 <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
               )}
@@ -111,7 +111,7 @@ export default function Profile() {
           <Link to="/explore" className="block outline-none shrink-0 w-[240px]">
             <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group">
                <div className="h-[140px] relative overflow-hidden bg-muted">
-                 <img src={tanko_hostel_1} className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Dufie Annex" />
+                 <img src={tanko_hostel_1} loading="lazy" className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Dufie Annex" />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                  <div className="absolute bottom-3 left-3">
                    <span className="bg-background/95 backdrop-blur-md text-foreground px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">In-Progress</span>

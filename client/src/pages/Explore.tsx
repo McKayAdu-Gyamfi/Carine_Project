@@ -87,7 +87,7 @@ export default function Explore() {
                 className="shrink-0 w-[240px] bg-card rounded-[10px] p-3 shadow-md border border-border cursor-pointer hover:shadow-xl transition-all group"
               >
                 <div className="relative w-full h-[240px] rounded-[10px] overflow-hidden mb-3">
-                  <img src={hostel.image} alt={hostel.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <button 
                       onClick={(e) => handleSave(e, hostel.id)}
                       className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md transition-colors"
@@ -133,7 +133,7 @@ export default function Explore() {
                 onClick={() => setSelectedHostel(hostel)}
                 className="shrink-0 w-[220px] bg-card rounded-lg p-2.5 flex items-center shadow-sm border border-border cursor-pointer hover:shadow-md transition-all gap-3"
               >
-                <img src={hostel.image} alt={hostel.name} className="w-16 h-16 rounded-lg object-cover" />
+                <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-16 h-16 rounded-lg object-cover" />
                 <div className="flex-1 overflow-hidden">
                   <h3 className="font-bold text-sm text-foreground truncate">{hostel.name}</h3>
                   <p className="text-muted-foreground text-[10px] font-medium mb-1 truncate">{hostel.location}</p>
@@ -174,7 +174,7 @@ export default function Explore() {
           <>
             {/* Header / Hero Image */}
             <div className="relative h-64 shrink-0">
-              <img src={selectedHostel.image} className="w-full h-full object-cover" alt="Property Header" />
+              <img src={selectedHostel.image} loading="lazy" className="w-full h-full object-cover" alt="Property Header" />
               
               {/* Back Button */}
               <button 
@@ -232,7 +232,7 @@ export default function Explore() {
                 <h3 className="text-lg font-bold text-foreground mb-3">Gallery</h3>
                 <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
                   {selectedHostel.gallery.map((img: string, idx: number) => (
-                    <img key={idx} src={img} className="w-20 h-20 rounded-2xl object-cover border border-border shrink-0 shadow-sm" alt="Gallery item" />
+                    <img key={idx} src={img} loading="lazy" className="w-20 h-20 rounded-2xl object-cover border border-border shrink-0 shadow-sm" alt="Gallery item" />
                   ))}
                 </div>
               </div>

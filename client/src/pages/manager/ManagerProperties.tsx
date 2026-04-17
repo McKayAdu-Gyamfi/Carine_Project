@@ -20,7 +20,7 @@ export default function ManagerProperties() {
         {properties.map((prop) => (
           <div key={prop.id} className="bg-card border border-border/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow relative">
             <div className="h-32 relative">
-              <img src={prop.image} className="w-full h-[120%] object-cover -mt-[5%]" alt="Property" />
+              <img src={prop.image} loading="lazy" className="w-full h-[120%] object-cover -mt-[5%]" alt="Property" />
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
               <div className="absolute bottom-3 left-4">
                 <h3 className="font-bold text-white text-lg tracking-wide">{prop.name}</h3>

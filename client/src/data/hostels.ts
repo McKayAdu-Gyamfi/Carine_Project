@@ -1,7 +1,7 @@
-const images = import.meta.glob('../assets/*.{png,jpg,jpeg,svg,webp}', { eager: true, import: 'default' });
-
 export const getImage = (filename: string): string => {
-  return (images[`../assets/${filename}`] as string) || '';
+  const name = filename.replace(/\.(png|jpg|jpeg|svg|webp)$/i, '');
+  if (name === 'New_Hosanna_2') return '/images/New_Hosanna_2png.webp';
+  return `/images/${name}.webp`;
 };
 
 export const MOST_POPULAR = [

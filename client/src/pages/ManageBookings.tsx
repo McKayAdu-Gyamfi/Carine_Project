@@ -27,7 +27,7 @@ export default function ManageBookings() {
           
           <div className="bg-card border border-primary/20 rounded-[32px] overflow-hidden shadow-xl">
              <div className="relative h-[180px] w-full">
-               <img src={tanko_hostel_1} className="w-full h-full object-cover" alt="Tanko Hostel" />
+               <img src={tanko_hostel_1} loading="lazy" className="w-full h-full object-cover" alt="Tanko Hostel" />
                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                
                <div className="absolute top-4 left-4 bg-primary text-primary-foreground text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md flex items-center space-x-1">
@@ -82,7 +82,7 @@ export default function ManageBookings() {
           <h2 className="text-[13px] font-extrabold uppercase tracking-widest text-muted-foreground mb-4 pl-1">Past Bookings</h2>
           <div className="bg-card border border-border/40 rounded-[24px] p-4 flex items-center space-x-4 opacity-70">
             <div className="w-16 h-16 rounded-2xl bg-muted overflow-hidden shrink-0">
-               <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?fit=crop&w=200&h=200" className="w-full h-full object-cover mix-blend-luminosity" alt="Past" />
+               <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?fit=crop&w=200&h=200" loading="lazy" className="w-full h-full object-cover mix-blend-luminosity" alt="Past" />
             </div>
             <div className="flex-1">
                <h4 className="font-bold text-sm mb-1">Blue Haven</h4>
