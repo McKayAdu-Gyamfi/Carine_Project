@@ -1,9 +1,9 @@
 import { Search, MapPin, Heart, ChevronLeft, Send, SlidersHorizontal, Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { useState } from "react";
 import FilterModal from "@/components/FilterModal";
+import HostelCard from "@/components/HostelCard";
 import { MOST_POPULAR, NEARBY_PLACES } from "../data/hostels";
 
 export default function Explore() {
@@ -81,39 +81,14 @@ export default function Explore() {
           <div className="flex overflow-x-auto hide-scrollbar -mx-5 px-5 space-x-5 pb-5">
             {filteredPopular.length === 0 && <p className="text-muted-foreground text-sm py-4">No popular hostels match your search.</p>}
             {filteredPopular.map((hostel) => (
-              <div 
-                key={hostel.id} 
-                onClick={() => setSelectedHostel(hostel)}
-                className="shrink-0 w-[240px] bg-card rounded-[10px] p-3 shadow-md border border-border cursor-pointer hover:shadow-xl transition-all group"
-              >
-                <div className="relative w-full h-[240px] rounded-[10px] overflow-hidden mb-3">
-                  <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                    <button 
-                      onClick={(e) => handleSave(e, hostel.id)}
-                      className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md transition-colors"
-                    >
-                      <Heart className={`w-4 h-4 ${savedHostels.includes(hostel.id) ? 'fill-white text-white' : 'text-white'}`} />
-                    </button>
-                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
-                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                      <span className="text-xs font-semibold text-white">{hostel.rating.toFixed(1)}</span>
-                    </div>
-                    <div className="absolute bottom-3 left-3 shadow-sm">
-                      <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-                        {hostel.availability}
-                      </Badge>
-                    </div>
-                </div>
-                <div className="px-2 pb-2">
-                  <h3 className="font-bold text-base text-foreground mb-1 truncate">{hostel.name}</h3>
-                  <p className="text-muted-foreground text-xs font-medium mb-3 truncate">{hostel.location}</p>
-                  <div className="flex items-baseline mt-1">
-                    <span className="text-muted-foreground text-[10px] uppercase font-bold mr-1">Starts from</span>
-                    <span className="text-primary font-bold text-lg">GHS {hostel.startingPrice}</span>
-                    <span className="text-muted-foreground text-[10px] font-medium ml-1">/{hostel.priceFreq.replace('per ', '')}</span>
-                  </div>
-                </div>
+              <div key={hostel.id} className="shrink-0 flex items-stretch">
+                <HostelCard 
+                  hostel={hostel} 
+                  onClick={() => setSelectedHostel(hostel)} 
+                  onSave={(e) => handleSave(e, hostel.id)}
+                  isSaved={savedHostels.includes(hostel.id)}
+                  showHeart={true}
+                />
               </div>
             ))}
           </div>

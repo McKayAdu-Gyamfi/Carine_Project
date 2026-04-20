@@ -1,10 +1,11 @@
-import { Bell, TrendingUp, MapPin, Star } from "lucide-react";
+import { Star } from "lucide-react";
 // import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import FilterModal from "@/components/FilterModal";
+import NotificationsDropdown from "@/components/NotificationsDropdown";
+import HostelCard from "@/components/HostelCard";
 import { useState, useEffect } from "react";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
 
@@ -26,7 +27,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background pb-6 transition-colors">
       {/* Top App Bar */}
-      <TopNav rightAction={<Bell className="w-6 h-6 text-muted-foreground transition-colors hover:text-foreground hidden sm:block" />} />
+      <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
 
       {/* Hero Section */}
       <section className="relative px-4 pt-24 pb-8 mb-4 overflow-hidden">
@@ -34,10 +35,6 @@ export default function Home() {
         <div className="absolute inset-0 z-0 bg-background pointer-events-none">
           {carouselImages.map((img, idx) => {
             const isCurrent = heroIndex === idx;
-            const isFading = idx === (heroIndex - 1 + carouselImages.length) % carouselImages.length;
-            
-            // Render only current and fading out image to save DOM composite overhead
-            if (!isCurrent && !isFading) return null;
             
             return (
               <img 
@@ -46,7 +43,7 @@ export default function Home() {
                 alt="Hero Background" 
                 loading={idx === 0 ? "eager" : "lazy"}
                 style={{ willChange: 'opacity' }}
-                className={`absolute inset-0 w-full h-full object-cover dark:opacity-40 transition-opacity duration-[2000ms] ease-in-out ${isCurrent ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${isCurrent ? 'opacity-100 dark:opacity-40' : 'opacity-0'}`}
               />
             );
           })}
@@ -93,39 +90,7 @@ export default function Home() {
             
             {MOST_POPULAR.map((hostel) => (
               <Link to="/explore" key={hostel.id} className="block outline-none">
-                <div className="w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative">
-                  <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
-                    <img src={hostel.image} alt={hostel.name} loading="lazy" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm">
-                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                      <span className="text-xs font-semibold text-white">{hostel.rating.toFixed(1)}</span>
-                    </div>
-                    <div className="absolute bottom-3 left-3 shadow-sm">
-                      <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-                        {hostel.availability}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h4 className="font-bold text-foreground text-[16px] truncate mb-1 group-hover:text-primary transition-colors">{hostel.name}</h4>
-                      <div className="flex items-center text-muted-foreground text-xs">
-                        <MapPin className="w-3 h-3 mr-1 shrink-0" />
-                        <span className="truncate">{hostel.location}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between mt-2">
-                      <div>
-                        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
-                        <p className="font-bold text-foreground text-lg">GHS {hostel.startingPrice}<span className="text-xs font-normal text-muted-foreground">/{hostel.priceFreq.replace('per ', '')}</span></p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md shrink-0">
-                        <TrendingUp className="w-4 h-4 text-primary-foreground rotate-45" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <HostelCard hostel={hostel} />
               </Link>
             ))}
 
