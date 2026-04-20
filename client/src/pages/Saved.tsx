@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TopNav from "@/components/TopNav";
+import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { ALL_HOSTELS } from "../data/hostels";
 import { Heart, MapPin, Trash2 } from "lucide-react";
 
@@ -23,7 +24,7 @@ export default function Saved() {
 
   return (
     <div className="flex flex-col min-h-screen bg-accent/20 dark:bg-black/30 transition-colors pt-24 pb-20">
-      <TopNav />
+      <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
       <div className="px-5">
         <h1 className="text-2xl font-bold text-foreground mb-6">Saved Hostels</h1>
 

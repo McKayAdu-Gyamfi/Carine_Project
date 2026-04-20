@@ -1,4 +1,4 @@
-import { Star, MapPin, TrendingUp, Heart } from "lucide-react";
+import { Star, MapPin, Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface HostelCardProps {
@@ -51,9 +51,6 @@ export default function HostelCard({ hostel, onClick, onSave, isSaved = false, s
           <div>
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
             <p className="font-bold text-foreground text-lg">GHS {hostel.startingPrice}<span className="text-xs font-normal text-muted-foreground">/{hostel.priceFreq.replace('per ', '')}</span></p>
-          </div>
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md shrink-0">
-            <TrendingUp className="w-4 h-4 text-primary-foreground rotate-45" />
           </div>
         </div>
       </div>

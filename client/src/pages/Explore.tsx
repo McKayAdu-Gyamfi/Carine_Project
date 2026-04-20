@@ -1,6 +1,7 @@
 import { Search, MapPin, Heart, ChevronLeft, Send, SlidersHorizontal, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TopNav from "@/components/TopNav";
+import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { useState } from "react";
 import FilterModal from "@/components/FilterModal";
 import HostelCard from "@/components/HostelCard";
@@ -46,7 +47,7 @@ export default function Explore() {
   return (
     <div className="flex flex-col min-h-screen bg-accent/20 dark:bg-black/30 transition-colors pt-24 pb-20 relative">
       {/* Top Navigation - simplified */}
-      <TopNav />
+      <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
 
       {/* Main Content Area */}
       <div className="px-5 space-y-8">
