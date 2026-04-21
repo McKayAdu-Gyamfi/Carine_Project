@@ -1,9 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Maximize, X, Hand, Scaling } from "lucide-react";
+import { useBookings } from "@/contexts/BookingContext";
 
 export default function LivePreview() {
   const navigate = useNavigate();
   const location = useLocation();
+  const summary = location.state;
+  const { bookings } = useBookings();
+  const hasActiveBooking = bookings.some((b) => b.studentName === "Nana Osei" && (b.status === "Pending" || b.status === "Approved"));
 
   const handleClose = () => {
     if (location.state?.returnPath) {
@@ -85,16 +89,37 @@ export default function LivePreview() {
         <div className="w-full bg-background/95 text-foreground backdrop-blur-xl border border-border rounded-[32px] overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.5)] transition-colors">
           <div className="p-4 flex items-center justify-between border-b border-border mx-2">
              <div className="flex flex-col ml-2">
-               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Starting from</span>
+               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Selected Room</span>
                <div className="flex items-baseline">
-                 <span className="text-2xl font-extrabold text-foreground mr-1">$450</span>
-                 <span className="text-[10px] font-medium text-muted-foreground">/mo</span>
+                 <span className="text-2xl font-extrabold text-foreground mr-1">GHS {summary?.price?.toLocaleString() || "4,500"}</span>
+                 <span className="text-[10px] font-medium text-muted-foreground">/{summary?.roomLabel || 'session'}</span>
                </div>
              </div>
              
-             <button className="bg-primary hover:bg-primary/90 transition-transform active:scale-95 px-6 py-3 rounded-full text-primary-foreground font-bold text-sm shadow-lg shadow-primary/30 mr-2 text-center h-full flex flex-col justify-center leading-tight">
-                <span>Book</span>
-                <span>Dufie Annex</span>
+             <button 
+               disabled={hasActiveBooking}
+               onClick={() => {
+                 if (hasActiveBooking) return;
+                 if (summary?.price) {
+                   navigate('/booking', { state: summary });
+                 } else {
+                   handleClose();
+                 }
+               }}
+               className={`transition-transform px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-primary/30 mr-2 text-center h-full flex flex-col justify-center leading-tight ${
+                 hasActiveBooking 
+                   ? 'bg-red-500/20 text-red-500 cursor-not-allowed border border-red-500/20'
+                   : 'bg-primary hover:bg-primary/90 active:scale-95 text-primary-foreground'
+               }`}
+             >
+                {hasActiveBooking ? (
+                   <span className="text-xs">Active Booking Exists</span>
+                ) : (
+                   <>
+                     <span>Book</span>
+                     <span className="truncate max-w-[100px]">{summary?.hostelName || "Dufie Annex"}</span>
+                   </>
+                )}
              </button>
           </div>
 

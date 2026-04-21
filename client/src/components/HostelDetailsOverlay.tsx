@@ -156,7 +156,19 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              navigate('/live-preview', { state: { returnToHostel: selectedHostel.id, returnPath: window.location.pathname } });
+                              const activeRoomObj = roomTypes.find(t => t.value === selectedRoom) || roomTypes[1];
+                              const finalPrice = Number(selectedHostel.startingPrice) + activeRoomObj.priceOffset;
+                              navigate('/live-preview', { 
+                                state: { 
+                                  returnToHostel: selectedHostel.id, 
+                                  returnPath: window.location.pathname,
+                                  hostelName: selectedHostel.name,
+                                  location: selectedHostel.location,
+                                  image: selectedHostel.image,
+                                  roomLabel: activeRoomObj.label,
+                                  price: finalPrice
+                                } 
+                              });
                             }}
                             className="bg-primary/10 hover:bg-primary/20 text-primary font-bold text-sm px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 border border-primary/20"
                           >
