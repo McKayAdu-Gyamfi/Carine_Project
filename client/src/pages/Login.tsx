@@ -150,7 +150,7 @@ export default function Login() {
 
       {/* Footer */}
       <div className="flex items-center justify-between text-[9px] text-muted-foreground font-bold tracking-[0.1em] pb-2">
-        <p className="leading-tight uppercase opacity-60">© 2024 CampusNest</p>
+        <p className="leading-tight uppercase opacity-60">© 2026 CampusNest</p>
         <div className="flex space-x-4 opacity-60">
           <span className="cursor-pointer hover:text-foreground transition-colors hover:opacity-100">PRIVACY</span>
           <span className="cursor-pointer hover:text-foreground transition-colors hover:opacity-100">TERMS</span>
