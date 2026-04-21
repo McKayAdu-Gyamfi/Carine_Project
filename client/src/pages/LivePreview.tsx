@@ -2,16 +2,27 @@ import { Link } from "react-router-dom";
 import { Sun, Maximize, X, Hand, Scaling, MapPin, Box, Home, Compass, User } from "lucide-react";
 
 export default function LivePreview() {
+  const handleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  };
+
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-black text-white">
-      {/* Background Room Image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1598928506311-c55dd121a97d?auto=format&fit=crop&q=80&w=1200&h=1600" 
-          alt="Room interior" 
-          className="w-full h-full object-cover scale-105"
+      {/* Background Room Tour (Pannellum) */}
+      <div className="absolute inset-0 z-0 bg-black">
+        <iframe 
+          width="100%" 
+          height="100%" 
+          allowFullScreen 
+          style={{ borderStyle: "none" }} 
+          src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://pannellum.org/images/alma.jpg&autoLoad=true"
         />
-        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
       </div>
 
       {/* Top Left Pills */}
@@ -32,7 +43,7 @@ export default function LivePreview() {
         <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors">
           <Sun className="w-5 h-5" />
         </button>
-        <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors">
+        <button onClick={handleFullscreen} className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors">
           <Maximize className="w-5 h-5" />
         </button>
         <Link to="/explore" className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors">
@@ -40,25 +51,6 @@ export default function LivePreview() {
         </Link>
       </div>
 
-      {/* Interactive Hotspots */}
-      <div className="absolute top-1/3 left-1/4 z-10">
-        <div className="relative flex items-center justify-center w-12 h-12">
-          <div className="absolute inset-0 bg-orange-500/40 rounded-full animate-ping" />
-          <div className="w-4 h-4 bg-orange-500 rounded-full shadow-[0_0_15px_rgba(249,115,22,1)] border-2 border-white" />
-        </div>
-      </div>
-      <div className="absolute bottom-1/3 left-1/3 z-10">
-        <div className="relative flex items-center justify-center w-16 h-16">
-          <div className="absolute inset-0 bg-primary/40 rounded-full animate-ping" />
-          <div className="w-4 h-4 bg-primary rounded-full shadow-[0_0_15px_rgba(59,130,246,1)] border-2 border-white" />
-        </div>
-      </div>
-      <div className="absolute top-1/2 right-1/3 z-10">
-        <div className="relative flex items-center justify-center w-14 h-14">
-          <div className="absolute inset-0 bg-primary/30 rounded-full animate-ping" />
-          <div className="w-3 h-3 bg-primary/90 rounded-full border border-white" />
-        </div>
-      </div>
 
       {/* Bottom Interface Group */}
       <div className="absolute bottom-6 left-2 right-2 z-30 flex flex-col items-center">
@@ -77,19 +69,7 @@ export default function LivePreview() {
             </div>
           </div>
 
-          <div className="relative w-36 h-36 bg-gray-900 rounded-2xl border border-white/30 overflow-hidden shadow-2xl shrink-0">
-            <div className="absolute inset-0 opacity-60 bg-[url('https://i.stack.imgur.com/HILmr.png')] bg-cover bg-center" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-            
-            <div className="absolute top-2 right-2 w-6 h-6 bg-primary border border-white/20 rounded-full flex items-center justify-center">
-               <MapPin className="w-3 h-3 text-white fill-white" />
-            </div>
 
-            <div className="absolute bottom-2 left-2 right-2">
-              <p className="text-[8px] font-bold text-primary uppercase">Campus East</p>
-              <p className="text-[10px] font-bold text-white leading-tight">North Campus District</p>
-            </div>
-          </div>
         </div>
 
         {/* Action Panel & Bottom Nav Wrapper */}

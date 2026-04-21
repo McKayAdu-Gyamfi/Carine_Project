@@ -223,7 +223,7 @@ export default function Explore() {
                   onClick={() => navigate('/live-preview')}
                   className="mt-4 w-full py-3 rounded-xl border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors"
                 >
-                  Enter Live 3D Preview
+                  Enter live 360 ° tour
                 </button>
               </div>
 
