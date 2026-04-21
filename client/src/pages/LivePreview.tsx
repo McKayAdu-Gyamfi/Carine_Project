@@ -32,7 +32,7 @@ export default function LivePreview() {
           height="100%" 
           allowFullScreen 
           style={{ borderStyle: "none" }} 
-          src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https://pannellum.org/images/alma.jpg&autoLoad=true"
+          src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=https%3A//emkajlxnqtpvbkotujuu.supabase.co/storage/v1/object/public/Images_Campus_Nest/DSC_0105.jpg&autoLoad=true"
         />
       </div>
 
