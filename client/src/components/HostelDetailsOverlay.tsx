@@ -11,7 +11,7 @@ export interface HostelDetailsOverlayProps {
 
 export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel, savedHostels = [], onSave }: HostelDetailsOverlayProps) {
   const navigate = useNavigate();
-  const [selectedRoom, setSelectedRoom] = useState(2);
+  const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const [activeImage, setActiveImage] = useState<string | null>(null);
 
   const roomTypes = [
@@ -171,10 +171,30 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
             {/* Bottom Sticky Action Bar */}
             <div className="p-4 bg-background border-t border-border shrink-0 z-30 pb-8">
               <button 
-                onClick={() => navigate('/booking')}
-                className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-transform text-lg"
+                disabled={!selectedRoom}
+                onClick={() => {
+                  if (!selectedRoom) return;
+                  const activeRoomObj = roomTypes.find(t => t.value === selectedRoom) || roomTypes[1];
+                  const finalPrice = Number(selectedHostel.startingPrice) + activeRoomObj.priceOffset;
+                  navigate('/booking', { 
+                    state: { 
+                       hostelName: selectedHostel.name,
+                       location: selectedHostel.location,
+                       image: selectedHostel.image,
+                       roomLabel: activeRoomObj.label,
+                       price: finalPrice,
+                       returnToHostel: selectedHostel.id,
+                       returnPath: window.location.pathname
+                    } 
+                  });
+                }}
+                className={`w-full py-4 rounded-2xl font-bold flex justify-center items-center transition-all text-lg ${
+                  selectedRoom 
+                    ? 'bg-primary text-primary-foreground shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98]' 
+                    : 'bg-muted text-muted-foreground opacity-50 cursor-not-allowed'
+                }`}
               >
-                Book Now
+                {selectedRoom ? "Book Now" : "Select a room to proceed"}
               </button>
             </div>
           </>

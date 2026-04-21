@@ -1,5 +1,5 @@
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { Maximize, X, Hand, Scaling, Box, Home, Compass, User } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Maximize, X, Hand, Scaling } from "lucide-react";
 
 export default function LivePreview() {
   const navigate = useNavigate();
@@ -98,21 +98,7 @@ export default function LivePreview() {
              </button>
           </div>
 
-          {/* Custom Bottom Nav for this screen */}
-          <div className="w-full flex justify-around items-center py-4 bg-card/50 transition-colors">
-            <Link to="/" className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-              <Home className="w-6 h-6" />
-            </Link>
-            <Link to="/explore" className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-              <Compass className="w-6 h-6" />
-            </Link>
-            <button className="p-3 bg-primary rounded-full text-primary-foreground shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-transform hover:scale-105">
-               <Box className="w-6 h-6" />
-            </button>
-            <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-              <User className="w-6 h-6" />
-            </button>
-          </div>
+
         </div>
 
       </div>
