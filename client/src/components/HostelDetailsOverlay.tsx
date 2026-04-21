@@ -123,7 +123,7 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                 <h3 className="text-lg font-bold text-foreground mb-3">Room Types</h3>
                 <div className="space-y-3">
                   {roomTypes.map((type) => (
-                    <label 
+                    <div 
                       key={type.value} 
                       className={`flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all hover:bg-accent/50 ${
                         selectedRoom === type.value 
@@ -148,6 +148,7 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                       {selectedRoom === type.value && (
                         <div className="mt-4 pt-4 border-t border-primary/20 flex justify-end animate-in fade-in slide-in-from-top-2 duration-300">
                           <button 
+                            type="button"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -160,7 +161,7 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                           </button>
                         </div>
                       )}
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>

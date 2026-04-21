@@ -4,13 +4,14 @@ import { X } from "lucide-react";
 interface FilterModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApplyFilters: (filters: { distance: number; amenities: string[] }) => void;
-  initialFilters: { distance: number; amenities: string[] };
+  onApplyFilters: (filters: { distance: number; amenities: string[]; priceRange: [number, number] }) => void;
+  initialFilters: { distance: number; amenities: string[]; priceRange: [number, number] };
 }
 
 export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFilters }: FilterModalProps) {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialFilters.amenities);
   const [distance, setDistance] = useState<number>(initialFilters.distance);
+  const [priceRange, setPriceRange] = useState<[number, number]>(initialFilters.priceRange || [0, 10000]);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
       // Sync state when opened
       setSelectedAmenities(initialFilters.amenities);
       setDistance(initialFilters.distance);
+      if (initialFilters.priceRange) setPriceRange(initialFilters.priceRange);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -38,7 +40,8 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
   const handleApply = () => {
     onApplyFilters({ 
       distance, 
-      amenities: selectedAmenities 
+      amenities: selectedAmenities,
+      priceRange
     });
     onClose();
   };
@@ -102,12 +105,38 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
               ))}
             </div>
           </div>
+
+          {/* Price Range */}
+          <div>
+            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Price Range (GHS)</h3>
+            <div className="flex items-center space-x-4">
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-muted-foreground mb-1 block">Min Price</label>
+                <input 
+                  type="number" 
+                  value={priceRange[0]} 
+                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none"
+                />
+              </div>
+              <div className="text-muted-foreground font-bold mt-4">-</div>
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-muted-foreground mb-1 block">Max Price</label>
+                <input 
+                  type="number" 
+                  value={priceRange[1]} 
+                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-3 pt-4 mt-2 border-t border-border/50">
           <button 
-             onClick={() => { setSelectedAmenities([]); setDistance(5); }}
+             onClick={() => { setSelectedAmenities([]); setDistance(5); setPriceRange([0, 10000]); }}
              className="px-6 py-4 font-bold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             Clear

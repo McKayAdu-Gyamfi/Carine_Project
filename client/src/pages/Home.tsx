@@ -175,7 +175,7 @@ export default function Home() {
         isOpen={isFilterOpen} 
         onClose={() => setIsFilterOpen(false)} 
         onApplyFilters={() => {}} 
-        initialFilters={{ distance: 10, amenities: [] }}
+        initialFilters={{ distance: 10, amenities: [], priceRange: [0, 10000] }}
       />
 
       <HostelDetailsOverlay 

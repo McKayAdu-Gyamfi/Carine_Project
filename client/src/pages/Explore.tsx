@@ -27,11 +27,16 @@ export default function Explore() {
   });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilters, setActiveFilters] = useState({ distance: 10, amenities: [] as string[] });
+  const [activeFilters, setActiveFilters] = useState<{ distance: number; amenities: string[], priceRange: [number, number] }>({ 
+    distance: 10, 
+    amenities: [], 
+    priceRange: [0, 10000] 
+  });
 
   const filteredPopular = MOST_POPULAR.filter(h => {
     if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     if (parseFloat(h.distance) > activeFilters.distance) return false;
+    if (h.startingPrice < activeFilters.priceRange[0] || h.startingPrice > activeFilters.priceRange[1]) return false;
     if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
     return true;
   });
@@ -39,6 +44,7 @@ export default function Explore() {
   const filteredNearby = NEARBY_PLACES.filter(h => {
     if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     if (parseFloat(h.distance) > activeFilters.distance) return false;
+    if (h.startingPrice < activeFilters.priceRange[0] || h.startingPrice > activeFilters.priceRange[1]) return false;
     if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
     return true;
   });
