@@ -1,14 +1,26 @@
-import { Search, MapPin, Heart, ChevronLeft, Send, SlidersHorizontal, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Search, SlidersHorizontal, Star } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { useState } from "react";
 import FilterModal from "@/components/FilterModal";
 import HostelCard from "@/components/HostelCard";
-import { MOST_POPULAR, NEARBY_PLACES } from "../data/hostels";
+import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
+import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
+
+const getBadgeStyle = (availability: string) => {
+  switch (availability?.toUpperCase()) {
+    case 'AVAILABLE': return { bg: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-500 animate-pulse' };
+    case 'FULL': return { bg: 'bg-destructive/20 text-destructive dark:text-red-400', dot: 'bg-destructive' };
+    default: return { bg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400', dot: 'bg-amber-500' };
+  }
+};
 
 export default function Explore() {
-  const [selectedHostel, setSelectedHostel] = useState<any>(null);
+  const location = useLocation();
+  const [selectedHostel, setSelectedHostel] = useState<any>(() => {
+    return location.state?.restoreHostel ? ALL_HOSTELS.find(h => h.id === location.state.restoreHostel) || null : null;
+  });
   const [savedHostels, setSavedHostels] = useState<string[]>(() => {
     const saved = localStorage.getItem("saved_hostels");
     return saved ? JSON.parse(saved) : [];
@@ -16,7 +28,6 @@ export default function Explore() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState({ distance: 10, amenities: [] as string[] });
-  const navigate = useNavigate();
 
   const filteredPopular = MOST_POPULAR.filter(h => {
     if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
@@ -113,8 +124,17 @@ export default function Explore() {
                 <div className="flex-1 overflow-hidden">
                   <h3 className="font-bold text-sm text-foreground truncate">{hostel.name}</h3>
                   <p className="text-muted-foreground text-[10px] font-medium mb-1 truncate">{hostel.location}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1">
+                  <div className="flex items-center justify-between mt-1">
+                    {(() => {
+                      const style = getBadgeStyle(hostel.availability);
+                      return (
+                        <div className={`font-bold text-[8px] px-1.5 py-0.5 rounded-md flex items-center ${style.bg}`}>
+                          <span className={`w-1 h-1 rounded-full mr-1 ${style.dot}`} />
+                          {hostel.availability}
+                        </div>
+                      );
+                    })()}
+                    <div className="flex items-center space-x-1 flex-shrink-0">
                       <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                       <span className="text-xs font-medium text-foreground">{hostel.rating.toFixed(1)}</span>
                     </div>
@@ -135,112 +155,12 @@ export default function Explore() {
         initialFilters={activeFilters}
       />
 
-      {/* Sliding Details Overlay */}
-      {/* Dimmed Background */}
-      <div 
-        className={`fixed inset-0 bg-black/50 z-[100] backdrop-blur-sm transition-opacity duration-300 ${selectedHostel ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setSelectedHostel(null)}
+      <HostelDetailsOverlay 
+        selectedHostel={selectedHostel} 
+        setSelectedHostel={setSelectedHostel}
+        savedHostels={savedHostels}
+        onSave={handleSave}
       />
-      
-      {/* Sliding Sheet */}
-      <div 
-        className={`fixed bottom-0 left-0 w-full h-[92vh] z-[110] bg-background rounded-t-[40px] flex flex-col overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${selectedHostel ? "translate-y-0" : "translate-y-full"}`}
-      >
-        {selectedHostel && (
-          <>
-            {/* Header / Hero Image */}
-            <div className="relative h-64 shrink-0">
-              <img src={selectedHostel.image} loading="lazy" className="w-full h-full object-cover" alt="Property Header" />
-              
-              {/* Back Button */}
-              <button 
-                onClick={() => setSelectedHostel(null)}
-                className="absolute top-6 left-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20 hover:bg-white/30 transition-colors"
-               >
-                 <ChevronLeft className="w-6 h-6" />
-              </button>
-
-              {/* Heart/Save Button */}
-              <button 
-                onClick={(e) => handleSave(e, selectedHostel.id)}
-                className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/20 hover:bg-white/30 transition-colors"
-               >
-                 <Heart className={`w-5 h-5 ${savedHostels.includes(selectedHostel.id) ? 'fill-white text-white' : 'text-white'}`} />
-              </button>
-
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
-            </div>
-
-            {/* Content Scrollable Area */}
-            <div className="flex-1 overflow-y-auto hide-scrollbar px-6 pb-28 z-20 relative -mt-16 pt-2">
-              
-              {/* Title Card Overlay-like visual */}
-              <div className="bg-card w-full rounded-[32px] p-6 shadow-xl border border-border mb-6 relative">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-1">{selectedHostel.name}</h2>
-                    <a 
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedHostel.name} ${selectedHostel.location}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-muted-foreground text-sm font-medium hover:text-primary transition-colors cursor-pointer group"
-                    >
-                      <MapPin className="w-4 h-4 mr-1 opacity-70 group-hover:opacity-100" />
-                      <span className="underline decoration-dotted underline-offset-2">{selectedHostel.location}</span>
-                    </a>
-                  </div>
-                  <div className="flex flex-col items-center justify-center w-12 h-12 rounded-full bg-primary/10 border border-primary/20 text-primary">
-                    <Send className="w-5 h-5" />
-                    <span className="text-[9px] font-bold mt-0.5">{selectedHostel.distance}</span>
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-1 bg-yellow-400/20 px-2 py-1 rounded-lg">
-                    <Star className="w-4 h-4 text-yellow-600 fill-yellow-600" />
-                    <span className="text-sm font-bold text-yellow-700">{selectedHostel.rating.toFixed(1)}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Gallery Section */}
-              <div className="mb-6">
-                <h3 className="text-lg font-bold text-foreground mb-3">Gallery</h3>
-                <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
-                  {selectedHostel.gallery.map((img: string, idx: number) => (
-                    <img key={idx} src={img} loading="lazy" className="w-20 h-20 rounded-2xl object-cover border border-border shrink-0 shadow-sm" alt="Gallery item" />
-                  ))}
-                </div>
-              </div>
-
-              {/* Description Section */}
-              <div className="mb-6">
-                <h3 className="text-lg font-bold text-foreground mb-3">Description</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {selectedHostel.desc}
-                </p>
-                <button 
-                  onClick={() => navigate('/live-preview')}
-                  className="mt-4 w-full py-3 rounded-xl border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors"
-                >
-                  Enter live 360 ° tour
-                </button>
-              </div>
-
-            </div>
-
-            {/* Bottom Sticky Action Bar */}
-            <div className="p-4 bg-background border-t border-border shrink-0 z-30 pb-8">
-              <button 
-                onClick={() => navigate('/booking')}
-                className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-2xl shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-transform text-lg"
-              >
-                Book Now
-              </button>
-            </div>
-          </>
-        )}
-      </div>
 
     </div>
   );

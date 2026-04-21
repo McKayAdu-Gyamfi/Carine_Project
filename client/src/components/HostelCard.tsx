@@ -10,6 +10,28 @@ interface HostelCardProps {
 }
 
 export default function HostelCard({ hostel, onClick, onSave, isSaved = false, showHeart = false }: HostelCardProps) {
+  const getBadgeStyle = (availability: string) => {
+    switch (availability?.toUpperCase()) {
+      case 'AVAILABLE':
+        return {
+          bg: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400',
+          dot: 'bg-emerald-500 animate-pulse'
+        };
+      case 'FULL':
+        return {
+          bg: 'bg-destructive/20 text-destructive dark:text-red-400',
+          dot: 'bg-destructive'
+        };
+      case 'FEW ROOMS LEFT':
+      default:
+        return {
+          bg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400',
+          dot: 'bg-amber-500'
+        };
+    }
+  };
+  const badgeStyle = getBadgeStyle(hostel.availability);
+
   return (
     <div 
       onClick={onClick}
@@ -33,8 +55,8 @@ export default function HostelCard({ hostel, onClick, onSave, isSaved = false, s
         </div>
         
         <div className="absolute bottom-3 left-3 shadow-sm">
-          <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'}`}>
-            <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${hostel.availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+          <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md transition-colors ${badgeStyle.bg}`}>
+            <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${badgeStyle.dot}`} />
             {hostel.availability}
           </Badge>
         </div>

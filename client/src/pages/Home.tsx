@@ -6,16 +6,40 @@ import TopNav from "@/components/TopNav";
 import FilterModal from "@/components/FilterModal";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
 import HostelCard from "@/components/HostelCard";
+import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { useState, useEffect } from "react";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
+
+const getBadgeStyle = (availability: string) => {
+  switch (availability?.toUpperCase()) {
+    case 'AVAILABLE': return { bg: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-500 animate-pulse' };
+    case 'FULL': return { bg: 'bg-destructive/20 text-destructive dark:text-red-400', dot: 'bg-destructive' };
+    default: return { bg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400', dot: 'bg-amber-500' };
+  }
+};
 
 export default function Home() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [heroIndex, setHeroIndex] = useState(0);
+  const [selectedHostel, setSelectedHostel] = useState<any>(null);
+  const [savedHostels, setSavedHostels] = useState<string[]>(() => {
+    const saved = localStorage.getItem("saved_hostels");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const carouselImages = ALL_HOSTELS
-    .filter(h => !h.name.toLowerCase().includes('evandy') && !h.name.toLowerCase().includes('gaza'))
-    .map(h => h.image);
+  const handleSave = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    let newSaved;
+    if (savedHostels.includes(id)) {
+      newSaved = savedHostels.filter(h => h !== id);
+    } else {
+      newSaved = [...savedHostels, id];
+    }
+    setSavedHostels(newSaved);
+    localStorage.setItem("saved_hostels", JSON.stringify(newSaved));
+  };
+
+  const carouselImages = ALL_HOSTELS.map(h => h.image);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -89,9 +113,15 @@ export default function Home() {
           <div className="flex w-max space-x-4 px-4 pb-4 pt-1">
             
             {MOST_POPULAR.map((hostel) => (
-              <Link to="/explore" key={hostel.id} className="block outline-none">
-                <HostelCard hostel={hostel} />
-              </Link>
+              <div key={hostel.id} className="block outline-none cursor-pointer">
+                <HostelCard 
+                  hostel={hostel} 
+                  onClick={() => setSelectedHostel(hostel)} 
+                  onSave={(e) => handleSave(e, hostel.id)}
+                  isSaved={savedHostels.includes(hostel.id)}
+                  showHeart={true}
+                />
+              </div>
             ))}
 
           </div>
@@ -105,7 +135,11 @@ export default function Home() {
         <div className="space-y-3">
           
           {NEARBY_PLACES.map((hostel) => (
-            <div key={hostel.id} className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full">
+            <div 
+              key={hostel.id} 
+              onClick={() => setSelectedHostel(hostel)}
+              className="bg-card border border-border rounded-lg flex p-3 hover:shadow-md hover:bg-accent/50 transition-all cursor-pointer w-full"
+            >
               <div className="w-[88px] h-[88px] rounded-xl overflow-hidden shrink-0">
                 <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-full h-full object-cover transition-transform hover:scale-110 duration-700" />
               </div>
@@ -114,8 +148,17 @@ export default function Home() {
                   <h4 className="font-bold text-foreground text-[16px] truncate">{hostel.name}</h4>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mt-1 tracking-wide truncate">{hostel.distance} away</p>
                 </div>
-                <div className="flex items-center justify-end">
-                  <div className="flex items-center space-x-1 bg-yellow-400/20 px-2 py-1 rounded-lg">
+                <div className="flex items-center justify-between">
+                  {(() => {
+                    const style = getBadgeStyle(hostel.availability);
+                    return (
+                      <div className={`font-bold text-[8px] px-1.5 py-0.5 rounded-md flex items-center ${style.bg}`}>
+                        <span className={`w-1 h-1 rounded-full mr-1 ${style.dot}`} />
+                        {hostel.availability}
+                      </div>
+                    );
+                  })()}
+                  <div className="flex items-center space-x-1 bg-yellow-400/20 px-2 flex-shrink-0 py-1 rounded-lg">
                     <Star className="w-3.5 h-3.5 text-yellow-600 fill-yellow-600" />
                     <span className="text-sm font-bold text-yellow-700">{hostel.rating.toFixed(1)}</span>
                   </div>
@@ -133,6 +176,13 @@ export default function Home() {
         onClose={() => setIsFilterOpen(false)} 
         onApplyFilters={() => {}} 
         initialFilters={{ distance: 10, amenities: [] }}
+      />
+
+      <HostelDetailsOverlay 
+        selectedHostel={selectedHostel} 
+        setSelectedHostel={setSelectedHostel}
+        savedHostels={savedHostels}
+        onSave={handleSave}
       />
 
     </div>

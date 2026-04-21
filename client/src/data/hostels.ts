@@ -4,25 +4,46 @@ export const getImage = (filename: string): string => {
   return `/images/${name}.webp`;
 };
 
+const dufieAnnex = { 
+  id: '1', 
+  name: 'Dufie Annex', 
+  location: 'Dufie Annex, Berekuso', 
+  distance: '1.2 km', 
+  price: 7000, 
+  startingPrice: 6500,
+  priceFreq: 'per semester',
+  rating: 4.8,
+  availability: 'AVAILABLE',
+  amenities: ["WiFi", "Laundry", "Kitchen Shared"],
+  image: getImage('Dufie_Annex_1.png'), 
+  gallery: [
+    getImage('Dufie_Annex_1.png'),
+    getImage('Dufie_Annex_2.png')
+  ],
+  desc: "Experience the layout and natural lighting of your future home. This premium hostel offers a combination of aesthetics and state-of-the-art facilities including max security, 24/7 water supply, and unlimited WiFi." 
+};
+
+const newHosanna = { 
+  id: '4', 
+  name: 'New Hosanna', 
+  location: 'New Hosanna, Berekuso', 
+  distance: '0.5 km', 
+  price: 8000, 
+  startingPrice: 6000,
+  priceFreq: 'per semester',
+  rating: 4.2,
+  availability: 'FULL',
+  amenities: ["WiFi", "Kitchen Personal"],
+  image: getImage('New Hosanna_1.png'), 
+  gallery: [
+    getImage('New_Hosanna_2.png'),
+    getImage('New_Hosanna_3.png')
+  ],
+  desc: "Experience the layout and natural lighting of your future home. This premium hostel offers a combination of aesthetics and state-of-the-art facilities including max security, 24/7 water supply, and unlimited WiFi." 
+};
+
 export const MOST_POPULAR = [
-  { 
-    id: '1', 
-    name: 'Dufie Annex', 
-    location: 'Dufie Annex, Berekuso', 
-    distance: '1.2 km', 
-    price: 7000, 
-    startingPrice: 6500,
-    priceFreq: 'per semester',
-    rating: 4.8,
-    availability: 'AVAILABLE',
-    amenities: ["WiFi", "Laundry", "Kitchen Shared"],
-    image: getImage('Dufie_Annex_1.png'), 
-    gallery: [
-      getImage('Dufie_Annex_1.png'),
-      getImage('Dufie_Annex_2.png')
-    ],
-    desc: "Experience the layout and natural lighting of your future home. This premium hostel offers a combination of aesthetics and state-of-the-art facilities including max security, 24/7 water supply, and unlimited WiFi." 
-  },
+  dufieAnnex,
   { 
     id: '2', 
     name: 'Dufie Platinum', 
@@ -62,24 +83,7 @@ export const MOST_POPULAR = [
     ],
     desc: "Experience the layout and natural lighting of your future home. This premium hostel offers a combination of aesthetics and state-of-the-art facilities including max security, 24/7 water supply, and unlimited WiFi." 
   },
-  { 
-    id: '4', 
-    name: 'New Hosanna', 
-    location: 'New Hosanna, Berekuso', 
-    distance: '0.5 km', 
-    price: 8000, 
-    startingPrice: 6000,
-    priceFreq: 'per semester',
-    rating: 4.2,
-    availability: 'WAITLIST',
-    amenities: ["WiFi", "Kitchen Personal"],
-    image: getImage('New Hosanna_1.png'), 
-    gallery: [
-      getImage('New_Hosanna_2.png'),
-      getImage('New_Hosanna_3.png')
-    ],
-    desc: "Experience the layout and natural lighting of your future home. This premium hostel offers a combination of aesthetics and state-of-the-art facilities including max security, 24/7 water supply, and unlimited WiFi." 
-  },
+  newHosanna,
   { 
     id: '5', 
     name: 'Old Hosanna', 
@@ -100,36 +104,8 @@ export const MOST_POPULAR = [
 ];
 
 export const NEARBY_PLACES = [
-  { 
-    id: '6', 
-    name: 'Evandy Hostel', 
-    location: 'Bomso Area', 
-    distance: '2.5 km',
-    price: 250, 
-    startingPrice: 150,
-    priceFreq: 'per month',
-    rating: 4.5,
-    availability: 'AVAILABLE',
-    amenities: ["WiFi", "Kitchen Shared", "Laundry", "Security"],
-    image: "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&q=80&w=400&h=400", 
-    gallery: ["https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&q=80&w=400&h=400"],
-    desc: "Cozy student living in the heart of Bomso. Perfect for students looking for affordability and peace." 
-  },
-  { 
-    id: '7', 
-    name: 'Gaza Hostel', 
-    location: 'Kotei', 
-    distance: '3.0 km',
-    price: 200, 
-    startingPrice: 100,
-    priceFreq: 'per month',
-    rating: 3.8,
-    availability: 'FEW ROOMS LEFT',
-    amenities: ["Kitchen Shared", "Water Supply", "Security"],
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=400&h=400", 
-    gallery: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=400&h=400"],
-    desc: "Basic hostel with great community vibes. A very vibrant student ecosystem." 
-  }
+  dufieAnnex,
+  newHosanna
 ];
 
-export const ALL_HOSTELS = [...MOST_POPULAR, ...NEARBY_PLACES];
+export const ALL_HOSTELS = Array.from(new Map([...MOST_POPULAR, ...NEARBY_PLACES].map(item => [item.id, item])).values());

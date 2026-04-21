@@ -1,7 +1,18 @@
-import { Link } from "react-router-dom";
-import { Sun, Maximize, X, Hand, Scaling, MapPin, Box, Home, Compass, User } from "lucide-react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Maximize, X, Hand, Scaling, Box, Home, Compass, User } from "lucide-react";
 
 export default function LivePreview() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClose = () => {
+    if (location.state?.returnPath) {
+      navigate(location.state.returnPath, { state: { restoreHostel: location.state.returnToHostel }, replace: true });
+    } else {
+      navigate(-1);
+    }
+  };
+
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch((err) => {
@@ -39,16 +50,13 @@ export default function LivePreview() {
       </div>
 
       {/* Floating Action Buttons (Right) */}
-      <div className="absolute top-1/2 right-4 -translate-y-1/2 flex flex-col space-y-4 z-20">
-        <button className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors">
-          <Sun className="w-5 h-5" />
-        </button>
-        <button onClick={handleFullscreen} className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors">
+      <div className="absolute top-1/2 right-4 -translate-y-1/2 flex flex-col space-y-4 z-[9999]">
+        <button onClick={handleFullscreen} className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors pointer-events-auto">
           <Maximize className="w-5 h-5" />
         </button>
-        <Link to="/explore" className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors">
+        <button onClick={handleClose} className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors pointer-events-auto cursor-pointer">
           <X className="w-5 h-5" />
-        </Link>
+        </button>
       </div>
 
 
