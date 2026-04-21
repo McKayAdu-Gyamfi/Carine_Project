@@ -137,7 +137,10 @@ export default function Booking() {
                    <span>Secure SSL encrypted payment processing</span>
                 </div>
 
-                <button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-5 rounded-2xl shadow-[0_8px_25px_rgba(59,130,246,0.3)] flex justify-center items-center transition-transform hover:scale-[1.02] active:scale-[0.98] text-[16px]">
+                <button 
+                  onClick={() => navigate('/payment', { state: summary })}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-5 rounded-2xl shadow-[0_8px_25px_rgba(59,130,246,0.3)] flex justify-center items-center transition-transform hover:scale-[1.02] active:scale-[0.98] text-[16px]"
+                >
                    Proceed to Details <ChevronRight className="w-5 h-5 ml-2" />
                 </button>
               </Card>

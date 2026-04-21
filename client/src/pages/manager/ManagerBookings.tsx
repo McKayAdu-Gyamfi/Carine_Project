@@ -1,15 +1,10 @@
 import { useState } from "react";
-import { Search, Filter, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { Search, Filter, CheckCircle2, XCircle, Clock, MapPin } from "lucide-react";
+import { useBookings } from "@/contexts/BookingContext";
 
 export default function ManagerBookings() {
   const [activeTab, setActiveTab] = useState("Pending");
-
-  const bookings = [
-    { id: 1, name: "Emmanuel Mensah", room: "Rm 402B", date: "Today, 10:30 AM", status: "Pending" },
-    { id: 2, name: "Sarah Adjei", room: "Rm 104", date: "Yesterday, 2:15 PM", status: "Pending" },
-    { id: 3, name: "Kofi Annan", room: "Rm 301A", date: "Oct 12, 09:00 AM", status: "Approved" },
-    { id: 4, name: "Ama Serwaa", room: "Rm 205", date: "Oct 10, 11:45 AM", status: "Declined" },
-  ];
+  const { bookings, approveBooking, declineBooking } = useBookings();
 
   const filteredBookings = bookings.filter(b => b.status === activeTab);
 
@@ -65,24 +60,28 @@ export default function ManagerBookings() {
             <div className="relative z-10">
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <h3 className="font-bold text-[15px] truncate max-w-[200px]">{b.name}</h3>
-                  <p className="text-[11px] font-semibold text-primary/80 mt-0.5">{b.room}</p>
+                  <h3 className="font-bold text-[15px] truncate max-w-[200px]">{b.studentName}</h3>
+                  <p className="text-[11px] font-semibold text-primary/80 mt-0.5">{b.hostelName}</p>
+                  <p className="text-[11px] font-semibold text-muted-foreground flex items-center mt-1"><MapPin className="w-3 h-3 mr-1 opacity-70" /> {b.roomNumber} ({b.roomLabel})</p>
                 </div>
-                <div className="text-[9px] font-extrabold uppercase tracking-widest text-muted-foreground">{b.date}</div>
+                <div className="flex flex-col items-end">
+                   <div className="text-[9px] font-extrabold uppercase tracking-widest text-muted-foreground mb-1">{b.date}</div>
+                   <div className="text-[11px] font-extrabold text-foreground">GHS {b.price.toLocaleString()}</div>
+                </div>
               </div>
 
-              {b.status === "Pending" && (
-                <div className="flex items-center space-x-3 mt-4 border-t border-border/40 pt-3">
-                  <button className="flex-1 flex items-center justify-center space-x-1.5 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 py-2.5 rounded-lg font-bold text-xs transition-colors">
-                     <CheckCircle2 className="w-4 h-4" />
-                     <span>Approve</span>
-                  </button>
-                  <button className="flex-1 flex items-center justify-center space-x-1.5 bg-red-500/10 text-red-600 hover:bg-red-500/20 py-2.5 rounded-lg font-bold text-xs transition-colors">
-                     <XCircle className="w-4 h-4" />
-                     <span>Decline</span>
-                  </button>
-                </div>
-              )}
+                        {b.status === "Pending" && (
+                          <div className="flex items-center space-x-3 mt-4 border-t border-border/40 pt-3">
+                            <button onClick={() => approveBooking(b.id)} className="flex-1 flex items-center justify-center space-x-1.5 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 py-2.5 rounded-lg font-bold text-xs transition-colors cursor-pointer">
+                               <CheckCircle2 className="w-4 h-4" />
+                               <span>Approve</span>
+                            </button>
+                            <button onClick={() => declineBooking(b.id)} className="flex-1 flex items-center justify-center space-x-1.5 bg-red-500/10 text-red-600 hover:bg-red-500/20 py-2.5 rounded-lg font-bold text-xs transition-colors cursor-pointer">
+                               <XCircle className="w-4 h-4" />
+                               <span>Decline</span>
+                            </button>
+                          </div>
+                        )}
 
               {b.status === "Approved" && (
                 <div className="flex items-center space-x-1.5 mt-3 border-t border-border/40 pt-3 text-emerald-500">

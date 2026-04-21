@@ -1,9 +1,8 @@
-import { Grid3X3, ShieldCheck, ChevronRight, Moon, LogOut, Settings } from "lucide-react";
+import { Grid3X3, ShieldCheck, ChevronRight, Moon, LogOut, Settings, Clock, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
 import { TygerAvatar } from 'tyger-avatar';
-import tanko_hostel_1 from "../assets/Tanko_4.png";
-
+import { useBookings } from "@/contexts/BookingContext";
 
 export default function Profile() {
   const { theme, setTheme } = useTheme();
@@ -12,6 +11,8 @@ export default function Profile() {
   const userBio = localStorage.getItem("userBio") || "Jus a chill person merhnnnn...";
   const storedPrefs = localStorage.getItem("userPrefs");
   const userPrefs = storedPrefs ? JSON.parse(storedPrefs) : ["Air-Conditioned", "Wi-Fi Included", "Ensuite Bathroom"];
+  const { bookings } = useBookings();
+  const myBookings = bookings.filter((b) => b.studentName === "Nana Osei");
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground pb-24 font-sans select-none overflow-x-hidden">
@@ -107,34 +108,50 @@ export default function Profile() {
         {/* Horizontal Booking Cards */}
         <div className="flex space-x-4 overflow-x-auto hide-scrollbar pb-6 px-1">
           
-          {/* Booking Card 1 */}
-          <Link to="/explore" className="block outline-none shrink-0 w-[240px]">
-            <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group">
-               <div className="h-[140px] relative overflow-hidden bg-muted">
-                 <img src={tanko_hostel_1} loading="lazy" className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt="Dufie Annex" />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                 <div className="absolute bottom-3 left-3">
-                   <span className="bg-background/95 backdrop-blur-md text-foreground px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">In-Progress</span>
-                 </div>
-               </div>
-               <div className="p-4 bg-card">
-                  <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">Sem 1 2024</p>
-                  <h4 className="font-bold text-[15px] truncate">Tanko Hostel • Room 402B</h4>
-               </div>
+          {myBookings.length === 0 ? (
+            <div className="flex flex-col items-center justify-center w-full bg-card rounded-[10px] py-10 shadow border border-border/40">
+              <span className="text-muted-foreground text-sm font-semibold mb-2">You don't have any bookings yet.</span>
+              <Link to="/explore" className="text-primary text-xs font-bold bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors">Start Exploring</Link>
             </div>
-          </Link>
+          ) : (
+            myBookings.map((b) => (
+              <Link key={b.id} to="/manage-bookings" className="block outline-none shrink-0 w-[240px]">
+                <div className={`bg-card rounded-[10px] overflow-hidden shadow border hover:transition-all group ${b.status === 'Pending' ? 'border-amber-500/40' : 'border-primary/30'}`}>
+                   <div className="h-[140px] relative overflow-hidden bg-muted">
+                     <img src={b.image} loading="lazy" className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt={b.hostelName} />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                     <div className="absolute bottom-3 left-3 flex items-center space-x-1">
+                       {b.status === "Pending" ? (
+                          <span className="bg-amber-500/90 text-white flex items-center px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">
+                            <Clock className="w-3 h-3 mr-1" /> Pending
+                          </span>
+                       ) : (
+                          <span className="bg-emerald-500/90 text-white flex items-center px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">
+                            <CheckCircle2 className="w-3 h-3 mr-1" /> Approved
+                          </span>
+                       )}
+                     </div>
+                   </div>
+                   <div className="p-4 bg-card">
+                      <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">{b.date.split(',')[0]}</p>
+                      <h4 className="font-bold text-[15px] truncate">{b.hostelName} • {b.roomNumber}</h4>
+                   </div>
+                </div>
+              </Link>
+            ))
+          )}
           
-          {/* Booking Card 2 */}
+          {/* New Explore Card */}
           <Link to="/explore" className="block outline-none shrink-0 w-[240px]">
-             <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group opacity-80 hover:opacity-100">
-               <div className="h-[140px] relative overflow-hidden bg-muted flex items-center justify-center border-b border-border/40">
+             <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group opacity-80 hover:opacity-100 h-full flex flex-col">
+               <div className="flex-1 min-h-[140px] relative overflow-hidden bg-muted flex items-center justify-center border-b border-border/40">
                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-muted-foreground/40 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
                     <span className="text-xl text-muted-foreground/50 group-hover:text-primary transition-colors">+</span>
                  </div>
                </div>
                <div className="p-4 bg-muted/10 text-center">
-                  <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">Next Semester</p>
-                  <h4 className="font-bold text-muted-foreground text-[14px] truncate">Explore new locations</h4>
+                  <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">Discover More</p>
+                  <h4 className="font-bold text-muted-foreground text-[14px] truncate">Find new hostels</h4>
                </div>
             </div>
           </Link>

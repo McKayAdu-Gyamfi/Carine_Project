@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Layout from "./components/Layout";
 import ManagerLayout from "./components/ManagerLayout";
 import { ThemeProvider } from "./components/theme-provider";
+import { BookingProvider } from "./contexts/BookingContext";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Explore = React.lazy(() => import("./pages/Explore"));
@@ -17,6 +18,7 @@ const Saved = React.lazy(() => import("./pages/Saved"));
 const ManagerDashboard = React.lazy(() => import("./pages/manager/ManagerDashboard"));
 const ManagerProperties = React.lazy(() => import("./pages/manager/ManagerProperties"));
 const ManagerBookings = React.lazy(() => import("./pages/manager/ManagerBookings"));
+const PaymentDetails = React.lazy(() => import("./pages/PaymentDetails"));
 
 const ScreenLoader = () => (
   <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -35,9 +37,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 export default function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <Router>
-      <Suspense fallback={<ScreenLoader />}>
-      <Routes>
+      <BookingProvider>
+        <Router>
+        <Suspense fallback={<ScreenLoader />}>
+        <Routes>
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
@@ -59,10 +62,12 @@ export default function App() {
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
         <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+        <Route path="/payment" element={<ProtectedRoute><PaymentDetails /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       </Suspense>
-    </Router>
+      </Router>
+      </BookingProvider>
     </ThemeProvider>
   );
 }
