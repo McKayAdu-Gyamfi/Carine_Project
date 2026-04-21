@@ -1,6 +1,7 @@
 import { ChevronLeft, Heart, MapPin, Send, Star, X, Box } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useBookings } from "@/contexts/BookingContext";
 
 export interface HostelDetailsOverlayProps {
   selectedHostel: any;
@@ -13,6 +14,9 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
   const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const { bookings } = useBookings();
+  
+  const hasActiveBooking = bookings.some((b) => b.studentName === "Nana Osei" && (b.status === "Pending" || b.status === "Approved"));
 
   const roomTypes = [
     { label: "1 in a room", value: 1, priceOffset: 2000 },
@@ -171,9 +175,9 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
             {/* Bottom Sticky Action Bar */}
             <div className="p-4 bg-background border-t border-border shrink-0 z-30 pb-8">
               <button 
-                disabled={!selectedRoom}
+                disabled={!selectedRoom || hasActiveBooking}
                 onClick={() => {
-                  if (!selectedRoom) return;
+                  if (!selectedRoom || hasActiveBooking) return;
                   const activeRoomObj = roomTypes.find(t => t.value === selectedRoom) || roomTypes[1];
                   const finalPrice = Number(selectedHostel.startingPrice) + activeRoomObj.priceOffset;
                   navigate('/booking', { 
@@ -189,12 +193,16 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                   });
                 }}
                 className={`w-full py-4 rounded-2xl font-bold flex justify-center items-center transition-all text-lg ${
-                  selectedRoom 
+                  hasActiveBooking
+                    ? 'bg-red-500/10 text-red-500 opacity-90 cursor-not-allowed border border-red-500/20'
+                    : selectedRoom 
                     ? 'bg-primary text-primary-foreground shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] active:scale-[0.98]' 
                     : 'bg-muted text-muted-foreground opacity-50 cursor-not-allowed'
                 }`}
               >
-                {selectedRoom ? "Book Now" : "Select a room to proceed"}
+                {hasActiveBooking 
+                   ? "You already have an active booking" 
+                   : selectedRoom ? "Book Now" : "Select a room to proceed"}
               </button>
             </div>
           </>

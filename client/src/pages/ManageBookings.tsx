@@ -126,8 +126,11 @@ export default function ManageBookings() {
                    </div>
                    
                    <div className="mt-3">
-                     <button className="w-full h-12 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center font-bold text-xs transition-colors cursor-pointer">
-                       Request Cancellation
+                     <button 
+                       onClick={() => cancelBooking(b.id)}
+                       className="w-full h-12 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center font-bold text-xs transition-colors cursor-pointer"
+                     >
+                       Cancel Booking
                      </button>
                    </div>
                  </div>
