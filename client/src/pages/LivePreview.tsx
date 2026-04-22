@@ -61,6 +61,24 @@ export default function LivePreview() {
         <button onClick={handleClose} className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors pointer-events-auto cursor-pointer">
           <X className="w-5 h-5" />
         </button>
+
+        {/* Glass Amenities Card */}
+        {summary?.amenities && (
+          <div className="w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[24px] p-5 shadow-2xl animate-in slide-in-from-right-10 duration-700 delay-300">
+            <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary mb-4">Room Features</h3>
+            <div className="space-y-3">
+              {summary.amenities.slice(0, 5).map((amenity: string, idx: number) => (
+                <div key={idx} className="flex items-center space-x-2.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
+                  <span className="text-[11px] font-bold text-white/90 truncate">{amenity}</span>
+                </div>
+              ))}
+            </div>
+            {summary.amenities.length > 5 && (
+              <p className="text-[9px] font-bold text-white/40 mt-3 italic">+{summary.amenities.length - 5} more features</p>
+            )}
+          </div>
+        )}
       </div>
 
 

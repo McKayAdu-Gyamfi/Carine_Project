@@ -30,9 +30,9 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
   const hasActiveBooking = bookings.some((b) => b.studentName === "Nana Osei" && (b.status === "Pending" || b.status === "Approved"));
 
   const roomTypes = [
-    { label: "1 in a room", value: 1, priceOffset: 2000, amenities: ["Air-Conditioned", "Wi-Fi Included"] },
-    { label: "2 in a room", value: 2, priceOffset: 1000, amenities: ["Air-Conditioned", "Wi-Fi Included"] },
-    { label: "4 in a room", value: 4, priceOffset: 0, amenities: ["Wi-Fi Included"] },
+    { label: "1 in a room", value: 1, priceOffset: 2000, amenities: ["Air-Conditioned", "WiFi"] },
+    { label: "2 in a room", value: 2, priceOffset: 1000, amenities: ["Air-Conditioned", "WiFi"] },
+    { label: "4 in a room", value: 4, priceOffset: 0, amenities: ["WiFi"] },
   ];
 
   return (
@@ -193,7 +193,7 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                       {selectedRoom === type.value && (
                         <div className="mt-4 pt-4 border-t border-primary/20 animate-in fade-in slide-in-from-top-2 duration-300 flex items-center justify-between gap-4">
                           <div className="flex flex-wrap gap-2">
-                            {[...type.amenities, ...(selectedHostel.amenities || [])].map((amenity, idx) => (
+                            {type.amenities.map((amenity, idx) => (
                               <span 
                                 key={`${amenity}-${idx}`} 
                                 className="px-3 py-1 rounded-full border border-border text-[10px] font-bold text-foreground bg-accent/30 whitespace-nowrap"
@@ -218,7 +218,8 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                                   location: selectedHostel.location,
                                   image: selectedHostel.image,
                                   roomLabel: activeRoomObj.label,
-                                  price: finalPrice
+                                  price: finalPrice,
+                                  amenities: activeRoomObj.amenities
                                 } 
                               });
                             }}
