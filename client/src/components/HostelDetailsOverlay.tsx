@@ -1,4 +1,4 @@
-import { ChevronLeft, Heart, MapPin, Send, Star, X, Box } from "lucide-react";
+import { ChevronLeft, Heart, MapPin, Send, Star, X, Box, Wifi, WashingMachine, ChefHat, Dumbbell, AirVent, ShieldCheck, Droplets } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBookings } from "@/contexts/BookingContext";
@@ -10,6 +10,17 @@ export interface HostelDetailsOverlayProps {
   onSave?: (e: React.MouseEvent, id: string) => void;
 }
 
+const AMENITY_ICONS: Record<string, any> = {
+  "WiFi": Wifi,
+  "Laundry": WashingMachine,
+  "Kitchen Shared": ChefHat,
+  "Kitchen Personal": ChefHat,
+  "Gym": Dumbbell,
+  "AC": AirVent,
+  "Security": ShieldCheck,
+  "Water": Droplets,
+};
+
 export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel, savedHostels = [], onSave }: HostelDetailsOverlayProps) {
   const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
@@ -19,9 +30,9 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
   const hasActiveBooking = bookings.some((b) => b.studentName === "Nana Osei" && (b.status === "Pending" || b.status === "Approved"));
 
   const roomTypes = [
-    { label: "1 in a room", value: 1, priceOffset: 2000 },
-    { label: "2 in a room", value: 2, priceOffset: 1000 },
-    { label: "4 in a room", value: 4, priceOffset: 0 },
+    { label: "1 in a room", value: 1, priceOffset: 2000, amenities: ["Air-Conditioned", "Wi-Fi Included"] },
+    { label: "2 in a room", value: 2, priceOffset: 1000, amenities: ["Air-Conditioned", "Wi-Fi Included"] },
+    { label: "4 in a room", value: 4, priceOffset: 0, amenities: ["Wi-Fi Included"] },
   ];
 
   return (
@@ -122,6 +133,36 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                 </p>
               </div>
 
+              {/* Amenities Section */}
+              <div className="mb-8">
+                <h3 className="text-lg font-bold text-foreground mb-4">What this place offers</h3>
+                <div className="grid grid-cols-2 gap-y-4">
+                  {(selectedHostel.amenities || []).map((amenity: string) => {
+                    const Icon = AMENITY_ICONS[amenity] || Box;
+                    return (
+                      <div key={amenity} className="flex items-center space-x-3 group">
+                        <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center border border-primary/10 group-hover:bg-primary/10 transition-colors">
+                          <Icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">{amenity}</span>
+                      </div>
+                    );
+                  })}
+                  <div className="flex items-center space-x-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center border border-primary/10">
+                      <ShieldCheck className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">Security</span>
+                  </div>
+                  <div className="flex items-center space-x-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center border border-primary/10">
+                      <Droplets className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">Water Supply</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Room Types Section */}
               <div className="mb-6">
                 <h3 className="text-lg font-bold text-foreground mb-3">Room Types</h3>
@@ -150,7 +191,18 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                       
                       {/* Expanded Section for Selected Room */}
                       {selectedRoom === type.value && (
-                        <div className="mt-4 pt-4 border-t border-primary/20 flex justify-end animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="mt-4 pt-4 border-t border-primary/20 animate-in fade-in slide-in-from-top-2 duration-300 flex items-center justify-between gap-4">
+                          <div className="flex flex-wrap gap-2">
+                            {[...type.amenities, ...(selectedHostel.amenities || [])].map((amenity, idx) => (
+                              <span 
+                                key={`${amenity}-${idx}`} 
+                                className="px-3 py-1 rounded-full border border-border text-[10px] font-bold text-foreground bg-accent/30 whitespace-nowrap"
+                              >
+                                {amenity}
+                              </span>
+                            ))}
+                          </div>
+                          
                           <button 
                             type="button"
                             onClick={(e) => {
@@ -170,10 +222,10 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
                                 } 
                               });
                             }}
-                            className="bg-primary/10 hover:bg-primary/20 text-primary font-bold text-sm px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 border border-primary/20"
+                            className="shrink-0 bg-primary/10 hover:bg-primary/20 text-primary font-bold text-xs px-3 py-2 rounded-lg transition-colors flex items-center space-x-2 border border-primary/20"
                           >
-                            <Box className="w-4 h-4" />
-                            <span>Preview 360° Virtual Tour</span>
+                            <Box className="w-3.5 h-3.5" />
+                            <span>Preview 360°</span>
                           </button>
                         </div>
                       )}

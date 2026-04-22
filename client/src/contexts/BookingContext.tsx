@@ -33,7 +33,7 @@ const initialBookings: Booking[] = [
     hostelName: "Tanko Hostel",
     roomLabel: "2 in a room",
     roomNumber: "Rm 402B",
-    price: 2400,
+    price: 2400, 
     date: "Jan 12, 2024, 10:30 AM",
     status: "Approved",
     image: "https://images.unsplash.com/photo-1598928506311-c55dd777589d?auto=format&fit=crop&q=80&w=400&h=400",
