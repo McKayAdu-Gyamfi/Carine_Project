@@ -4,10 +4,13 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useBookings } from "@/contexts/BookingContext";
+import { useToast } from "@/components/ui/toaster";
+import BookingProgress from "@/components/BookingProgress";
 
 export default function PaymentDetails() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { addBooking } = useBookings();
   const [selectedRoomNumber, setSelectedRoomNumber] = useState<string | null>(null);
   const [copiedBank, setCopiedBank] = useState(false);
@@ -59,6 +62,8 @@ export default function PaymentDetails() {
         location: summary.location
       });
 
+      toast("Payment confirmation sent!", "success");
+
       // 2. Navigate straight back to Manage Bookings with success state
       navigate('/manage-bookings', { 
         state: { newBookingSuccess: true },
@@ -77,6 +82,13 @@ export default function PaymentDetails() {
           <h1 className="text-2xl font-bold tracking-tight">Manual Payment</h1>
         </div>
       </header>
+      
+      {/* Fixed Progress Bar Container */}
+      <div className="bg-background/50 backdrop-blur-sm border-b border-border/30">
+        <div className="max-w-md mx-auto">
+          <BookingProgress currentStep={isProcessing ? 3 : 2} />
+        </div>
+      </div>
 
       <main className="max-w-4xl mx-auto px-6 pt-8">
         

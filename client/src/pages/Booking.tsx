@@ -2,6 +2,7 @@ import { ArrowLeft, Calendar as CalendarIcon, Lock, ChevronRight, Info, MapPin }
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import BookingProgress from "@/components/BookingProgress";
 
 export default function Booking() {
   const location = useLocation();
@@ -35,33 +36,19 @@ export default function Booking() {
           <h1 className="text-2xl font-bold text-foreground tracking-tight">Complete Booking</h1>
         </div>
       </header>
+      
+      {/* Fixed Progress Bar Container */}
+      <div className="bg-background/50 backdrop-blur-sm border-b border-border/30">
+        <div className="max-w-md mx-auto">
+          <BookingProgress currentStep={1} />
+        </div>
+      </div>
 
       <main className="max-w-6xl mx-auto px-6 pt-8">
         <div className="flex flex-col md:flex-row gap-10">
           
           {/* Left Column - Details */}
           <div className="flex-1 space-y-10">
-            
-            {/* Progress Indicator */}
-            <div>
-              <div className="flex items-center justify-between relative max-w-md">
-                <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-1 bg-muted rounded-full z-0" />
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 h-1 bg-primary w-[33%] transition-all duration-500 rounded-full z-0" />
-                
-                <div className="flex flex-col items-center z-10 w-12 gap-2">
-                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm shadow-lg shadow-primary/30">1</div>
-                  <span className="text-[11px] font-bold tracking-wider text-primary">DATES</span>
-                </div>
-                <div className="flex flex-col items-center z-10 w-12 gap-2">
-                  <div className="w-10 h-10 rounded-full bg-card border-2 border-border text-muted-foreground flex items-center justify-center font-bold text-sm relative">2</div>
-                  <span className="text-[11px] font-bold tracking-wider text-muted-foreground">DETAILS</span>
-                </div>
-                <div className="flex flex-col items-center z-10 w-12 gap-2">
-                  <div className="w-10 h-10 rounded-full bg-card border-2 border-border text-muted-foreground flex items-center justify-center font-bold text-sm relative">3</div>
-                  <span className="text-[11px] font-bold tracking-wider text-muted-foreground">PAYMENT</span>
-                </div>
-              </div>
-            </div>
 
             {/* Selected Unit Summary */}
             <Card className="bg-card border border-border/80 shadow-[0_4px_25px_rgba(0,0,0,0.03)] rounded-3xl overflow-hidden p-5 flex space-x-6 transition-colors">

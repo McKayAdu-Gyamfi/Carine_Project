@@ -1,9 +1,11 @@
 import { ChevronLeft, MoreHorizontal, Clock, DollarSign, MessageCircle, MapPin, Loader2, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookings } from "@/contexts/BookingContext";
+import { useToast } from "@/components/ui/toaster";
 
 export default function ManageBookings() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { bookings, cancelBooking } = useBookings();
   const myBookings = bookings.filter((b) => b.studentName === "Nana Osei");
 
@@ -52,7 +54,7 @@ export default function ManageBookings() {
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
                          <h3 className="font-bold text-base tracking-tight">{b.hostelName}</h3>
-                         <button onClick={() => cancelBooking(b.id)} className="text-[10px] font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 px-2 py-1 rounded-md transition-colors cursor-pointer">
+                         <button onClick={() => { cancelBooking(b.id); toast("Booking request canceled", "info"); }} className="text-[10px] font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 px-2 py-1 rounded-md transition-colors cursor-pointer">
                            Cancel
                          </button>
                       </div>
@@ -127,7 +129,7 @@ export default function ManageBookings() {
                    
                    <div className="mt-3">
                      <button 
-                       onClick={() => cancelBooking(b.id)}
+                       onClick={() => { cancelBooking(b.id); toast("Booking canceled", "info"); }}
                        className="w-full h-12 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center font-bold text-xs transition-colors cursor-pointer"
                      >
                        Cancel Booking

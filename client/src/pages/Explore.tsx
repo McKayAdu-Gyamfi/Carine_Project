@@ -2,11 +2,12 @@ import { Search, SlidersHorizontal, Star } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FilterModal from "@/components/FilterModal";
 import HostelCard from "@/components/HostelCard";
 import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
+import { useToast } from "@/components/ui/toaster";
 
 const getBadgeStyle = (availability: string) => {
   switch (availability?.toUpperCase()) {
@@ -17,6 +18,7 @@ const getBadgeStyle = (availability: string) => {
 };
 
 export default function Explore() {
+  const { toast } = useToast();
   const location = useLocation();
   const [selectedHostel, setSelectedHostel] = useState<any>(() => {
     return location.state?.restoreHostel ? ALL_HOSTELS.find(h => h.id === location.state.restoreHostel) || null : null;
@@ -25,6 +27,13 @@ export default function Explore() {
     const saved = localStorage.getItem("saved_hostels");
     return saved ? JSON.parse(saved) : [];
   });
+
+  useEffect(() => {
+    if (location.state?.restoreHostel) {
+      const hostel = ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
+      if (hostel) setSelectedHostel(hostel);
+    }
+  }, [location.state]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<{ distance: number; amenities: string[], priceRange: [number, number] }>({ 
@@ -54,8 +63,10 @@ export default function Explore() {
     let newSaved;
     if (savedHostels.includes(id)) {
       newSaved = savedHostels.filter(h => h !== id);
+      toast("Removed from favorites", "info");
     } else {
       newSaved = [...savedHostels, id];
+      toast("Added to favorites", "success");
     }
     setSavedHostels(newSaved);
     localStorage.setItem("saved_hostels", JSON.stringify(newSaved));
@@ -93,7 +104,6 @@ export default function Explore() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-foreground">Most Popular</h2>
-            <button className="text-sm font-bold text-primary">See All</button>
           </div>
           
           <div className="flex overflow-x-auto hide-scrollbar -mx-5 px-5 space-x-5 pb-5">

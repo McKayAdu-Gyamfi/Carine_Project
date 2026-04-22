@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import ManagerLayout from "./components/ManagerLayout";
 import { ThemeProvider } from "./components/theme-provider";
 import { BookingProvider } from "./contexts/BookingContext";
+import { ToastProvider } from "./components/ui/toaster";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Explore = React.lazy(() => import("./pages/Explore"));
@@ -37,7 +38,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 export default function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <BookingProvider>
+      <ToastProvider>
+        <BookingProvider>
         <Router>
         <Suspense fallback={<ScreenLoader />}>
         <Routes>
@@ -67,7 +69,8 @@ export default function App() {
       </Routes>
       </Suspense>
       </Router>
-      </BookingProvider>
+        </BookingProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

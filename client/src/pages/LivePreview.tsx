@@ -54,32 +54,38 @@ export default function LivePreview() {
       </div>
 
       {/* Floating Action Buttons (Right) */}
-      <div className="absolute top-1/2 right-4 -translate-y-1/2 flex flex-col space-y-4 z-[9999]">
-        <button onClick={handleFullscreen} className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors pointer-events-auto">
-          <Maximize className="w-5 h-5" />
-        </button>
-        <button onClick={handleClose} className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors pointer-events-auto cursor-pointer">
+      <div className="fixed top-1/2 right-4 -translate-y-1/2 flex flex-col space-y-4 z-[10001] pointer-events-none">
+        <button 
+          onClick={handleClose} 
+          className="w-12 h-12 rounded-full bg-destructive/90 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-destructive transition-colors pointer-events-auto cursor-pointer"
+        >
           <X className="w-5 h-5" />
         </button>
-
-        {/* Glass Amenities Card */}
-        {summary?.amenities && (
-          <div className="w-48 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[24px] p-5 shadow-2xl animate-in slide-in-from-right-10 duration-700 delay-300">
-            <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary mb-4">Room Features</h3>
-            <div className="space-y-3">
-              {summary.amenities.slice(0, 5).map((amenity: string, idx: number) => (
-                <div key={idx} className="flex items-center space-x-2.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
-                  <span className="text-[11px] font-bold text-white/90 truncate">{amenity}</span>
-                </div>
-              ))}
-            </div>
-            {summary.amenities.length > 5 && (
-              <p className="text-[9px] font-bold text-white/40 mt-3 italic">+{summary.amenities.length - 5} more features</p>
-            )}
-          </div>
-        )}
+        <button 
+          onClick={handleFullscreen} 
+          className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center border border-white/20 text-white shadow-lg hover:bg-black/80 transition-colors pointer-events-auto cursor-pointer"
+        >
+          <Maximize className="w-5 h-5" />
+        </button>
       </div>
+
+      {/* Glass Amenities Card (Right/Top) */}
+      {summary?.amenities && summary.amenities.length > 0 && (
+        <div className="fixed top-6 right-20 sm:top-1/2 sm:right-20 sm:-translate-y-1/2 w-40 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/30 rounded-[24px] p-4 sm:p-5 shadow-2xl animate-in slide-in-from-right-10 duration-700 delay-300 z-[10000]">
+          <h3 className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary mb-3 sm:mb-4">Room Features</h3>
+          <div className="space-y-2 sm:space-y-3">
+            {summary.amenities.slice(0, 5).map((amenity: string, idx: number) => (
+              <div key={idx} className="flex items-center space-x-2.5">
+                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
+                <span className="text-[10px] sm:text-[11px] font-bold text-white/90 truncate">{amenity}</span>
+              </div>
+            ))}
+          </div>
+          {summary.amenities.length > 5 && (
+            <p className="text-[8px] sm:text-[9px] font-bold text-white/40 mt-3 italic">+{summary.amenities.length - 5} more</p>
+          )}
+        </div>
+      )}
 
 
       {/* Bottom Interface Group */}
@@ -110,7 +116,7 @@ export default function LivePreview() {
                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Selected Room</span>
                <div className="flex items-baseline">
                  <span className="text-2xl font-extrabold text-foreground mr-1">GHS {summary?.price?.toLocaleString() || "4,500"}</span>
-                 <span className="text-[10px] font-medium text-muted-foreground">/{summary?.roomLabel || 'session'}</span>
+                 <span className="text-[10px] font-medium text-muted-foreground">/semester</span>
                </div>
              </div>
              
@@ -133,10 +139,7 @@ export default function LivePreview() {
                 {hasActiveBooking ? (
                    <span className="text-xs">Active Booking Exists</span>
                 ) : (
-                   <>
-                     <span>Book</span>
-                     <span className="truncate max-w-[100px]">{summary?.hostelName || "Dufie Annex"}</span>
-                   </>
+                   <span>Book this room</span>
                 )}
              </button>
           </div>

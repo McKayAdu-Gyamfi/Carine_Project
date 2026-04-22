@@ -115,6 +115,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                 <input 
                   type="number" 
                   value={priceRange[0]} 
+                  placeholder="0"
                   onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
                   className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none"
                 />
@@ -125,6 +126,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                 <input 
                   type="number" 
                   value={priceRange[1]} 
+                  placeholder="Value"
                   onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
                   className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none"
                 />

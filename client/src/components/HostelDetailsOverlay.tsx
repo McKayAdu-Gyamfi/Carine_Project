@@ -30,9 +30,9 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
   const hasActiveBooking = bookings.some((b) => b.studentName === "Nana Osei" && (b.status === "Pending" || b.status === "Approved"));
 
   const roomTypes = [
-    { label: "1 in a room", value: 1, priceOffset: 2000, amenities: ["Air-Conditioned", "WiFi"] },
-    { label: "2 in a room", value: 2, priceOffset: 1000, amenities: ["Air-Conditioned", "WiFi"] },
-    { label: "4 in a room", value: 4, priceOffset: 0, amenities: ["WiFi"] },
+    { label: "1 in a room", value: 1, priceOffset: 2000, amenities: ["Air-Conditioned"] },
+    { label: "2 in a room", value: 2, priceOffset: 1000, amenities: ["Air-Conditioned"] },
+    { label: "4 in a room", value: 4, priceOffset: 0, amenities: [] },
   ];
 
   return (

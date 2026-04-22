@@ -1,14 +1,27 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { ALL_HOSTELS } from "../data/hostels";
 import { Heart, MapPin, Trash2, Search, SlidersHorizontal } from "lucide-react";
 import FilterModal from "@/components/FilterModal";
 import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
+import { useToast } from "@/components/ui/toaster";
 
 export default function Saved() {
+  const { toast } = useToast();
+  const location = useLocation();
   const [savedHostelIds, setSavedHostelIds] = useState<string[]>([]);
-  const [selectedHostel, setSelectedHostel] = useState<any>(null);
+  const [selectedHostel, setSelectedHostel] = useState<any>(() => {
+    return location.state?.restoreHostel ? ALL_HOSTELS.find(h => h.id === location.state.restoreHostel) || null : null;
+  });
+
+  useEffect(() => {
+    if (location.state?.restoreHostel) {
+      const hostel = ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
+      if (hostel) setSelectedHostel(hostel);
+    }
+  }, [location.state]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<{ distance: number; amenities: string[], priceRange: [number, number] }>({ 
@@ -29,6 +42,7 @@ export default function Saved() {
     const newSaved = savedHostelIds.filter(hId => hId !== id);
     setSavedHostelIds(newSaved);
     localStorage.setItem("saved_hostels", JSON.stringify(newSaved));
+    toast("Removed from saved", "info");
   };
 
   const savedHostels = ALL_HOSTELS.filter(h => savedHostelIds.includes(h.id));

@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 // import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import FilterModal from "@/components/FilterModal";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
@@ -9,6 +9,7 @@ import HostelCard from "@/components/HostelCard";
 import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { useState, useEffect } from "react";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
+import { useToast } from "@/components/ui/toaster";
 
 const getBadgeStyle = (availability: string) => {
   switch (availability?.toUpperCase()) {
@@ -19,21 +20,34 @@ const getBadgeStyle = (availability: string) => {
 };
 
 export default function Home() {
+  const { toast } = useToast();
+  const location = useLocation();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [heroIndex, setHeroIndex] = useState(0);
-  const [selectedHostel, setSelectedHostel] = useState<any>(null);
+  const [selectedHostel, setSelectedHostel] = useState<any>(() => {
+    return location.state?.restoreHostel ? ALL_HOSTELS.find(h => h.id === location.state.restoreHostel) || null : null;
+  });
   const [savedHostels, setSavedHostels] = useState<string[]>(() => {
     const saved = localStorage.getItem("saved_hostels");
     return saved ? JSON.parse(saved) : [];
   });
+
+  useEffect(() => {
+    if (location.state?.restoreHostel) {
+      const hostel = ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
+      if (hostel) setSelectedHostel(hostel);
+    }
+  }, [location.state]);
 
   const handleSave = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     let newSaved;
     if (savedHostels.includes(id)) {
       newSaved = savedHostels.filter(h => h !== id);
+      toast("Removed from favorites", "info");
     } else {
       newSaved = [...savedHostels, id];
+      toast("Added to favorites", "success");
     }
     setSavedHostels(newSaved);
     localStorage.setItem("saved_hostels", JSON.stringify(newSaved));
