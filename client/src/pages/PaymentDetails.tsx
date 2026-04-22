@@ -1,4 +1,4 @@
-import { ArrowLeft, CheckCircle2, ChevronRight, Copy, Landmark, Smartphone, MapPin } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Copy, Landmark, Smartphone, MapPin } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
