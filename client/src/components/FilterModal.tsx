@@ -12,6 +12,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialFilters.amenities);
   const [distance, setDistance] = useState<number>(initialFilters.distance);
   const [priceRange, setPriceRange] = useState<[number, number]>(initialFilters.priceRange || [0, 10000]);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
     onApplyFilters({ 
       distance, 
       amenities: selectedAmenities,
-      priceRange
+      priceRange: [priceRange[0], priceRange[1] === 0 ? 10000 : priceRange[1]]
     });
     onClose();
   };
@@ -114,10 +115,12 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">Min Price</label>
                 <input 
                   type="number" 
-                  value={priceRange[0]} 
-                  placeholder="0"
-                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none"
+                  value={priceRange[0] === 0 ? "" : priceRange[0]} 
+                  placeholder={focusedInput === "min" ? "" : "0"}
+                  onFocus={() => setFocusedInput("min")}
+                  onBlur={() => setFocusedInput(null)}
+                  onChange={(e) => setPriceRange([e.target.value === "" ? 0 : Number(e.target.value), priceRange[1]])}
+                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none transition-all"
                 />
               </div>
               <div className="text-muted-foreground font-bold mt-4">-</div>
@@ -125,10 +128,12 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">Max Price</label>
                 <input 
                   type="number" 
-                  value={priceRange[1]} 
-                  placeholder="Value"
-                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none"
+                  value={priceRange[1] === 10000 || priceRange[1] === 0 ? "" : priceRange[1]} 
+                  placeholder={focusedInput === "max" ? "" : "10000"}
+                  onFocus={() => setFocusedInput("max")}
+                  onBlur={() => setFocusedInput(null)}
+                  onChange={(e) => setPriceRange([priceRange[0], e.target.value === "" ? 0 : Number(e.target.value)])}
+                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none transition-all"
                 />
               </div>
             </div>
