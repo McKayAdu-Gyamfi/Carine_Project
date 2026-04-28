@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Search, Filter, CheckCircle2, XCircle, Clock, MapPin } from "lucide-react";
+import { Search, Filter, CheckCircle2, XCircle, Clock, MapPin, Loader2 } from "lucide-react";
 import { useBookings } from "@/contexts/BookingContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ManagerBookings() {
   const [activeTab, setActiveTab] = useState("Pending");
-  const { bookings, approveBooking, declineBooking } = useBookings();
+  const { bookings, loading, approveBooking, declineBooking } = useBookings();
+  useAuth();
 
+  // If user is hostel manager, back-end `useBookings` returns ALL bookings for THEIR hostels
   const filteredBookings = bookings.filter(b => b.status === activeTab);
 
   return (
@@ -43,13 +46,17 @@ export default function ManagerBookings() {
       </div>
 
       <div className="px-5 mt-4 space-y-4">
-        {filteredBookings.length === 0 && (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center mt-10">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="text-sm font-semibold text-muted-foreground mt-4">Loading bookings...</p>
+          </div>
+        ) : filteredBookings.length === 0 ? (
           <div className="text-center text-muted-foreground mt-10">
             <p className="text-sm font-semibold">No {activeTab.toLowerCase()} bookings found.</p>
           </div>
-        )}
-        
-        {filteredBookings.map(b => (
+        ) : (
+          filteredBookings.map(b => (
           <div key={b.id} className="bg-card border border-border/60 rounded-xl p-4 shadow-sm relative group overflow-hidden">
             {b.status === "Pending" && (
                <div className="absolute top-0 right-0 p-2 opacity-5">
@@ -91,7 +98,8 @@ export default function ManagerBookings() {
               )}
             </div>
           </div>
-        ))}
+        ))
+      )}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { useState, useEffect } from "react";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
 import { useToast } from "@/components/ui/toaster";
+import { useHostels } from "@/hooks/useHostels";
 
 const getBadgeStyle = (availability: string) => {
   switch (availability?.toUpperCase()) {
@@ -32,12 +33,19 @@ export default function Home() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const { hostels } = useHostels();
+  
+  // Use API hostels if available, otherwise fallback to static mock data
+  const popularHostels = hostels.length > 0 ? hostels : MOST_POPULAR;
+  const nearbyHostels = hostels.length > 0 ? hostels.slice(0, 3) : NEARBY_PLACES;
+
   useEffect(() => {
     if (location.state?.restoreHostel) {
-      const hostel = ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
+      // Find from either API or static
+      const hostel = hostels.find(h => h.id === location.state.restoreHostel) || ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
       if (hostel) setSelectedHostel(hostel);
     }
-  }, [location.state]);
+  }, [location.state, hostels]);
 
   const handleSave = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -53,9 +61,10 @@ export default function Home() {
     localStorage.setItem("saved_hostels", JSON.stringify(newSaved));
   };
 
-  const carouselImages = ALL_HOSTELS.map(h => h.image);
+  const carouselImages = popularHostels.map(h => h.image);
 
   useEffect(() => {
+    if (carouselImages.length === 0) return;
     const timer = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % carouselImages.length);
     }, 3000);
@@ -126,7 +135,7 @@ export default function Home() {
         <ScrollArea className="w-full whitespace-nowrap">
           <div className="flex w-max space-x-4 px-4 pb-4 pt-1">
             
-            {MOST_POPULAR.map((hostel) => (
+            {popularHostels.map((hostel) => (
               <div key={hostel.id} className="block outline-none cursor-pointer">
                 <HostelCard 
                   hostel={hostel} 
@@ -148,7 +157,7 @@ export default function Home() {
         <h3 className="text-xl font-bold text-foreground mb-4">Recommended for you</h3>
         <div className="space-y-3">
           
-          {NEARBY_PLACES.map((hostel) => (
+          {nearbyHostels.map((hostel) => (
             <div 
               key={hostel.id} 
               onClick={() => setSelectedHostel(hostel)}

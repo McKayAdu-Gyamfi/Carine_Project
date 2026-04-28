@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { ChevronLeft, Pencil, Check, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ChevronLeft, Check, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { TygerAvatar } from 'tyger-avatar';
+import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/lib/api";
 
 const PREFERENCES = [
   "Quiet / Low Noise",
@@ -11,22 +12,23 @@ const PREFERENCES = [
   "Backup Generator"
 ];
 
-const AVATARS = [
-  "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
-  "TrFranklin", "TrImran", "TrMaria", "TrRachel", "TrShamila", 
-  "TrAlex", "TrFelix", "TrEnrique", "TrSophia", "TrHarry", 
-  "TrHelen", "TrStu", "TrNancy", "TrChad"
-];
-
 export default function EditProfile() {
   const navigate = useNavigate();
-  const [userAvatar, setUserAvatar] = useState<string>(localStorage.getItem("userAvatar") || "TrFelix");
-  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
-  const [selectedPrefs, setSelectedPrefs] = useState<string[]>([
-    "Air-Conditioned", 
-    "Wi-Fi Included", 
-  ]);
+  const { user, refreshUser } = useAuth();
+  
+  const [selectedPrefs, setSelectedPrefs] = useState<string[]>(() => {
+    const stored = localStorage.getItem("userPrefs");
+    return stored ? JSON.parse(stored) : ["Air-Conditioned", "Wi-Fi Included"];
+  });
   const [bio, setBio] = useState(localStorage.getItem("userBio") || "Jus a chill person merhnnnn...");
+  const [name, setName] = useState(user?.name || "");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user?.name) {
+      setName(user.name);
+    }
+  }, [user]);
 
   const togglePreference = (pref: string) => {
     if (selectedPrefs.includes(pref)) {
@@ -36,12 +38,29 @@ export default function EditProfile() {
     }
   };
 
-  const handleSave = () => {
-    localStorage.setItem("userBio", bio);
-    localStorage.setItem("userPrefs", JSON.stringify(selectedPrefs));
-    localStorage.setItem("userAvatar", userAvatar);
-    navigate(-1);
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      // Save local preferences that don't belong in the DB
+      localStorage.setItem("userBio", bio);
+      localStorage.setItem("userPrefs", JSON.stringify(selectedPrefs));
+      
+      // Save real name to DB
+      if (name && name !== user?.name) {
+        await api.patch('/users/me', { name });
+        await refreshUser();
+      }
+      
+      navigate(-1);
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to save profile");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const initial = user?.name ? user.name.charAt(0).toUpperCase() : "👤";
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
@@ -52,31 +71,23 @@ export default function EditProfile() {
           <ChevronLeft className="w-6 h-6" />
         </button>
         <h1 className="text-lg font-bold">Edit Profile</h1>
-        <button onClick={handleSave} className="p-2 text-primary font-bold text-sm cursor-pointer hover:bg-primary/10 rounded-lg transition-colors">
-          Save
+        <button 
+          onClick={handleSave} 
+          disabled={loading}
+          className="p-2 text-primary font-bold text-sm cursor-pointer hover:bg-primary/10 rounded-lg transition-colors flex items-center"
+        >
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save"}
         </button>
       </div>
 
       <div className="px-6 py-8 flex-1 pb-16">
         
-        {/* Avatar Edit */}
+        {/* Avatar Display */}
         <div className="flex flex-col items-center mb-8">
           <div className="relative w-[100px] h-[100px] mb-4">
             <div className="w-full h-full rounded-full overflow-hidden bg-accent flex items-center justify-center border-2 border-border shadow-md p-1">
-              {userAvatar?.startsWith("Tr") ? (
-                <TygerAvatar name={userAvatar as any} size="3xl" />
-              ) : userAvatar?.startsWith("http") ? (
-                <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
-              ) : (
-                <span className="text-[50px] leading-none mb-1">{userAvatar}</span>
-              )}
+              <span className="text-[50px] leading-none mb-1 text-primary">{initial}</span>
             </div>
-            <button 
-              onClick={() => setIsAvatarPickerOpen(true)}
-              className="absolute bottom-0 right-0 w-8 h-8 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center border-2 border-background shadow-lg transition-colors cursor-pointer"
-            >
-              <Pencil className="w-4 h-4 text-primary-foreground" />
-            </button>
           </div>
         </div>
 
@@ -86,7 +97,8 @@ export default function EditProfile() {
             <label className="text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground ml-1">Full Name</label>
             <input 
               type="text" 
-              defaultValue="Sarah Adjei"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
             />
           </div>
@@ -95,11 +107,13 @@ export default function EditProfile() {
             <label className="text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground ml-1">University</label>
             <input 
               type="text" 
-              defaultValue="Ashesi University"
-              className="w-full h-12 bg-card border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none focus:ring-1 ring-primary/50 transition-all shadow-sm"
+              readOnly
+              value={user?.user_type === "HOSTEL_MANAGER" ? "Manager" : "Ashesi University"}
+              className="w-full h-12 bg-muted border border-border/60 rounded-lg px-4 font-semibold text-[13px] focus:outline-none shadow-sm text-foreground/70"
             />
           </div>
           
+          {user?.user_type !== "HOSTEL_MANAGER" && (
           <div className="flex space-x-4">
             <div className="space-y-2 flex-1">
               <label className="text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground ml-1">Program</label>
@@ -122,6 +136,7 @@ export default function EditProfile() {
               </select>
             </div>
           </div>
+          )}
 
           <div className="space-y-2">
             <label className="text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground ml-1">Bio</label>
@@ -165,37 +180,6 @@ export default function EditProfile() {
 
         </div>
       </div>
-
-      {/* Avatar Picker Overlay */}
-      {isAvatarPickerOpen && (
-        <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-[100] flex flex-col p-6 overflow-y-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-[20px] font-bold tracking-tight mt-10">Choose Avatar</h2>
-            <button onClick={() => setIsAvatarPickerOpen(false)} className="p-2 bg-muted rounded-full hover:bg-accent mt-10">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="grid grid-cols-4 gap-4 pb-12">
-            {AVATARS.map((av, idx) => (
-              <button 
-                key={idx}
-                onClick={() => {
-                  setUserAvatar(av);
-                  setIsAvatarPickerOpen(false);
-                }}
-                className={`aspect-square flex items-center justify-center p-1 rounded-xl transition-all duration-300 cursor-pointer overflow-hidden ${
-                  userAvatar === av 
-                    ? 'bg-primary ring-2 ring-primary ring-offset-2 ring-offset-background scale-105 z-10 shadow-lg' 
-                    : 'bg-muted/50 hover:bg-accent border border-border/40'
-                }`}
-              >
-                <TygerAvatar name={av as any} size="xl" />
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }

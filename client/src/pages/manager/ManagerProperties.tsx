@@ -1,9 +1,29 @@
-import { Plus, Settings, Home } from "lucide-react";
-import { MOST_POPULAR } from "@/data/hostels";
+import { Plus, Settings, Home, Loader2, HomeIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { api } from "@/lib/api";
+import { transformHostel } from "@/hooks/useHostels";
+import type { Hostel } from "@/hooks/useHostels";
 
 export default function ManagerProperties() {
-  // Mock only picking properties belonging to manager
-  const properties = MOST_POPULAR.slice(0, 2);
+  const [properties, setProperties] = useState<Hostel[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchManagerHostels = async () => {
+      try {
+        const res = await api.get<{ success: boolean; data: any[] }>('/users/me/hostels');
+        if (res.success) {
+          const mapped = res.data.map(transformHostel);
+          setProperties(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to fetch manager hostels", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchManagerHostels();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen pb-6">
@@ -17,7 +37,20 @@ export default function ManagerProperties() {
       </div>
 
       <div className="px-5 space-y-5">
-        {properties.map((prop) => (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center mt-10">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="text-sm font-semibold text-muted-foreground mt-4">Loading properties...</p>
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="flex flex-col items-center justify-center mt-20 text-center space-y-4">
+             <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground/50">
+                <HomeIcon className="w-8 h-8" />
+             </div>
+             <p className="font-bold text-muted-foreground">You don't have any properties yet.</p>
+           </div>
+        ) : (
+          properties.map((prop) => (
           <div key={prop.id} className="bg-card border border-border/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow relative">
             <div className="h-32 relative">
               <img src={prop.image} loading="lazy" className="w-full h-[120%] object-cover -mt-[5%]" alt="Property" />
@@ -38,22 +71,23 @@ export default function ManagerProperties() {
               </div>
               <div className="flex justify-between items-center text-sm font-semibold border-t border-border/40 pt-3">
                 <span className="text-muted-foreground uppercase tracking-widest text-[10px]">Occupancy</span>
-                <span className="text-emerald-500">92% Filled</span>
+                <span className="text-emerald-500">Active</span>
               </div>
               
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <button className="flex items-center justify-center space-x-2 bg-accent/50 hover:bg-accent text-foreground font-semibold text-xs py-2.5 rounded-lg border border-border/50 transition-colors">
+                <button className="flex items-center justify-center space-x-2 bg-accent/50 hover:bg-accent text-foreground font-semibold text-xs py-2.5 rounded-lg border border-border/50 transition-colors cursor-pointer">
                   <Home className="w-4 h-4" />
                   <span>Rooms</span>
                 </button>
-                <button className="flex items-center justify-center space-x-2 bg-accent/50 hover:bg-accent text-foreground font-semibold text-xs py-2.5 rounded-lg border border-border/50 transition-colors">
+                <button className="flex items-center justify-center space-x-2 bg-accent/50 hover:bg-accent text-foreground font-semibold text-xs py-2.5 rounded-lg border border-border/50 transition-colors cursor-pointer">
                   <Settings className="w-4 h-4" />
                   <span>Settings</span>
                 </button>
               </div>
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

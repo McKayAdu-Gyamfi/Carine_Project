@@ -1,18 +1,26 @@
 import { Grid3X3, ShieldCheck, ChevronRight, Moon, LogOut, Settings, Clock, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
-import { TygerAvatar } from 'tyger-avatar';
 import { useBookings } from "@/contexts/BookingContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Profile() {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === "dark";
-  const userAvatar = localStorage.getItem("userAvatar") || "👤";
-  const userBio = localStorage.getItem("userBio") || "Jus a chill person merhnnnn...";
-  const storedPrefs = localStorage.getItem("userPrefs");
-  const userPrefs = storedPrefs ? JSON.parse(storedPrefs) : ["Air-Conditioned", "Wi-Fi Included", "Ensuite Bathroom"];
+  const { user, signOut } = useAuth();
+  
+  const userBio = "Student at Ashesi University";
+  const userPrefs = ["Air-Conditioned", "Wi-Fi Included"];
+  
   const { bookings } = useBookings();
-  const myBookings = bookings.filter((b) => b.studentName === "Nana Osei");
+  const myBookings = bookings; // Server already filters by user 
+
+  // Format joined date
+  const joinedDate = user?.createdAt 
+    ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    : "Recently";
+
+  const initial = user?.name ? user.name.charAt(0).toUpperCase() : "👤";
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground pb-24 font-sans select-none overflow-x-hidden">
@@ -31,19 +39,13 @@ export default function Profile() {
         <div className="flex justify-center mb-5">
           <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center bg-gradient-to-br from-primary/60 to-primary/10 shadow dark:shadow">
             <div className="w-full h-full rounded-full border-[4px] border-background overflow-hidden bg-accent flex items-center justify-center p-2">
-              {userAvatar?.startsWith("Tr") ? (
-                <TygerAvatar name={userAvatar as any} size="3xl" />
-              ) : userAvatar?.startsWith("http") ? (
-                <img src={userAvatar} alt="Avatar" loading="lazy" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
-              )}
+              <span className="text-[60px] leading-none mb-1 text-primary">{initial}</span>
             </div>
           </div>
         </div>
         
         <div className="text-center mb-6">
-          <h1 className="text-[28px] font-bold mb-1 tracking-tight">Sarah Adjei</h1>
+          <h1 className="text-[28px] font-bold mb-1 tracking-tight">{user?.name || "Student"}</h1>
           <Link to="/edit-profile" className="text-primary font-medium text-[13px] hover:underline transition-all cursor-pointer inline-block">Edit Profile</Link>
         </div>
         
@@ -65,15 +67,15 @@ export default function Profile() {
         <div className="flex justify-center items-center divide-x divide-border/60 text-center mb-4">
           <div className="px-5 w-auto">
             <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">University</p>
-            <p className="text-[13px] font-semibold text-foreground/90">Ashesi University</p>
+            <p className="text-[13px] font-semibold text-foreground/90">{user?.user_type === 'HOSTEL_MANAGER' ? 'Manager' : 'Ashesi University'}</p>
           </div>
           <div className="px-5 w-auto">
             <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">Status</p>
-            <p className="text-[13px] font-semibold text-foreground/90">Student</p>
+            <p className="text-[13px] font-semibold text-foreground/90 capitalize">{user?.user_type?.toLowerCase().replace('_', ' ') || 'Student'}</p>
           </div>
           <div className="px-5 w-auto">
             <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">Joined</p>
-            <p className="text-[13px] font-semibold text-foreground/90">Nov 2024</p>
+            <p className="text-[13px] font-semibold text-foreground/90">{joinedDate}</p>
           </div>
         </div>
         
@@ -185,13 +187,18 @@ export default function Profile() {
           </div>
           
           {/* Sign Out */}
-          <Link to="/login" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-red-500/10 transition-colors group">
+          <button 
+            onClick={async () => {
+              await signOut();
+            }}
+            className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-red-500/10 transition-colors group cursor-pointer"
+          >
             <div className="flex items-center space-x-4">
               <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-500 transition-colors" />
               <span className="font-bold text-[15px] text-red-400 group-hover:text-red-500 transition-colors">Sign Out</span>
             </div>
             <ChevronRight className="w-4 h-4 text-red-400 opacity-50 group-hover:opacity-100 transition-opacity" />
-          </Link>
+          </button>
           
         </div>
       </div>

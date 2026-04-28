@@ -8,6 +8,7 @@ import HostelCard from "@/components/HostelCard";
 import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
 import { useToast } from "@/components/ui/toaster";
+import { useHostels } from "@/hooks/useHostels";
 
 const getBadgeStyle = (availability: string) => {
   switch (availability?.toUpperCase()) {
@@ -20,6 +21,10 @@ const getBadgeStyle = (availability: string) => {
 export default function Explore() {
   const { toast } = useToast();
   const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  // Pass searchQuery directly to API hook if implemented, or filter client-side
+  const { hostels } = useHostels(searchQuery);
+
   const [selectedHostel, setSelectedHostel] = useState<any>(() => {
     return location.state?.restoreHostel ? ALL_HOSTELS.find(h => h.id === location.state.restoreHostel) || null : null;
   });
@@ -30,33 +35,34 @@ export default function Explore() {
 
   useEffect(() => {
     if (location.state?.restoreHostel) {
-      const hostel = ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
+      // Look in both API results and fallback data
+      const hostel = hostels.find(h => h.id === location.state.restoreHostel) || ALL_HOSTELS.find(h => h.id === location.state.restoreHostel);
       if (hostel) setSelectedHostel(hostel);
     }
-  }, [location.state]);
+  }, [location.state, hostels]);
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<{ distance: number; amenities: string[], priceRange: [number, number] }>({ 
     distance: 10, 
     amenities: [], 
     priceRange: [0, 10000] 
   });
 
-  const filteredPopular = MOST_POPULAR.filter(h => {
-    if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (parseFloat(h.distance) > activeFilters.distance) return false;
-    if (h.startingPrice < activeFilters.priceRange[0] || h.startingPrice > activeFilters.priceRange[1]) return false;
-    if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
-    return true;
-  });
+  // Decide the base source of data
+  const basePopular = hostels.length > 0 ? hostels : MOST_POPULAR;
+  const baseNearby = hostels.length > 0 ? hostels.slice(0, 5) : NEARBY_PLACES;
 
-  const filteredNearby = NEARBY_PLACES.filter(h => {
+  const applyClientSideFilters = (h: any) => {
     if (searchQuery && !h.name.toLowerCase().includes(searchQuery.toLowerCase()) && !h.location.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     if (parseFloat(h.distance) > activeFilters.distance) return false;
     if (h.startingPrice < activeFilters.priceRange[0] || h.startingPrice > activeFilters.priceRange[1]) return false;
-    if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every(a => h.amenities.includes(a))) return false;
+    if (activeFilters.amenities.length > 0 && !activeFilters.amenities.every((a: string) => h.amenities.includes(a))) return false;
     return true;
-  });
+  };
+
+  const filteredPopular = basePopular.filter(applyClientSideFilters);
+  const filteredNearby = baseNearby.filter(applyClientSideFilters);
+
 
   const handleSave = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();

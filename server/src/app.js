@@ -16,8 +16,16 @@ import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 const app = express();
 
 app.use(helmet());
+const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173").split(",");
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, mobile apps)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: origin ${origin} not allowed`));
+    }
+  },
   credentials: true,
 }));
 // Custom Auth Routes (must be before Better Auth wildcard)

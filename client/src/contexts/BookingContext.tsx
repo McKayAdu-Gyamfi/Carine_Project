@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { api } from "@/lib/api";
+import { useAuth } from "./AuthContext";
 
 export type BookingStatus = "Pending" | "Approved" | "Declined";
 
@@ -13,77 +15,85 @@ export interface Booking {
   status: BookingStatus;
   image: string;
   location: string;
+  // Raw ids for manager logic
+  roomId?: string;
+  hostelId?: string;
 }
 
 interface BookingContextType {
   bookings: Booking[];
-  addBooking: (booking: Omit<Booking, "id" | "status" | "date">) => void;
-  approveBooking: (id: string) => void;
-  declineBooking: (id: string) => void;
-  cancelBooking: (id: string) => void;
+  loading: boolean;
+  error: string | null;
+  refreshBookings: () => Promise<void>;
+  addBooking: (payload: { check_in: string; check_out: string; room_id: string }) => Promise<void>;
+  approveBooking: (id: string) => Promise<void>;
+  declineBooking: (id: string) => Promise<void>;
+  cancelBooking: (id: string) => Promise<void>;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
-// Initial state populated with a few static mock bookings for display purposes
-const initialBookings: Booking[] = [
-  {
-    id: "b-1",
-    studentName: "Nana Osei",
-    hostelName: "Tanko Hostel",
-    roomLabel: "2 in a room",
-    roomNumber: "Rm 402B",
-    price: 2400, 
-    date: "Jan 12, 2024, 10:30 AM",
-    status: "Approved",
-    image: "https://images.unsplash.com/photo-1598928506311-c55dd777589d?auto=format&fit=crop&q=80&w=400&h=400",
-    location: "Berekuso"
-  },
-  {
-    id: "b-2",
-    studentName: "Sarah Adjei",
-    hostelName: "New Hosanna",
-    roomLabel: "1 in a room",
-    roomNumber: "Rm 104",
-    price: 3500,
-    date: "Yesterday, 2:15 PM",
-    status: "Pending",
-    image: "https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&q=80&w=400&h=400",
-    location: "Berekuso"
-  }
-];
-
 export function BookingProvider({ children }: { children: ReactNode }) {
-  const [bookings, setBookings] = useState<Booking[]>(initialBookings);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
-  const addBooking = (newBookingData: Omit<Booking, "id" | "status" | "date">) => {
-    const newBooking: Booking = {
-      ...newBookingData,
-      id: `b-${Date.now()}`,
-      status: "Pending",
-      date: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }),
-    };
-    setBookings((prev) => [newBooking, ...prev]);
+  const refreshBookings = useCallback(async () => {
+    if (!user) {
+      setBookings([]);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await api.get<{ success: boolean; data: any[] }>('/bookings');
+      if (res.success) {
+        const mapped = res.data.map(transformBooking);
+        setBookings(mapped);
+      }
+    } catch (err: any) {
+      console.error("Failed to refresh bookings:", err);
+      setError(err.message || 'Failed to fetch bookings');
+      // Fallback for demo if DB is completely empty or errors
+      setBookings([]); 
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    refreshBookings();
+  }, [refreshBookings]);
+
+  const addBooking = async (payload: { check_in: string; check_out: string; room_id: string }) => {
+    // API requires check_in_date, check_out_date, room_id, student_id
+    await api.post('/bookings', {
+      check_in_date: payload.check_in,
+      check_out_date: payload.check_out,
+      room_id: payload.room_id,
+      student_id: user?.id,
+    });
+    await refreshBookings();
   };
 
-  const approveBooking = (id: string) => {
-    setBookings((prev) => 
-      prev.map(b => b.id === id ? { ...b, status: "Approved" } : b)
-    );
+  const approveBooking = async (id: string) => {
+    await api.patch(`/bookings/${id}`, { status: "CONFIRMED" });
+    await refreshBookings();
   };
 
-  const declineBooking = (id: string) => {
-    setBookings((prev) => 
-      prev.map(b => b.id === id ? { ...b, status: "Declined" } : b)
-    );
+  const declineBooking = async (id: string) => {
+    await api.patch(`/bookings/${id}`, { status: "DECLINED" }); // Using server enum DECLINED/CANCELLED
+    await refreshBookings();
   };
 
-  const cancelBooking = (id: string) => {
-    setBookings((prev) => prev.filter(b => b.id !== id));
+  const cancelBooking = async (id: string) => {
+    await api.patch(`/bookings/${id}`, { status: "CANCELLED" });
+    await refreshBookings();
   };
 
   return (
-    <BookingContext.Provider value={{ bookings, addBooking, approveBooking, declineBooking, cancelBooking }}>
+    <BookingContext.Provider value={{ bookings, loading, error, refreshBookings, addBooking, approveBooking, declineBooking, cancelBooking }}>
       {children}
     </BookingContext.Provider>
   );
@@ -95,4 +105,31 @@ export function useBookings() {
     throw new Error("useBookings must be used within a BookingProvider");
   }
   return context;
+}
+
+function transformBooking(dbBooking: any): Booking {
+  // DB enums: PENDING, CONFIRMED, CANCELLED, CHECKED_OUT
+  let status: BookingStatus = "Pending";
+  if (dbBooking.status === "CONFIRMED") status = "Approved";
+  if (dbBooking.status === "CANCELLED" || dbBooking.status === "DECLINED") status = "Declined";
+
+  // Use optional chaining carefully since the JOIN might fail if data is bad
+  const room = dbBooking.ROOM || {};
+  const hostel = room.HOSTEL || {};
+  const users = dbBooking.USERS || {};
+
+  return {
+    id: dbBooking.id,
+    studentName: users.email || "Student", // Name not exposed in this specific payload, standard email used
+    hostelName: hostel.hostel_name || "Unknown Hostel",
+    roomLabel: `${room.capacity || 1} in a room`,
+    roomNumber: room.room_number || "TBD",
+    price: room.price_per_semester || 0,
+    date: new Date(dbBooking.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }),
+    status,
+    image: "/images/Dufie_Annex_1.png", // Fallback, booking payload doesn't embed hostel images
+    location: "Campus Area",
+    roomId: dbBooking.room_id,
+    hostelId: room.hostel_id,
+  };
 }

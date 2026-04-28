@@ -1,6 +1,13 @@
 import { Bell, TrendingUp, Users, CheckCircle, Home } from "lucide-react";
+import { useBookings } from "@/contexts/BookingContext";
+import { useNavigate } from "react-router-dom";
 
 export default function ManagerDashboard() {
+  const { bookings } = useBookings();
+  const navigate = useNavigate();
+  
+  const pendingCount = bookings.filter(b => b.status === "Pending").length;
+
   return (
     <div className="flex flex-col min-h-screen pb-6">
       {/* Header */}
@@ -8,11 +15,11 @@ export default function ManagerDashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">Manager Hub</h1>
-            <p className="text-muted-foreground text-xs font-medium uppercase tracking-widest mt-1">Dufie Platinum & Annex</p>
+            <p className="text-muted-foreground text-xs font-medium uppercase tracking-widest mt-1">Properties Overview</p>
           </div>
           <button className="w-10 h-10 bg-card border border-border/50 rounded-full flex items-center justify-center relative shadow-sm">
             <Bell className="w-5 h-5 text-foreground" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            {pendingCount > 0 && <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />}
           </button>
         </div>
       </div>
@@ -60,13 +67,15 @@ export default function ManagerDashboard() {
         </div>
 
         {/* Action Required Banner */}
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" />
-            <p className="font-bold text-red-600 dark:text-red-400 text-sm">3 Pending Approvals</p>
+        {pendingCount > 0 && (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" />
+              <p className="font-bold text-red-600 dark:text-red-400 text-sm">{pendingCount} Pending Approvals</p>
+            </div>
+            <button onClick={() => navigate('/manager/bookings')} className="text-xs font-bold bg-red-500 text-white px-3 py-1.5 rounded-lg shadow-sm active:scale-95 transition-transform cursor-pointer">View Files</button>
           </div>
-          <button className="text-xs font-bold bg-red-500 text-white px-3 py-1.5 rounded-lg shadow-sm active:scale-95 transition-transform">View Files</button>
-        </div>
+        )}
 
         {/* Recent Activity List */}
         <div>

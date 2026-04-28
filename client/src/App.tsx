@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import ManagerLayout from "./components/ManagerLayout";
 import { ThemeProvider } from "./components/theme-provider";
 import { BookingProvider } from "./contexts/BookingContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ToastProvider } from "./components/ui/toaster";
 
 const Home = React.lazy(() => import("./pages/Home"));
@@ -28,8 +29,13 @@ const ScreenLoader = () => (
 );
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const isAuthenticated = localStorage.getItem("userAvatar") !== null;
-  if (!isAuthenticated) {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return <ScreenLoader />;
+  }
+
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
   return children;
@@ -39,37 +45,39 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <ToastProvider>
-        <BookingProvider>
-        <Router>
-        <Suspense fallback={<ScreenLoader />}>
-        <Routes>
-        <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/saved" element={<Saved />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
+        <AuthProvider>
+          <BookingProvider>
+            <Router>
+              <Suspense fallback={<ScreenLoader />}>
+                <Routes>
+                  <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/explore" element={<Explore />} />
+                    <Route path="/saved" element={<Saved />} />
+                    <Route path="/profile" element={<Profile />} />
+                  </Route>
 
-        {/* Manager Routes */}
-        <Route element={<ProtectedRoute><ManagerLayout /></ProtectedRoute>}>
-          <Route path="/manager" element={<ManagerDashboard />} />
-          <Route path="/manager/properties" element={<ManagerProperties />} />
-          <Route path="/manager/bookings" element={<ManagerBookings />} />
-        </Route>
-        
-        {/* Full-screen routes without bottom nav */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-        <Route path="/manage-bookings" element={<ProtectedRoute><ManageBookings /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-        <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
-        <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
-        <Route path="/payment" element={<ProtectedRoute><PaymentDetails /></ProtectedRoute>} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-      </Suspense>
-      </Router>
-        </BookingProvider>
+                  {/* Manager Routes */}
+                  <Route element={<ProtectedRoute><ManagerLayout /></ProtectedRoute>}>
+                    <Route path="/manager" element={<ManagerDashboard />} />
+                    <Route path="/manager/properties" element={<ManagerProperties />} />
+                    <Route path="/manager/bookings" element={<ManagerBookings />} />
+                  </Route>
+                  
+                  {/* Full-screen routes without bottom nav */}
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+                  <Route path="/manage-bookings" element={<ProtectedRoute><ManageBookings /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+                  <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
+                  <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+                  <Route path="/payment" element={<ProtectedRoute><PaymentDetails /></ProtectedRoute>} />
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </Suspense>
+            </Router>
+          </BookingProvider>
+        </AuthProvider>
       </ToastProvider>
     </ThemeProvider>
   );

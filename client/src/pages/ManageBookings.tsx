@@ -1,13 +1,18 @@
 import { ChevronLeft, MoreHorizontal, Clock, DollarSign, MessageCircle, MapPin, Loader2, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookings } from "@/contexts/BookingContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/toaster";
 
 export default function ManageBookings() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { bookings, cancelBooking } = useBookings();
-  const myBookings = bookings.filter((b) => b.studentName === "Nana Osei");
+  useAuth(); // Keeping hook if it was intended to enforce auth implicitly, else returning void.
+  const { bookings, loading, cancelBooking } = useBookings();
+  
+  // Back-end already filters by student_id for STUDENT roles, but we can do a sanity check, 
+  // or just use `bookings` directly.
+  const myBookings = bookings;
 
   const pendingBookings = myBookings.filter((b) => b.status === "Pending");
   const approvedBookings = myBookings.filter((b) => b.status === "Approved");
@@ -28,15 +33,20 @@ export default function ManageBookings() {
 
       <div className="px-5 py-6">
         
-        {myBookings.length === 0 && (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center mt-20 text-center space-y-4">
+             <Loader2 className="w-8 h-8 animate-spin text-primary" />
+             <p className="font-bold text-muted-foreground">Loading your bookings...</p>
+          </div>
+        ) : myBookings.length === 0 ? (
            <div className="flex flex-col items-center justify-center mt-20 text-center space-y-4">
              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground/50">
                 <Clock className="w-8 h-8" />
              </div>
              <p className="font-bold text-muted-foreground">You don't have any bookings yet.</p>
            </div>
-        )}
-
+        ) : (
+          <>
         {/* Pending Approval Bookings */}
         {pendingBookings.length > 0 && (
           <div className="mb-8 space-y-4">
@@ -141,6 +151,8 @@ export default function ManageBookings() {
           </div>
         )}
 
+          </>
+        )}
       </div>
     </div>
   );
