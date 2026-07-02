@@ -50,7 +50,7 @@ export default function LivePreview() {
       },
       bathroom_1: {
         type: "equirectangular",
-        panorama: "https://clear-tortoise-364.eu-west-1.convex.cloud/api/storage/9074e9bd-4806-4f3e-853b-02e518ceadfa",
+        panorama: "https://ardent-lobster-343.eu-west-1.convex.cloud/api/storage/14b05d63-7718-45ae-90ec-d286e1d3139d",
         hotSpots: [
           {
             pitch: -5,
