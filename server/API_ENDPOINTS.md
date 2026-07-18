@@ -3,6 +3,7 @@
 This document lists all active API endpoints identified in the project, organized by module. It includes the required authentication protections applied to each endpoint.
 
 ## 🏢 Hostels (`/api/hostels`)
+
 - `GET /` : Get all hostels **(Public)**
 - `GET /:id` : Get details for a specific hostel **(Public)**
 - `POST /` : Create a new hostel **(Requires Auth, Role: ADMIN)**
@@ -13,6 +14,7 @@ This document lists all active API endpoints identified in the project, organize
 - `POST /:id/images` : Upload hostel images to Supabase (up to 10) **(Requires Auth, Hostel Owner)**
 
 ## 🛏️ Rooms (`/api/rooms`)
+
 - `GET /` : Get all rooms **(Public)**
 - `GET /:id` : Get details for a specific room **(Public)**
 - `POST /` : Create a new room **(Requires Auth, Role: HOSTEL_MANAGER)**
@@ -25,22 +27,26 @@ This document lists all active API endpoints identified in the project, organize
 - `DELETE /:id/tours/:sceneId` : Delete a room tour scene **(Requires Auth, Room Owner)**
 
 ## 📅 Bookings (`/api/bookings`)
+
 - `GET /` : View all bookings (Filtered automatically for Students) **(Requires Auth)**
 - `GET /:id` : Get specific booking details **(Requires Auth)**
 - `POST /` : Create a booking **(Requires Auth)**
 - `PATCH /:id` : Update a booking status **(Requires Auth)**
 
 ## 💬 Complaints (`/api/complaints`)
+
 - `GET /` : View complaints **(Requires Auth)**
 - `GET /:id` : Get specific complaint details **(Requires Auth)**
 - `POST /` : Submit a new complaint **(Requires Auth)**
 - `PATCH /:id` : Update a complaint status **(Requires Auth)**
 
 ## ⭐ Reviews (`/api/reviews`)
+
 - `GET /` : Get reviews **(Public)**
 - `POST /` : Submit a review **(Requires Auth)**
 
 ## 👤 Users (`/api/users`)
+
 - `GET /me` : View current user profile **(Requires Auth)**
 - `PATCH /me` : Update current user profile **(Requires Auth)**
 - `PATCH /me/profile-complete` : Provide student details (ID & course) **(Requires Auth, Role: STUDENT)**
@@ -51,4 +57,5 @@ This document lists all active API endpoints identified in the project, organize
 - `PATCH /:id` : Admin manual override update for a user **(Requires Auth, Role: ADMIN)**
 
 ## 🔐 Auth (`/api/auth/*`)
+
 Handled by the **BetterAuth** module. Consists of standard Email & Password functionality for robust and unified authentication (`/api/auth/sign-in`, `/api/auth/sign-up`). Microsoft SSO has been officially removed; all users now leverage local email authentication dynamically resolving user roles (`STUDENT`, `HOSTEL_MANAGER`, `ADMIN`).
