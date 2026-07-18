@@ -8,6 +8,8 @@ const router = Router();
 const jsonParser = express.json();
 
 // Custom route for MANAGER signup
+router.get("/schools", controllers.getSchools);
+
 router.post(
   "/register",
   jsonParser,

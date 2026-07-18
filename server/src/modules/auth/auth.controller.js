@@ -1,5 +1,6 @@
 import { auth } from "../../../auth.js";
 import { supabase } from "../../config/db.js";
+import { SCHOOLS } from "../../config/schools.js";
 
 // POST /api/auth/register
 export const registerManager = async (req, res, next) => {
@@ -49,9 +50,9 @@ export const registerManager = async (req, res, next) => {
 // POST /api/auth/sign-up/email
 export const signUp = async (req, res, next) => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name, school_id } = req.body;
     const response = await auth.api.signUpEmail({
-      body: { email, password, name: name || email.split("@")[0] },
+      body: { email, password, name: name || email.split("@")[0], school_id },
       asResponse: true
     });
 
@@ -114,4 +115,9 @@ export const signOut = async (req, res, next) => {
     console.error("[Auth Controller - signOut] Error:", err);
     next(err);
   }
+};
+
+// GET /api/auth/schools
+export const getSchools = (req, res) => {
+  res.json({ success: true, data: SCHOOLS });
 };

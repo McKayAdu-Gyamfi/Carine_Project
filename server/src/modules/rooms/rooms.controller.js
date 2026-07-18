@@ -1,6 +1,8 @@
 import { supabase } from "../../config/db.js";
 import * as amenitiesService from "../amenities/Amenities.service.js";
 import { uploadImageToSupabase } from "../../utils/supabaseStorage.js";
+import { buildMarzipanoConfig } from "../../utils/tourBuilder.js";
+import crypto from "crypto";
 
 // GET /api/rooms?hostel_id=123
 export const getRooms = async (req, res, next) => {
@@ -241,6 +243,75 @@ export const createRoomTourScene = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "scene_name and scene_config_url are required" });
     }
 
+    const { data: sceneData, error: sceneError } = await supabase
+      .from("ROOM_TOUR_SCENES")
+      .insert([{
+        room_id: id,
+        scene_name: scene_name,
+        scene_config_url: scene_config_url
+      }])
+      .select()
+      .single();
+
+    if (sceneError) throw sceneError;
+
+    res.status(201).json({ success: true, data: sceneData });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /api/rooms/:id/tours/upload
+export const uploadRoomTourPanorama = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { scene_name, hotspots } = req.body; // hotspots can be JSON string
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No panorama image provided" });
+    }
+
+    if (!scene_name) {
+      return res.status(400).json({ success: false, message: "scene_name is required" });
+    }
+
+    // 1. Upload Panorama Image to tour-panoramas bucket
+    const panoramaUrl = await uploadImageToSupabase(req.file, "tour-panoramas", `rooms/${id}`);
+
+    // 2. Parse hotspots if provided
+    let parsedHotspots = [];
+    if (hotspots) {
+      try {
+        parsedHotspots = JSON.parse(hotspots);
+      } catch (e) {
+        return res.status(400).json({ success: false, message: "Invalid hotspots JSON format" });
+      }
+    }
+
+    // 3. Build Marzipano Config
+    const configObj = buildMarzipanoConfig(panoramaUrl, scene_name, parsedHotspots);
+    const configBuffer = Buffer.from(JSON.stringify(configObj));
+
+    // 4. Upload Config to tour-configs bucket
+    const sceneId = crypto.randomBytes(16).toString("hex");
+    const configFileName = `rooms/${id}/${sceneId}.json`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("tour-configs")
+      .upload(configFileName, configBuffer, {
+        contentType: "application/json",
+        upsert: false
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { data: publicUrlData } = supabase.storage
+      .from("tour-configs")
+      .getPublicUrl(configFileName);
+
+    const scene_config_url = publicUrlData.publicUrl;
+
+    // 5. Store in Database
     const { data: sceneData, error: sceneError } = await supabase
       .from("ROOM_TOUR_SCENES")
       .insert([{

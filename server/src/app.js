@@ -11,6 +11,9 @@ import complaintsRouter from "./modules/complaints/complaints.routes.js";
 import reviewsRouter from "./modules/reviews/reviews.routes.js";
 import usersRouter from "./modules/users/users.routes.js";
 import authRouter from "./modules/auth/auth.routes.js";
+import paymentsRouter from "./modules/payments/payments.routes.js";
+import adminRouter from "./modules/admin/admin.routes.js";
+import managerRouter from "./modules/manager/manager.routes.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
@@ -36,6 +39,9 @@ app.use("/api/bookings", bookingsRouter);
 app.use("/api/complaints", complaintsRouter);
 app.use("/api/reviews", reviewsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/payments", paymentsRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/manager", managerRouter);
 
 // Error Handling
 app.use(notFoundHandler);

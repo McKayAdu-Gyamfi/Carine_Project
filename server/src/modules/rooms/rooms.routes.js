@@ -29,4 +29,7 @@ router.delete("/:id/tours/:sceneId", requireAuth, verifyRoomOwnership, controlle
 // Create room tour scene from frontend result
 router.post("/:id/tours", requireAuth, verifyRoomOwnership, controllers.createRoomTourScene);
 
+// Upload room tour panorama
+router.post("/:id/tours/upload", requireAuth, verifyRoomOwnership, uploadMiddleware.single("panorama"), controllers.uploadRoomTourPanorama);
+
 export default router;
