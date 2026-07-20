@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { ALL_HOSTELS } from "../data/hostels";
-import { Heart, MapPin, Trash2, Search, SlidersHorizontal } from "lucide-react";
+import { Heart, MapPin, Trash2, Search, SlidersHorizontal, Bookmark } from "lucide-react";
+import { Link } from "react-router-dom";
 import FilterModal from "@/components/FilterModal";
 import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { useToast } from "@/components/ui/toaster";
@@ -65,10 +66,18 @@ export default function Saved() {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-accent/20 dark:bg-black/30 transition-colors pt-24 pb-20">
-      <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
-      <div className="px-5 space-y-6">
-        <div className="flex items-center justify-between">
+    <div className="flex flex-col min-h-screen bg-background transition-colors pb-20 relative">
+      <div className="lg:hidden">
+        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+      </div>
+      
+      {/* Desktop Header */}
+      <header className="hidden lg:flex items-center justify-between px-8 pt-6 pb-6 w-full border-b border-border/40">
+        <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">Saved</h1>
+      </header>
+
+      <div className="px-5 lg:px-8 space-y-6 pt-24 lg:pt-8">
+        <div className="flex items-center justify-between lg:hidden">
           <h1 className="text-2xl font-bold text-foreground">Saved Hostels</h1>
           {savedHostelIds.length > 0 && (
             <span className="bg-primary/10 text-primary text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">{savedHostelIds.length} Saved</span>
@@ -98,15 +107,25 @@ export default function Saved() {
         )}
 
         {filteredSaved.length === 0 ? (
-          <div className="flex flex-col items-center justify-center mt-20 opacity-50">
-            <Heart className={`w-16 h-16 text-muted-foreground mb-4 opacity-50 ${searchQuery ? 'hidden' : 'block'}`} />
+          <div className="flex flex-col items-center justify-center mt-20 lg:mt-32">
+            <div className={`w-24 h-24 rounded-full bg-[#FDFCFB] flex items-center justify-center mb-6 shadow-sm border border-border/40 ${searchQuery ? 'hidden' : 'flex'}`}>
+              <Bookmark className="w-8 h-8 text-[#A2705D]" />
+            </div>
             <Search className={`w-16 h-16 text-muted-foreground mb-4 opacity-50 ${searchQuery ? 'block' : 'hidden'}`} />
-            <p className="text-lg font-medium text-muted-foreground text-center">
-              {searchQuery ? "No results found" : "No saved hostels yet."}
+            
+            <h2 className="text-[22px] font-extrabold text-foreground text-center mb-3">
+              {searchQuery ? "No results found" : "No saved hostels yet"}
+            </h2>
+            <p className="text-[15px] font-medium text-muted-foreground text-center max-w-sm mb-8 leading-relaxed">
+              {searchQuery ? "Try a different search term or clear filters." : "Tap the heart on any hostel to keep it here. Build your shortlist and compare rooms side by side."}
             </p>
-            <p className="text-sm text-muted-foreground text-center mt-2">
-              {searchQuery ? "Try a different search term or clear filters." : "Explore and click the heart icon to save your favorites here."}
-            </p>
+            
+            {!searchQuery && (
+              <Link to="/explore" className="inline-flex items-center justify-center h-12 px-8 bg-[#A2705D] text-white font-bold rounded-full transition-colors shadow-sm text-[15px] hover:bg-[#8e6150]">
+                <Search className="w-4 h-4 mr-2" />
+                Explore hostels
+              </Link>
+            )}
           </div>
         ) : (
           <div className="flex flex-col space-y-4">

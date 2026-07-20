@@ -1,0 +1,77 @@
+import { Link, useLocation } from "react-router-dom";
+import Logo from "./Logo";
+import { Home, Compass, Bookmark, BedDouble, User } from "lucide-react";
+import { TygerAvatar } from 'tyger-avatar';
+
+export default function DesktopSidebar() {
+  const { pathname } = useLocation();
+  const userAvatar = localStorage.getItem("userAvatar");
+  
+  // Define navigation items
+  const navItems = [
+    { path: "/", label: "Home", icon: Home },
+    { path: "/explore", label: "Explore", icon: Compass },
+    { path: "/saved", label: "Saved", icon: Bookmark },
+    { path: "/manage-bookings", label: "Bookings", icon: BedDouble },
+    { path: "/profile", label: "Account", icon: User },
+  ];
+
+  return (
+    <aside className="hidden lg:flex w-[88px] hover:w-[260px] flex-col h-screen fixed top-0 left-0 bg-[#F8F6F3] border-r border-border/40 z-50 py-8 transition-[width] duration-300 group overflow-x-hidden shadow-[4px_0_24px_rgba(0,0,0,0.02)] hover:shadow-[12px_0_40px_rgba(0,0,0,0.06)]">
+      {/* Top Logo */}
+      <div className="px-5 mb-12 min-w-[260px]">
+        <Logo 
+          iconClassName="h-10 w-auto shrink-0" 
+          textClassName="text-[19px] font-bold tracking-tight text-foreground ml-1 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap" 
+        />
+      </div>
+
+      {/* Navigation Links */}
+      <nav className="flex-1 flex flex-col space-y-2 px-3">
+        {navItems.map((item) => {
+          const isActive = pathname === item.path;
+          const Icon = item.icon;
+          
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center space-x-4 px-4 py-3.5 rounded-2xl font-bold text-[15px] transition-all relative overflow-hidden min-w-[236px] ${
+                isActive 
+                  ? "text-canyon bg-[#F2EFEA]" 
+                  : "text-[#5E5B58] hover:bg-[#F2EFEA]/60 hover:text-foreground"
+              }`}
+            >
+              {/* Active vertical marker */}
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#A2705D] rounded-r-md" />
+              )}
+              
+              <Icon className={`w-6 h-6 shrink-0 ${isActive ? 'text-canyon' : 'text-[#8C8A88]'}`} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* User Profile */}
+      <div className="px-5 mt-auto pt-8 border-t border-border/40 min-w-[260px]">
+        <div className="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
+          <div className="w-12 h-12 ring-2 ring-background flex items-center justify-center bg-[#E5D0BA] shadow-sm rounded-full overflow-hidden p-0 shrink-0">
+            {userAvatar?.startsWith("Tr") ? (
+               <TygerAvatar name={userAvatar as any} size="lg" />
+            ) : userAvatar?.startsWith("http") ? (
+               <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+               <span className="text-[#6c5e57] font-bold text-[16px]">SA</span>
+            )}
+          </div>
+          <div className="flex flex-col opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap">
+            <span className="font-bold text-[15px] text-foreground leading-tight">Sarah Adjei</span>
+            <span className="text-[12px] font-medium text-muted-foreground">Student</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}

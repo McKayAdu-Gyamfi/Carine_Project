@@ -1,14 +1,16 @@
-import NewLogo from "../assets/Logo.png";
+import kaya from "../assets/Kaya.png";
 
 export default function Logo({ 
   className = "", 
-  iconClassName = "h-22 w-35", 
-  // textClassName = "text-xl font-bold font-serif tracking-tight text-primary" 
+  iconClassName = "h-14 w-auto", 
+  textClassName = "text-xl font-bold tracking-tight text-current" 
 }: { className?: string, iconClassName?: string, textClassName?: string }) {
   return (
-    <div className={`flex items-center space-x-2 ${className}`}>
-      <img src={NewLogo} alt="CampusNest Logo" className={iconClassName} />
-      {/* <span className={textClassName}>CampusNest</span> */}
+    <div className={`flex items-center space-x-2.5 ${className}`}>
+      <img src={kaya} alt="Logo" className={iconClassName} />
+      <span className={textClassName}>
+        Kaya<span className="text-canyon">Campus</span>
+      </span>
     </div>
   );
 }

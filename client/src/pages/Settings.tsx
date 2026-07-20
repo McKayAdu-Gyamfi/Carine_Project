@@ -1,88 +1,130 @@
-import { ChevronLeft, User, CreditCard, Bell, Shield, HelpCircle, FileText, ChevronRight } from "lucide-react";
+import { ChevronLeft, Bell, Compass, Moon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function SettingsPage() {
   const navigate = useNavigate();
+  const [notifications, setNotifications] = useState(true);
+  const [alerts, setAlerts] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans relative lg:pl-10">
       
       {/* Header */}
-      <div className="flex items-center justify-between px-4 h-20 border-b border-border/50 sticky top-0 bg-background z-50">
-        <button onClick={() => navigate(-1)} className="p-2 hover:bg-accent rounded-full transition-colors cursor-pointer">
-          <ChevronLeft className="w-6 h-6" />
+      <div className="flex items-center px-4 lg:px-8 h-20 pt-6 lg:pt-8 mb-4">
+        <button onClick={() => navigate(-1)} className="flex items-center space-x-2 text-foreground hover:opacity-80 transition-opacity cursor-pointer">
+          <ChevronLeft className="w-5 h-5" />
+          <h1 className="text-xl lg:text-[24px] font-extrabold tracking-tight">Account settings</h1>
         </button>
-        <h1 className="text-lg font-bold">Account Settings</h1>
-        <div className="w-10"></div> {/* Spacer for centering */}
       </div>
 
-      <div className="px-5 py-6 space-y-8">
+      <div className="px-5 lg:px-8 py-6 space-y-10 max-w-4xl">
         
-        {/* Section 1 */}
+        {/* Personal Information */}
         <div>
-          <h2 className="text-[12px] font-extrabold uppercase tracking-widest text-muted-foreground mb-3 pl-2">Account</h2>
-          <div className="bg-card border border-border/40 rounded-[28px] overflow-hidden shadow-sm">
-            <Link to="/edit-profile" className="flex items-center justify-between p-5 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer group">
-              <div className="flex items-center space-x-4">
-                <User className="w-5 h-5 text-primary" />
-                <span className="font-bold text-[15px]">Personal Information</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-            </Link>
-            <div className="flex items-center justify-between p-5 hover:bg-accent/50 transition-colors cursor-pointer group">
-              <div className="flex items-center space-x-4">
-                <CreditCard className="w-5 h-5 text-orange-400" />
-                <span className="font-bold text-[15px]">Payments & Payouts</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          <h2 className="text-[12px] font-extrabold uppercase tracking-widest text-muted-foreground mb-4">Personal Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-foreground">Full name</label>
+              <input 
+                type="text" 
+                defaultValue="Sarah Adjei"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-foreground">Phone</label>
+              <input 
+                type="text" 
+                defaultValue="+233 24 123 4567"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-foreground">Email</label>
+              <input 
+                type="email" 
+                defaultValue="sarah.adjei@ashesi.edu.gh"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-foreground">University</label>
+              <input 
+                type="text" 
+                defaultValue="Ashesi University"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+              />
             </div>
           </div>
         </div>
 
-        {/* Section 2 */}
+        {/* Preferences */}
         <div>
-          <h2 className="text-[12px] font-extrabold uppercase tracking-widest text-muted-foreground mb-3 pl-2">Preferences</h2>
-          <div className="bg-card border border-border/40 rounded-[28px] overflow-hidden shadow-sm">
-            <div className="flex items-center justify-between p-5 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer group">
+          <h2 className="text-[12px] font-extrabold uppercase tracking-widest text-muted-foreground mb-4">Preferences</h2>
+          <div className="bg-white border border-border/60 rounded-2xl shadow-sm overflow-hidden">
+            
+            <div className="flex items-center justify-between p-5 border-b border-border/40">
               <div className="flex items-center space-x-4">
-                <Bell className="w-5 h-5 text-blue-400" />
-                <span className="font-bold text-[15px]">Notifications</span>
+                <Bell className="w-[22px] h-[22px] text-[#8C5E4D]" />
+                <div>
+                  <h3 className="font-bold text-[15px] text-foreground">Booking notifications</h3>
+                  <p className="text-[12px] text-muted-foreground font-medium">Approvals, payment reminders</p>
+                </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+              {/* Toggle Switch */}
+              <button 
+                onClick={() => setNotifications(!notifications)}
+                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${notifications ? 'bg-[#A2705D]' : 'bg-[#D6CFC8]'}`}
+              >
+                <div className={`absolute top-1 w-[18px] h-[18px] bg-white rounded-full transition-transform ${notifications ? 'left-[26px]' : 'left-1'}`} />
+              </button>
             </div>
-            <div className="flex items-center justify-between p-5 hover:bg-accent/50 transition-colors cursor-pointer group">
+
+            <div className="flex items-center justify-between p-5 border-b border-border/40">
               <div className="flex items-center space-x-4">
-                <Shield className="w-5 h-5 text-emerald-400" />
-                <span className="font-bold text-[15px]">Privacy & Security</span>
+                <Compass className="w-[22px] h-[22px] text-[#8C5E4D]" />
+                <div>
+                  <h3 className="font-bold text-[15px] text-foreground">New hostel alerts</h3>
+                  <p className="text-[12px] text-muted-foreground font-medium">When rooms open near campus</p>
+                </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+              <button 
+                onClick={() => setAlerts(!alerts)}
+                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${alerts ? 'bg-[#A2705D]' : 'bg-[#D6CFC8]'}`}
+              >
+                <div className={`absolute top-1 w-[18px] h-[18px] bg-white rounded-full transition-transform ${alerts ? 'left-[26px]' : 'left-1'}`} />
+              </button>
             </div>
+
+            <div className="flex items-center justify-between p-5">
+              <div className="flex items-center space-x-4">
+                <Moon className="w-[22px] h-[22px] text-[#8C5E4D]" />
+                <div>
+                  <h3 className="font-bold text-[15px] text-foreground">Dark mode</h3>
+                  <p className="text-[12px] text-muted-foreground font-medium">Easier on the eyes at night</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setDarkMode(!darkMode)}
+                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${darkMode ? 'bg-[#A2705D]' : 'bg-[#D6CFC8]'}`}
+              >
+                <div className={`absolute top-1 w-[18px] h-[18px] bg-white rounded-full transition-transform ${darkMode ? 'left-[26px]' : 'left-1'}`} />
+              </button>
+            </div>
+
           </div>
         </div>
 
-        {/* Section 3 */}
-        <div>
-          <h2 className="text-[12px] font-extrabold uppercase tracking-widest text-muted-foreground mb-3 pl-2">Support</h2>
-          <div className="bg-card border border-border/40 rounded-[28px] overflow-hidden shadow-sm">
-            <div className="flex items-center justify-between p-5 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer group">
-              <div className="flex items-center space-x-4">
-                <HelpCircle className="w-5 h-5 text-muted-foreground" />
-                <span className="font-bold text-[15px]">Help Center</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-            </div>
-            <div className="flex items-center justify-between p-5 hover:bg-accent/50 transition-colors cursor-pointer group">
-              <div className="flex items-center space-x-4">
-                <FileText className="w-5 h-5 text-muted-foreground" />
-                <span className="font-bold text-[15px]">Terms of Service</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center pt-6 pb-12">
-           <p className="text-[11px] font-bold text-muted-foreground tracking-widest uppercase">Version 1.0.0 (MVP)</p>
+        {/* Buttons */}
+        <div className="flex items-center space-x-4 pt-4">
+          <button className="h-[48px] px-8 bg-[#A2705D] text-white font-bold rounded-full transition-colors shadow-sm text-[15px] hover:bg-[#8e6150] cursor-pointer">
+            Save changes
+          </button>
+          <button className="h-[48px] px-8 bg-transparent border border-border/80 text-foreground font-bold rounded-full transition-colors text-[15px] hover:bg-accent/50 cursor-pointer">
+            Cancel
+          </button>
         </div>
 
       </div>

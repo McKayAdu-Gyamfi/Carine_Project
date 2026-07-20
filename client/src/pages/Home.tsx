@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { Star, Search, Bell } from "lucide-react";
 // import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Link, useLocation } from "react-router-dom";
@@ -64,11 +64,34 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-6 transition-colors">
-      {/* Top App Bar */}
-      <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+      {/* Mobile Top App Bar */}
+      <div className="lg:hidden">
+        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+      </div>
 
-      {/* Hero Section */}
-      <section className="relative px-4 pt-24 pb-8 mb-4 overflow-hidden">
+      {/* Desktop Header */}
+      <header className="hidden lg:flex items-center justify-between px-8 pt-6 pb-6 w-full">
+        <div className="relative w-full max-w-xl">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input 
+            type="text" 
+            placeholder="Search hostels near Berekuso..." 
+            className="w-full h-[52px] pl-12 pr-4 bg-white/60 border border-border/50 rounded-full text-[15px] font-medium outline-none focus:ring-2 focus:ring-canyon/30 transition-all shadow-sm backdrop-blur-sm"
+          />
+        </div>
+        <div className="flex items-center space-x-4">
+          <button className="w-[52px] h-[52px] bg-white/60 border border-border/50 rounded-full flex items-center justify-center relative shadow-sm hover:bg-white transition-colors cursor-pointer">
+            <Bell className="w-[22px] h-[22px] text-[#5E5B58]" />
+            <span className="absolute top-3.5 right-3.5 w-2.5 h-2.5 bg-[#B17B6A] rounded-full border-2 border-white" />
+          </button>
+          <div className="w-[52px] h-[52px] bg-[#E5D0BA] rounded-full flex items-center justify-center font-bold text-[#6c5e57] shadow-sm text-lg cursor-pointer hover:opacity-90">
+            SA
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Hero Section */}
+      <section className="lg:hidden relative px-4 pt-24 pb-8 mb-4 overflow-hidden">
         {/* Background Room Image with Fade Carousel */}
         <div className="absolute inset-0 z-0 bg-background pointer-events-none">
           {carouselImages.map((img, idx) => {
@@ -116,11 +139,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Desktop Hero Banner */}
+      <section className="hidden lg:block px-8 mb-10">
+        <div className="relative w-full rounded-[32px] overflow-hidden bg-gradient-to-br from-[#6c5e57] to-[#4D4D4D] p-12 flex flex-col justify-center shadow-xl shadow-black/10" style={{ minHeight: '320px' }}>
+          {/* Diagonal stripe pattern overlay */}
+          <div className="absolute inset-0 opacity-[0.08]"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,1) 10px, rgba(255,255,255,1) 12px)',
+            }}
+          />
+          <div className="relative z-10 max-w-xl">
+            <p className="text-[12px] font-bold tracking-[0.2em] text-[#E09F5E] uppercase mb-3">
+              WELCOME BACK, SARAH
+            </p>
+            <h1 className="text-white text-[48px] font-extrabold leading-[1.1] tracking-tight mb-8">
+              Find your perfect room
+            </h1>
+            <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-canyon hover:bg-[#c28446] text-white font-bold rounded-full transition-colors shadow-lg shadow-black/20 text-[16px] cursor-pointer">
+              Explore hostels
+            </Link>
+          </div>
+          {/* Badge */}
+          <div className="absolute bottom-1/2 left-1/2 translate-x-12 translate-y-16 z-10 hidden xl:block">
+             <span className="inline-block px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#6c5e57] bg-white/90 border border-white/25 rounded-full backdrop-blur-md shadow-sm">
+                CAMPUS / HOSTEL PHOTO
+              </span>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Hostels */}
-      <section className="py-2">
-        <div className="flex items-center justify-between px-4 mb-4">
-          <h3 className="text-xl font-bold text-foreground">Featured Hostels</h3>
-          <Link to="/explore" className="text-sm font-medium text-primary hover:underline">View All</Link>
+      <section className="py-2 lg:px-4">
+        <div className="flex items-center justify-between px-4 lg:px-4 mb-4 lg:mb-6">
+          <h3 className="text-xl lg:text-[24px] font-extrabold tracking-tight text-foreground">Featured hostels</h3>
+          <Link to="/explore" className="text-sm font-bold text-[#B17B6A] hover:underline cursor-pointer">View all</Link>
         </div>
         
         <ScrollArea className="w-full whitespace-nowrap">
@@ -144,9 +196,9 @@ export default function Home() {
       </section>
 
       {/* Recommended for you */}
-      <section className="px-4 py-2 mt-4">
-        <h3 className="text-xl font-bold text-foreground mb-4">Recommended for you</h3>
-        <div className="space-y-3">
+      <section className="px-4 py-2 mt-4 lg:px-8 lg:mt-6 mb-12">
+        <h3 className="text-xl lg:text-[24px] font-extrabold tracking-tight text-foreground mb-4 lg:mb-6">Recommended for you</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
           
           {NEARBY_PLACES.map((hostel) => (
             <div 

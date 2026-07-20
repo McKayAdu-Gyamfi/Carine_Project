@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "./BottomNav";
+import DesktopSidebar from "./DesktopSidebar";
 import { useEffect } from "react";
 
 export default function Layout() {
@@ -10,11 +11,14 @@ export default function Layout() {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen pb-20 bg-background text-foreground">
-      <main className="flex-1">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-background text-foreground">
+      <DesktopSidebar />
+      <main className="flex-1 pb-20 lg:pb-0 lg:ml-[88px] w-full max-w-[100vw] lg:max-w-[calc(100vw-88px)]">
         <Outlet />
       </main>
-      <BottomNav />
+      <div className="lg:hidden">
+        <BottomNav />
+      </div>
     </div>
   );
 }

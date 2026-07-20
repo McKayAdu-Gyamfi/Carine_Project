@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowRight, Shield, HelpCircle, CheckCircle2, FileText, Lock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Shield, HelpCircle, CheckCircle2, FileText, Lock, Eye, EyeOff, CheckCircle, Monitor, BookOpen, Search, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
 import { Input } from "@/components/ui/input";
@@ -19,20 +19,31 @@ export default function Login() {
   const [institutionQuery, setInstitutionQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [authMode, setAuthMode] = useState<'signup' | 'signin'>('signin');
+  const [showMobileForm, setShowMobileForm] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % 3);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   const INSTITUTIONS = [
-    "Ashesi University",
-    "Wisconsin International University College",
-    "Central University",
-    "University of Ghana",
-    "Lancaster University Ghana",
-    "University of Professional Studies Accra",
-    "Ghana Communication Technology",
-    "IPMC Ghana"
+    { id: 'ashesi', name: 'Ashesi University', location: 'Berekuso', abbr: 'AU' },
+    { id: 'ug', name: 'Univ. of Ghana', location: 'Legon', abbr: 'UG' },
+    { id: 'knust', name: 'KNUST', location: 'Kumasi', abbr: 'KN' },
+    { id: 'gimpa', name: 'GIMPA', location: 'Achimota', abbr: 'GI' }
   ];
 
-  const filteredInstitutions = INSTITUTIONS.filter(inst => inst.toLowerCase().includes(institutionQuery.toLowerCase()));
+  const filteredInstitutions = INSTITUTIONS.filter(inst => 
+    inst.name.toLowerCase().includes(institutionQuery.toLowerCase()) || 
+    inst.abbr.toLowerCase().includes(institutionQuery.toLowerCase())
+  );
 
   const handleLoginClick = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
@@ -53,105 +64,122 @@ export default function Login() {
 
   if (step === "institution") {
     return (
-      <div className="flex flex-col min-h-screen bg-background relative font-sans">
-        {/* Subtle Background Pattern */}
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none" />
+      <div className="flex flex-col h-[100dvh] w-full overflow-hidden relative font-sans bg-[#F8F6F3] sm:bg-[#9A6A56]">
+        {/* Floating background circles - Desktop Only */}
+        <div 
+          className="hidden sm:block absolute top-[-10%] right-[-15%] w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{ backgroundColor: '#AC7B67', animation: 'float 15s ease-in-out infinite' }}
+        />
+        <div 
+          className="hidden sm:block absolute bottom-[-15%] left-[-15%] w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ backgroundColor: '#A2705D', animation: 'float 18s ease-in-out infinite 5s' }}
+        />
+        <div 
+          className="hidden sm:block absolute top-[20%] left-[20%] w-[350px] h-[350px] rounded-full pointer-events-none"
+          style={{ backgroundColor: '#8B5C4A', animation: 'float 22s ease-in-out infinite 2s' }}
+        />
 
-        {/* Top Header */}
-        <div className="absolute top-8 left-8 z-10">
-          <Logo />
+        {/* Top Header - Desktop Only */}
+        <div className="hidden sm:block absolute top-8 left-8 z-10">
+          <Logo iconClassName="h-10 w-auto brightness-0 invert" textClassName="text-xl font-bold tracking-tight text-white" />
         </div>
 
         {/* Center Card */}
-        <div className="flex-1 flex items-center justify-center z-10 p-6">
-          <div className="bg-card rounded-[24px] shadow-xl shadow-black/5 w-full max-w-[480px] p-8 sm:p-10 border border-border/60">
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-extrabold tracking-tight text-foreground mb-2">
-                Welcome to CampusNest
+        <div className="flex-1 flex items-center justify-center z-10 p-0 sm:p-6 h-full overflow-hidden">
+          <div className="bg-transparent sm:bg-[#F8F6F3] sm:rounded-[28px] shadow-none sm:shadow-2xl sm:shadow-black/20 w-full h-full sm:h-auto max-w-[540px] p-6 pb-8 pt-8 sm:p-10 flex flex-col">
+            
+            {/* Progress Bar & Mobile Back */}
+            <div className="flex items-center w-full mb-8">
+              <button 
+                onClick={() => setStep("login")}
+                className="sm:hidden w-10 h-10 mr-4 bg-white rounded-full flex items-center justify-center shadow-sm border border-border text-foreground flex-shrink-0"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <div className="flex-1 flex items-center space-x-4">
+                <div className="flex-1 h-1.5 bg-border/60 rounded-full overflow-hidden">
+                  <div className="h-full bg-canyon rounded-full w-1/2"></div>
+                </div>
+                <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">2 / 4</span>
+              </div>
+            </div>
+
+            {/* Header */}
+            <div className="mb-6">
+              <h1 className="text-[28px] font-extrabold tracking-tight text-foreground mb-1.5">
+                Where do you study?
               </h1>
-              <p className="text-sm text-muted-foreground font-medium">
-                Select your institution to find exclusive spaces
+              <p className="text-[15px] text-muted-foreground font-medium">
+                We'll show hostels closest to your campus.
               </p>
             </div>
 
-            <div className="space-y-6">
-              <div className="relative">
-                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 ml-1">Your Institution</label>
-                <div className="relative">
-                  <Input 
-                    type="text" 
-                    placeholder="Search for your university..." 
-                    value={institutionQuery}
-                    onChange={(e) => {
-                      setInstitutionQuery(e.target.value);
-                      setShowDropdown(true);
-                      setSelectedInstitution("");
-                    }}
-                    onFocus={() => setShowDropdown(true)}
-                    className="h-14 border-border/80 bg-background rounded-xl text-[15px] font-medium focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary placeholder:text-muted-foreground/50 transition-all shadow-sm"
-                  />
-                  
-                  {showDropdown && institutionQuery.length > 0 && (
-                    <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-card border border-border rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto overflow-x-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                      {filteredInstitutions.length > 0 ? (
-                        filteredInstitutions.map((inst, idx) => {
-                          const matchIndex = inst.toLowerCase().indexOf(institutionQuery.toLowerCase());
-                          return (
-                            <div 
-                              key={idx}
-                              className="px-4 py-3.5 hover:bg-accent cursor-pointer text-foreground text-[14px] font-medium border-b border-border/50 last:border-0 transition-colors"
-                              onClick={() => {
-                                setInstitutionQuery(inst);
-                                setSelectedInstitution(inst);
-                                setShowDropdown(false);
-                                setTimeout(() => setStep("login"), 400);
-                              }}
-                            >
-                              {matchIndex >= 0 ? (
-                                <span>
-                                  {inst.substring(0, matchIndex)}
-                                  <span className="text-primary font-bold">{inst.substring(matchIndex, matchIndex + institutionQuery.length)}</span>
-                                  {inst.substring(matchIndex + institutionQuery.length)}
-                                </span>
-                              ) : inst}
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <div className="px-4 py-4 text-muted-foreground text-sm font-medium text-center">No institutions found</div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
+            {/* Search */}
+            <div className="relative mb-6">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <Input 
+                type="text" 
+                placeholder="Search university..." 
+                value={institutionQuery}
+                onChange={(e) => setInstitutionQuery(e.target.value)}
+                className="h-12 w-full pl-12 pr-4 bg-white border-border/80 rounded-xl text-[15px] font-medium focus-visible:ring-2 focus-visible:ring-canyon/30 focus-visible:border-canyon placeholder:text-muted-foreground/50 transition-all shadow-sm"
+              />
+            </div>
 
-              {!selectedInstitution && (
-                <div className="bg-primary/5 border border-primary/10 text-primary p-4 rounded-xl text-[13px] font-medium leading-relaxed flex items-start space-x-3">
-                  <div className="mt-0.5">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                  </div>
-                  <p>Type the first few letters of your institution to see matching results in the list.</p>
-                </div>
-              )}
+            {/* Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 flex-1 sm:flex-none overflow-y-auto sm:overflow-visible pr-2 sm:pr-0 pb-12 sm:pb-0 hide-scrollbar">
+              {filteredInstitutions.map((inst) => {
+                const isSelected = selectedInstitution === inst.id;
+                return (
+                  <button 
+                    key={inst.id}
+                    onClick={() => setSelectedInstitution(inst.id)}
+                    className={`flex items-center text-left p-3 rounded-xl border transition-all cursor-pointer ${
+                      isSelected 
+                        ? 'border-canyon bg-canyon/5 shadow-sm' 
+                        : 'border-border/60 bg-transparent hover:border-border hover:bg-white/50'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-[14px] flex-shrink-0 mr-3 ${
+                      isSelected ? 'bg-canyon/10 text-canyon' : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {inst.abbr}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-[13px] text-foreground truncate">{inst.name}</div>
+                      <div className="text-[11px] font-medium text-muted-foreground truncate">{inst.location}</div>
+                    </div>
+                    {isSelected && (
+                      <div className="ml-2 w-5 h-5 rounded-full bg-canyon flex items-center justify-center flex-shrink-0">
+                        <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
-              <div className="grid grid-cols-2 gap-3 mt-8">
-                <button className="flex items-center justify-between px-4 py-3.5 border border-border/80 bg-background rounded-xl hover:bg-accent transition-all group shadow-sm">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <FileText className="w-4 h-4 text-primary" />
-                    </div>
-                    <span className="text-[13px] font-bold text-foreground leading-tight">Terms of<br/>Use</span>
-                  </div>
-                </button>
-                <button className="flex items-center justify-between px-4 py-3.5 border border-border/80 bg-background rounded-xl hover:bg-accent transition-all group shadow-sm">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Lock className="w-4 h-4 text-primary" />
-                    </div>
-                    <span className="text-[13px] font-bold text-foreground leading-tight">Privacy<br/>Policy</span>
-                  </div>
-                </button>
-              </div>
+            {/* Bottom Buttons */}
+            <div className="mt-auto pt-4 flex items-center space-x-4 w-full">
+              <button 
+                onClick={() => setStep("login")} 
+                className="hidden sm:block h-12 px-8 rounded-full font-bold text-[14px] border border-border/80 text-foreground hover:bg-white transition-all cursor-pointer shadow-sm"
+              >
+                Back
+              </button>
+              <button 
+                onClick={() => {
+                  if (selectedInstitution) setStep("login");
+                }}
+                className={`flex-1 h-[52px] sm:h-12 w-full rounded-full font-bold text-[16px] sm:text-[14px] transition-all flex items-center justify-center shadow-md ${
+                  selectedInstitution 
+                    ? 'bg-canyon text-white hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer' 
+                    : 'bg-muted text-muted-foreground cursor-not-allowed opacity-70'
+                }`}
+                disabled={!selectedInstitution}
+              >
+                Continue
+              </button>
             </div>
           </div>
         </div>
@@ -161,7 +189,7 @@ export default function Login() {
 
   if (step === "avatar") {
     return (
-      <div className="flex flex-col min-h-screen bg-background text-foreground p-6 justify-center items-center select-none animate-in fade-in slide-in-from-bottom-8 duration-500">
+      <div className="flex flex-col h-[100dvh] w-full overflow-hidden bg-background text-foreground p-6 justify-center items-center select-none animate-in fade-in slide-in-from-bottom-8 duration-500">
         <div className="w-full max-w-[380px] bg-card border border-border rounded-lg p-8 shadow-xl flex flex-col items-center">
           <Logo className="mb-6 scale-90" />
           <h2 className="text-2xl font-extrabold mb-1 text-center tracking-tight">Choose your avatar</h2>
@@ -204,83 +232,265 @@ export default function Login() {
     );
   }
 
+  // ── Login Step: Split-screen layout ──
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground p-6 justify-between select-none">
+    <div className="flex h-[100dvh] w-full overflow-hidden select-none bg-soft-linen relative">
       
-      {/* Top Header */}
-      <div className="flex items-center justify-center w-full mb-4 mt-8">
-        <Logo />
+      {/* ─── Left Panel ─── */}
+      <div className={`${showMobileForm ? 'hidden' : 'flex'} w-full lg:w-[45%] h-full relative overflow-hidden flex-col justify-between bg-gradient-to-br from-[#6c5e57] to-ironwood`}
+      >
+        {/* Diagonal stripe pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,1) 10px, rgba(255,255,255,1) 12px)',
+          }}
+        />
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-between h-full p-8 pb-10 lg:p-10 overflow-y-auto hide-scrollbar">
+          
+          {/* Logo */}
+          <div className="flex items-center space-x-2.5">
+            <Logo iconClassName="h-14 w-auto brightness-0 invert" textClassName="text-2xl font-bold tracking-tight text-white" />
+          </div>
+          
+          {/* Middle area with carousel */}
+          <div className="flex-1 flex flex-col justify-end lg:justify-center mt-18 lg:mt-24 pb-6 lg:pb-0">
+            {/* Carousel Indicators */}
+            <div className="flex items-center space-x-2 mb-4">
+              <div className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === 0 ? 'w-8 bg-canyon' : 'w-2 bg-white/30'}`} />
+              <div className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === 1 ? 'w-8 bg-canyon' : 'w-2 bg-white/30'}`} />
+              <div className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === 2 ? 'w-8 bg-canyon' : 'w-2 bg-white/30'}`} />
+            </div>
+
+            <div className="grid w-full items-center">
+              {/* Slide 1 */}
+              <div className={`col-start-1 row-start-1 transition-all duration-700 ease-in-out ${activeSlide === 0 ? 'opacity-100 translate-x-0 z-10' : 'opacity-0 translate-x-8 pointer-events-none -z-10'}`}>
+                <div className="mb-6">
+                  <span className="inline-block px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80 border border-white/25 rounded-full backdrop-blur-sm">
+                    CAMPUS / HOSTEL AT DUSK
+                  </span>
+                </div>
+                <h2 className="text-white text-4xl lg:text-[42px] font-bold leading-[1.15] tracking-tight mb-5">
+                  Find your perfect<br/>room near campus
+                </h2>
+                <p className="text-white/90 text-[16px] font-medium leading-relaxed max-w-[90%]">
+                  Browse verified hostels around Ashesi, tour rooms in 360°, and book your semester in minutes.
+                </p>
+              </div>
+
+              {/* Slide 2 */}
+              <div className={`col-start-1 row-start-1 transition-all duration-700 ease-in-out ${activeSlide === 1 ? 'opacity-100 translate-x-0 z-10' : 'opacity-0 translate-x-8 pointer-events-none -z-10'}`}>
+                <div className="mb-6">
+                  <span className="inline-block px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80 border border-white/25 rounded-full backdrop-blur-sm">
+                    Hostel Courtyard
+                  </span>
+                </div>
+                <h2 className="text-white text-3xl lg:text-4xl font-bold leading-[1.15] tracking-tight mb-8">
+                  Your next home is<br/>a few clicks away.
+                </h2>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-4.5 h-4.5 text-white/90" />
+                    </div>
+                    <span className="text-white/90 text-[15px] font-medium">Verified hostels near your campus</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                      <Monitor className="w-4.5 h-4.5 text-white/90" />
+                    </div>
+                    <span className="text-white/90 text-[15px] font-medium">Tour rooms in 360° before you book</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                      <BookOpen className="w-4.5 h-4.5 text-white/90" />
+                    </div>
+                    <span className="text-white/90 text-[15px] font-medium">Book your semester in minutes</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slide 3 (Testimonial) */}
+              <div className={`col-start-1 row-start-1 transition-all duration-700 ease-in-out ${activeSlide === 2 ? 'opacity-100 translate-x-0 z-10' : 'opacity-0 translate-x-8 pointer-events-none -z-10'}`}>
+                <h2 className="text-white text-[28px] lg:text-[34px] font-bold leading-[1.25] tracking-tight mb-8">
+                  “Found my room near Ashesi in a weekend — toured it in 360° before I ever visited.”
+                </h2>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-full bg-[#E5D0BA] flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#6c5e57] font-bold text-[15px]">KA</span>
+                  </div>
+                  <div>
+                    <div className="text-white font-bold text-[16px]">Kwame A.</div>
+                    <div className="text-white/70 text-[13px] font-medium">Level 200 · Ashesi</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile buttons */}
+            <div className="lg:hidden mt-auto pt-8 pb-2 w-full">
+              <button 
+                onClick={() => { setAuthMode('signup'); setShowMobileForm(true); }}
+                className="w-full h-[52px] rounded-full font-bold text-[16px] bg-canyon text-white shadow-md cursor-pointer hover:shadow-lg transition-all"
+              >
+                Get started
+              </button>
+              <p className="text-center text-[13px] text-white/90 mt-4 font-medium">
+                Already have an account?{" "}
+                <button onClick={() => { setAuthMode('signin'); setShowMobileForm(true); }} className="text-[#E09F5E] font-bold cursor-pointer hover:underline">Sign in</button>
+              </p>
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      {/* Main Login Card Area */}
-      <div className="w-full max-w-[340px] mx-auto flex-1 flex flex-col justify-center mb-8 animate-in fade-in zoom-in-95 duration-500">
-        
-        <div className="mb-8 text-center">
-          <h2 className="text-[28px] font-extrabold leading-tight mb-2 tracking-tight">Your Campus<br/>Home Awaits</h2>
-          <p className="text-xs text-muted-foreground font-medium">Log in to explore exclusive student spaces.</p>
-        </div>
-
-        {/* Microsoft Auth */}
-        <button onClick={handleLoginClick} className="w-full bg-card border border-border shadow-sm hover:shadow-md hover:bg-accent text-foreground rounded-lg h-12 flex items-center justify-center space-x-3 font-bold text-[13px] transition-all cursor-pointer mb-6 transform hover:-translate-y-0.5">
-          <div className="grid grid-cols-2 gap-0.5 w-4 h-4 mr-1">
-            <div className="bg-[#F25022]" />
-            <div className="bg-[#7FBA00]" />
-            <div className="bg-[#00A4EF]" />
-            <div className="bg-[#FFB900]" />
-          </div>
-          <span>Sign in with Microsoft</span>
+      {/* ─── Right Panel (Form) ─── */}
+      <div className={`${showMobileForm ? 'flex' : 'hidden'} lg:flex flex-1 items-center justify-center bg-soft-linen p-6 pb-10 lg:p-8 h-full relative overflow-y-auto`}>
+        {/* Mobile Back Button */}
+        <button 
+          onClick={() => setShowMobileForm(false)}
+          className="lg:hidden absolute top-6 left-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-border text-foreground z-10 cursor-pointer"
+        >
+          <ChevronLeft className="w-5 h-5" />
         </button>
-        
-        {/* Divider */}
-        <div className="flex items-center justify-center space-x-4 mb-6 opacity-70">
-          <div className="h-px bg-border flex-1" />
-          <span className="text-[9px] font-extrabold tracking-[0.2em] text-muted-foreground uppercase">Or use email</span>
-          <div className="h-px bg-border flex-1" />
-        </div>
 
-        {/* Fallback Auth */}
-        <form className="flex flex-col space-y-4" onSubmit={handleLoginClick}>
-          <div className="space-y-1.5">
-             <label className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground ml-1">Email</label>
-             <Input type="email" required placeholder="student@university.edu" className="h-12 rounded-lg bg-card border-border/60 text-[13px] font-medium placeholder:text-muted-foreground/50 focus-visible:ring-1 focus-visible:ring-primary/50" />
-          </div>
+        <div className="w-full max-w-[420px] animate-in fade-in zoom-in-95 duration-500 mt-10 lg:mt-0">
           
-          <div className="space-y-1.5">
-             <div className="flex items-center justify-between ml-1">
-               <label className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">Password</label>
-               <a href="#" className="text-[10px] font-bold text-primary hover:underline">Forgot?</a>
-             </div>
-             <Input type="password" required placeholder="••••••••" className="h-12 rounded-lg bg-card border-border/60 text-[13px] font-medium placeholder:text-muted-foreground/50 focus-visible:ring-1 focus-visible:ring-primary/50" />
+          {/* Heading */}
+          <div className="mb-5">
+            <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-foreground leading-tight mb-1.5">
+              {authMode === 'signup' ? 'Create your account' : 'Welcome back'}
+            </h1>
+            <p className="text-sm text-muted-foreground font-medium">
+              {authMode === 'signup' ? 'Join Kaya Campus and find your next home.' : 'Sign in to continue your search.'}
+            </p>
           </div>
-          
-          <button type="submit" className="w-full h-12 mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-[13px] rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center space-x-2 transform hover:-translate-y-0.5">
-            <span>Log In</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </form>
 
-        {/* Management Buttons */}
-        <div className="grid grid-cols-2 gap-4 mt-8 pt-8 border-t border-border/50">
-          <button onClick={handleManagerLogin} className="h-12 bg-card border border-border rounded-lg flex items-center justify-center space-x-2 font-bold text-[11px] hover:bg-accent transition-colors shadow-sm cursor-pointer text-muted-foreground hover:text-foreground">
-            <Shield className="w-4 h-4" />
-            <span>Manager</span>
+          {/* Form */}
+          <form className="flex flex-col space-y-4" onSubmit={handleLoginClick}>
+            
+            {/* Full name */}
+            {authMode === 'signup' && (
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-foreground">Full name</label>
+                <Input 
+                  type="text" 
+                  placeholder="Sarah Adjei" 
+                  className="h-11 rounded-lg bg-white border-border text-[14px] font-medium placeholder:text-muted-foreground/50 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
+                />
+              </div>
+            )}
+            
+            {/* University email */}
+            <div className="space-y-1">
+              <label className="text-sm font-semibold text-foreground">University email</label>
+              <Input 
+                type="email" 
+                required 
+                placeholder="sarah.adjei@ashesi.edu.gh" 
+                className="h-11 rounded-lg bg-white border-border text-[14px] font-medium placeholder:text-muted-foreground/50 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
+              />
+            </div>
+            
+            {/* Password */}
+            <div className="space-y-1">
+              <label className="text-sm font-semibold text-foreground">Password</label>
+              <div className="relative">
+                <Input 
+                  type={showPassword ? "text" : "password"} 
+                  required 
+                  placeholder="••••••••" 
+                  className="h-11 rounded-lg bg-white border-border text-[14px] font-medium placeholder:text-muted-foreground/50 pr-16 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs font-semibold flex items-center space-x-1 cursor-pointer transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  <span>{showPassword ? "Hide" : "Show"}</span>
+                </button>
+              </div>
+              {authMode === 'signin' && (
+                <div className="flex justify-end pt-1.5 pb-0.5">
+                  <button type="button" className="text-[12px] font-semibold text-canyon hover:underline cursor-pointer">
+                    Forgot password?
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {/* Create account button */}
+            <button 
+              type="submit" 
+              className={`w-full h-11 ${authMode === 'signup' ? 'mt-1' : 'mt-2'} rounded-full font-bold text-[14px] shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center space-x-2 transform hover:-translate-y-0.5 text-white bg-canyon`}
+            >
+              <span>{authMode === 'signup' ? 'Create account' : 'Sign in'}</span>
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center justify-center space-x-4 my-4">
+            <div className="h-px bg-border flex-1" />
+            <span className="text-xs text-muted-foreground font-medium">or</span>
+            <div className="h-px bg-border flex-1" />
+          </div>
+
+          {/* Microsoft SSO */}
+          <button 
+            onClick={handleLoginClick} 
+            className="w-full bg-white border border-border shadow-sm hover:shadow-md hover:bg-accent text-foreground rounded-full h-11 flex items-center justify-center space-x-3 font-semibold text-[14px] transition-all cursor-pointer transform hover:-translate-y-0.5"
+          >
+            <div className="grid grid-cols-2 gap-0.5 w-4 h-4 mr-1">
+              <div className="bg-[#F25022]" />
+              <div className="bg-[#7FBA00]" />
+              <div className="bg-[#00A4EF]" />
+              <div className="bg-[#FFB900]" />
+            </div>
+            <span>Continue with Microsoft</span>
           </button>
-          <button className="h-12 bg-card border border-border rounded-lg flex items-center justify-center space-x-2 font-bold text-[11px] hover:bg-accent transition-colors shadow-sm cursor-pointer text-muted-foreground hover:text-foreground">
-            <HelpCircle className="w-4 h-4" />
-            <span>Help</span>
-          </button>
+
+          {/* Footer Toggle */}
+          <p className="text-center text-[12px] text-muted-foreground mt-4 font-medium">
+            {authMode === 'signup' ? (
+              <>
+                Already have an account?{" "}
+                <button type="button" onClick={() => setAuthMode('signin')} className="font-semibold text-canyon hover:underline cursor-pointer">
+                  Sign in
+                </button>
+              </>
+            ) : (
+              <>
+                New here?{" "}
+                <button type="button" onClick={() => setAuthMode('signup')} className="font-semibold text-canyon hover:underline cursor-pointer">
+                  Create an account
+                </button>
+              </>
+            )}
+          </p>
+
+          {/* Terms footer (only on signup) */}
+          {authMode === 'signup' && (
+            <p className="text-center text-[11px] text-muted-foreground mt-3">
+              By continuing you agree to our{" "}
+              <a href="#" className="font-semibold text-canyon hover:underline">Terms & Privacy Policy</a>.
+            </p>
+          )}
+
+          {/* Manager login - subtle link */}
+          <div className="flex items-center justify-center mt-5 pt-4 border-t border-border/50">
+            <button 
+              onClick={handleManagerLogin} 
+              className="text-xs text-muted-foreground hover:text-foreground font-semibold flex items-center space-x-1.5 cursor-pointer transition-colors"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>Manager Login</span>
+            </button>
+          </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between text-[9px] text-muted-foreground font-bold tracking-[0.1em] pb-2">
-        <p className="leading-tight uppercase opacity-60">© 2026 CampusNest</p>
-        <div className="flex space-x-4 opacity-60">
-          <span className="cursor-pointer hover:text-foreground transition-colors hover:opacity-100">PRIVACY</span>
-          <span className="cursor-pointer hover:text-foreground transition-colors hover:opacity-100">TERMS</span>
-        </div>
-      </div>
-
     </div>
   );
 }
