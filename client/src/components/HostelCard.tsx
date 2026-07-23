@@ -1,4 +1,4 @@
-import { Star, MapPin, Heart } from "lucide-react";
+import { Star, MapPin, Bookmark, Crown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface HostelCardProps {
@@ -7,25 +7,33 @@ interface HostelCardProps {
   onSave?: (e: React.MouseEvent) => void;
   isSaved?: boolean;
   showHeart?: boolean;
+  className?: string;
 }
 
-export default function HostelCard({ hostel, onClick, onSave, isSaved = false, showHeart = false }: HostelCardProps) {
+export default function HostelCard({ 
+  hostel, 
+  onClick, 
+  onSave, 
+  isSaved = false, 
+  showHeart = false,
+  className = ""
+}: HostelCardProps) {
   const getBadgeStyle = (availability: string) => {
     switch (availability?.toUpperCase()) {
       case 'AVAILABLE':
         return {
-          bg: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400',
-          dot: 'bg-emerald-500 animate-pulse'
+          bg: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
+          dot: 'bg-emerald-500'
         };
       case 'FULL':
         return {
-          bg: 'bg-destructive/20 text-destructive dark:text-red-400',
-          dot: 'bg-destructive'
+          bg: 'bg-red-500/15 text-red-600 dark:text-red-400',
+          dot: 'bg-red-500'
         };
       case 'FEW ROOMS LEFT':
       default:
         return {
-          bg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400',
+          bg: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
           dot: 'bg-amber-500'
         };
     }
@@ -35,45 +43,56 @@ export default function HostelCard({ hostel, onClick, onSave, isSaved = false, s
   return (
     <div 
       onClick={onClick}
-      className={`w-[280px] h-[280px] bg-card border border-border/80 rounded-lg overflow-hidden shrink-0 group transition-all hover:shadow-lg hover:border-primary/30 flex flex-col isolate relative ${onClick ? 'cursor-pointer' : ''}`}
+      className={`w-full bg-white dark:bg-card border border-border/40 rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
-      <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-muted">
-        <img src={hostel.image} alt={hostel.name} loading="lazy" className="object-cover w-full h-[105%] -mt-[1%] group-hover:scale-105 transition-transform duration-700" />
+      <div className="relative h-[190px] w-full shrink-0 overflow-hidden bg-muted">
+        <img 
+          src={hostel.image} 
+          alt={hostel.name} 
+          loading="lazy" 
+          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" 
+        />
         
+        {/* Rating Badge Top Left */}
+        <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center space-x-1 shadow-sm">
+          <Crown className="w-3.5 h-3.5 text-[#E09F5E] fill-[#E09F5E]" />
+          <span className="text-xs font-extrabold text-white">{hostel.rating.toFixed(1)}</span>
+        </div>
+
+        {/* Save / Bookmark Button Top Right */}
         {showHeart && onSave && (
           <button 
             onClick={onSave}
-            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md transition-colors shadow-sm z-10"
+            className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md hover:bg-white transition-colors shadow-sm z-10 cursor-pointer"
           >
-            <Heart className={`w-4 h-4 ${isSaved ? 'fill-white text-white' : 'text-white'}`} />
+            <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-[#E09F5E] text-[#E09F5E]' : 'text-gray-500'}`} />
           </button>
         )}
         
-        <div className={`absolute top-3 ${showHeart ? 'left-3' : 'right-3'} bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg flex items-center space-x-1 shadow-sm`}>
-          <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-          <span className="text-xs font-semibold text-white">{hostel.rating.toFixed(1)}</span>
-        </div>
-        
-        <div className="absolute bottom-3 left-3 shadow-sm">
-          <Badge variant="secondary" className={`border-none font-bold text-[9px] px-2 py-0.5 backdrop-blur-md transition-colors ${badgeStyle.bg}`}>
-            <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${badgeStyle.dot}`} />
-            {hostel.availability}
-          </Badge>
-        </div>
+        {/* Availability Badge Bottom Left if FULL */}
+        {hostel.availability && hostel.availability.toUpperCase() === 'FULL' && (
+          <div className="absolute bottom-3 left-3">
+            <span className="bg-[#FCE8E6] text-[#C5221F] font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-md">
+              FULL
+            </span>
+          </div>
+        )}
       </div>
-      <div className="p-4 flex-1 flex flex-col justify-between">
+
+      <div className="p-5 flex-1 flex flex-col justify-between bg-white dark:bg-card">
         <div>
-          <h4 className="font-bold text-foreground text-[16px] truncate mb-1 group-hover:text-primary transition-colors">{hostel.name}</h4>
-          <div className="flex items-center text-muted-foreground text-xs">
-            <MapPin className="w-3 h-3 mr-1 shrink-0" />
-            <span className="truncate">{hostel.location}</span>
-          </div>
+          <h4 className="font-extrabold text-foreground text-[18px] truncate mb-0.5 group-hover:text-[#E09F5E] transition-colors">
+            {hostel.name}
+          </h4>
+          <p className="text-muted-foreground text-[13px] font-medium truncate mb-3">
+            {hostel.location}
+          </p>
         </div>
-        <div className="flex items-center justify-between mt-2">
-          <div>
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">Starts from</p>
-            <p className="font-bold text-foreground text-lg">GHS {hostel.startingPrice}<span className="text-xs font-normal text-muted-foreground">/{hostel.priceFreq.replace('per ', '')}</span></p>
-          </div>
+        <div>
+          <p className="font-extrabold text-foreground text-[18px]">
+            GHS {hostel.startingPrice ? hostel.startingPrice.toLocaleString() : (hostel.price ? hostel.price.toLocaleString() : '6,000')}
+            <span className="text-[13px] font-normal text-muted-foreground">/{hostel.priceFreq ? hostel.priceFreq.replace('per ', '') : 'sem'}</span>
+          </p>
         </div>
       </div>
     </div>

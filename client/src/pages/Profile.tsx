@@ -1,201 +1,168 @@
-import { Grid3X3, ShieldCheck, ChevronRight, Moon, LogOut, Settings, Clock, CheckCircle2 } from "lucide-react";
+import { Heart, BedDouble, Star, Settings, ShieldCheck, Bell, ChevronRight, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useTheme } from "@/components/theme-provider";
+import TopNav from "@/components/TopNav";
+import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { TygerAvatar } from 'tyger-avatar';
-import { useBookings } from "@/contexts/BookingContext";
 
 export default function Profile() {
-  const { theme, setTheme } = useTheme();
-  const isDarkMode = theme === "dark";
-  const userAvatar = localStorage.getItem("userAvatar") || "👤";
-  const userBio = localStorage.getItem("userBio") || "Jus a chill person merhnnnn...";
-  const storedPrefs = localStorage.getItem("userPrefs");
-  const userPrefs = storedPrefs ? JSON.parse(storedPrefs) : ["Air-Conditioned", "Wi-Fi Included", "Ensuite Bathroom"];
-  const { bookings } = useBookings();
-  const myBookings = bookings.filter((b) => b.studentName === "Nana Osei");
+  const userAvatar = localStorage.getItem("userAvatar");
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground pb-24 font-sans select-none overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans pb-24 relative">
       
-      {/* Top Header Area */}
-      <div className="px-6 pt-12 pb-12 relative z-10 bg-background">
+      {/* Mobile Header */}
+      <div className="lg:hidden">
+        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+      </div>
+
+      {/* Desktop Header */}
+      <header className="hidden lg:flex items-center justify-between px-8 pt-6 pb-6 w-full">
+        <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">My account</h1>
+        <NotificationsDropdown />
+      </header>
+
+      <div className="px-5 lg:px-8 space-y-8 pt-24 lg:pt-0 w-full">
         
-        {/* Menu Icon */}
-        <div className="flex justify-end mb-8">
-          <Link to="/settings" className="block focus:outline-none">
-            <Grid3X3 className="w-6 h-6 text-foreground/80 hover:text-primary transition-colors cursor-pointer" />
-          </Link>
+        {/* Mobile Header Title */}
+        <div className="lg:hidden">
+          <h1 className="text-2xl font-bold text-foreground">My account</h1>
         </div>
-        
-        {/* Name & Edit */}
-        <div className="flex justify-center mb-5">
-          <div className="relative w-[120px] h-[120px] rounded-full p-1 flex items-center justify-center bg-gradient-to-br from-primary/60 to-primary/10 shadow dark:shadow">
-            <div className="w-full h-full rounded-full border-[4px] border-background overflow-hidden bg-accent flex items-center justify-center p-2">
+
+        {/* Profile Hero Banner Card */}
+        <div className="w-full bg-[#8C5B4F] rounded-[28px] p-6 lg:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-white shadow-sm relative overflow-hidden">
+          <div className="flex items-center space-x-5">
+            <div className="w-20 h-20 rounded-full bg-[#E5D0BA] flex items-center justify-center text-[#6c5e57] font-extrabold text-2xl shadow-md border-2 border-white/20 shrink-0 overflow-hidden">
               {userAvatar?.startsWith("Tr") ? (
-                <TygerAvatar name={userAvatar as any} size="3xl" />
+                <TygerAvatar name={userAvatar as any} size="2xl" />
               ) : userAvatar?.startsWith("http") ? (
-                <img src={userAvatar} alt="Avatar" loading="lazy" className="w-full h-full object-cover" />
+                <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <span className="text-[60px] leading-none mb-1">{userAvatar}</span>
+                <span>SA</span>
               )}
             </div>
-          </div>
-        </div>
-        
-        <div className="text-center mb-6">
-          <h1 className="text-[28px] font-bold mb-1 tracking-tight">Sarah Adjei</h1>
-          <Link to="/edit-profile" className="text-primary font-medium text-[13px] hover:underline transition-all cursor-pointer inline-block">Edit Profile</Link>
-        </div>
-        
-        {/* Bio */}
-        <p className="text-center text-muted-foreground text-[13px] px-6 mb-4 leading-relaxed max-w-[320px] mx-auto">
-          {userBio}
-        </p>
-
-        {/* Room Preferences Tags */}
-        <div className="flex flex-wrap items-center justify-center gap-2 max-w-[320px] mx-auto mb-8">
-          {userPrefs.map((pref: string) => (
-            <span key={pref} className="px-3 py-1.5 rounded-full border border-border/80 text-[11px] font-extrabold text-foreground/70 bg-transparent">
-              {pref}
-            </span>
-          ))}
-        </div>
-        
-        {/* 3-Column Stats */}
-        <div className="flex justify-center items-center divide-x divide-border/60 text-center mb-4">
-          <div className="px-5 w-auto">
-            <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">University</p>
-            <p className="text-[13px] font-semibold text-foreground/90">Ashesi University</p>
-          </div>
-          <div className="px-5 w-auto">
-            <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">Status</p>
-            <p className="text-[13px] font-semibold text-foreground/90">Student</p>
-          </div>
-          <div className="px-5 w-auto">
-            <p className="text-[9px] font-extrabold text-primary uppercase tracking-[0.1em] mb-1">Joined</p>
-            <p className="text-[13px] font-semibold text-foreground/90">Nov 2024</p>
-          </div>
-        </div>
-        
-      </div>
-
-      {/* Overlapping Verification Card */}
-      <div className="px-5 -mt-8 relative z-20 mb-8">
-        <div className="bg-card border border-border/50 rounded-[10px] p-5 flex items-center justify-between hover:shadow-sm transition-shadow cursor-pointer">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center bg-primary/5 shrink-0">
-              <ShieldCheck className="w-6 h-6 text-primary" />
-            </div>
-            <div className="pr-2">
-              <div className="flex items-center space-x-2">
-                <h3 className="font-bold text-[15px]">Verify Student ID</h3>
-                <span className="text-[10px] font-extrabold text-primary bg-primary/10 px-2 py-0.5 rounded-full">3 steps left &gt;</span>
+            <div>
+              <h2 className="text-2xl lg:text-[28px] font-extrabold text-white leading-tight">Sarah Adjei</h2>
+              <p className="text-sm text-white/80 font-medium mb-3">sarah.adjei@ashesi.edu.gh</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-white/20 backdrop-blur-md text-white font-extrabold text-[12px] px-3.5 py-1 rounded-full">
+                  Level 300 · Ashesi
+                </span>
+                <span className="bg-white/20 backdrop-blur-md text-white font-extrabold text-[12px] px-3.5 py-1 rounded-full">
+                  Verified student
+                </span>
               </div>
-              <p className="text-[11px] text-muted-foreground mt-1 leading-tight">We ask everyone for details to unlock student features. Get a head start!</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Bottom Layout - Primary Tinted Background */}
-      <div className="flex-1 bg-accent/30 dark:bg-primary/5 rounded-t-[40px] pt-8 pb-12 mt-[-4rem] px-5 border-t border-border/30">
-        
-        <div className="flex items-center justify-between mb-5 pt-8 px-1">
-          <h3 className="text-[13px] font-extrabold text-foreground uppercase tracking-[0.08em]">Your Bookings</h3>
-          <Link to="/manage-bookings" className="text-primary text-[13px] font-bold hover:underline cursor-pointer">Edit &gt;</Link>
-        </div>
-        
-        {/* Horizontal Booking Cards */}
-        <div className="flex space-x-4 overflow-x-auto hide-scrollbar pb-6 px-1">
-          
-          {myBookings.length === 0 ? (
-            <div className="flex flex-col items-center justify-center w-full bg-card rounded-[10px] py-10 shadow border border-border/40">
-              <span className="text-muted-foreground text-sm font-semibold mb-2">You don't have any bookings yet.</span>
-              <Link to="/explore" className="text-primary text-xs font-bold bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors">Start Exploring</Link>
-            </div>
-          ) : (
-            myBookings.map((b) => (
-              <Link key={b.id} to="/manage-bookings" className="block outline-none shrink-0 w-[240px]">
-                <div className={`bg-card rounded-[10px] overflow-hidden shadow border hover:transition-all group ${b.status === 'Pending' ? 'border-amber-500/40' : 'border-primary/30'}`}>
-                   <div className="h-[140px] relative overflow-hidden bg-muted">
-                     <img src={b.image} loading="lazy" className="w-full h-[105%] -mt-[1%] object-cover group-hover:scale-105 transition-transform duration-700" alt={b.hostelName} />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                     <div className="absolute bottom-3 left-3 flex items-center space-x-1">
-                       {b.status === "Pending" ? (
-                          <span className="bg-amber-500/90 text-white flex items-center px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">
-                            <Clock className="w-3 h-3 mr-1" /> Pending
-                          </span>
-                       ) : (
-                          <span className="bg-emerald-500/90 text-white flex items-center px-3 py-1.5 text-[9px] font-extrabold rounded-lg uppercase tracking-wider shadow-sm">
-                            <CheckCircle2 className="w-3 h-3 mr-1" /> Approved
-                          </span>
-                       )}
-                     </div>
-                   </div>
-                   <div className="p-4 bg-card">
-                      <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">{b.date.split(',')[0]}</p>
-                      <h4 className="font-bold text-[15px] truncate">{b.hostelName} • {b.roomNumber}</h4>
-                   </div>
-                </div>
-              </Link>
-            ))
-          )}
-          
-          {/* New Explore Card */}
-          <Link to="/explore" className="block outline-none shrink-0 w-[240px]">
-             <div className="bg-card rounded-[10px] overflow-hidden shadow border border-border/40 hover:transition-all group opacity-80 hover:opacity-100 h-full flex flex-col">
-               <div className="flex-1 min-h-[140px] relative overflow-hidden bg-muted flex items-center justify-center border-b border-border/40">
-                 <div className="w-12 h-12 rounded-full border-2 border-dashed border-muted-foreground/40 flex items-center justify-center group-hover:bg-primary/5 transition-colors">
-                    <span className="text-xl text-muted-foreground/50 group-hover:text-primary transition-colors">+</span>
-                 </div>
-               </div>
-               <div className="p-4 bg-muted/10 text-center">
-                  <p className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">Discover More</p>
-                  <h4 className="font-bold text-muted-foreground text-[14px] truncate">Find new hostels</h4>
-               </div>
-            </div>
-          </Link>
-          
-        </div>
-        
-        {/* Settings Links */}
-        <div className="mt-6 flex flex-col space-y-3 px-1">
-          
-          {/* Account Settings */}
-          <Link to="/settings" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-accent/50 transition-colors cursor-pointer block outline-none">
-            <div className="flex items-center space-x-4">
-              <Settings className="w-5 h-5 text-muted-foreground" />
-              <span className="font-semibold text-[15px]">Account Settings</span>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </Link>
-          
-          {/* Dark Mode Toggle */}
-          <div 
-            className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 cursor-pointer hover:bg-accent/50 transition-colors"
-            onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+          <Link 
+            to="/settings" 
+            className="w-full md:w-auto text-center bg-white text-[#8C5B4F] hover:bg-white/90 font-extrabold text-[15px] px-6 py-2.5 rounded-full transition-all shadow-sm shrink-0 cursor-pointer"
           >
-            <div className="flex items-center space-x-4">
-              <Moon className="w-5 h-5 text-muted-foreground" />
-              <span className="font-semibold text-[15px]">Dark Mode</span>
-            </div>
-            <div className={`w-12 h-6 rounded-full flex items-center p-1 transition-colors duration-300 shadow-inner ${isDarkMode ? 'bg-[#60A5FA] justify-end' : 'bg-muted border border-border justify-start'}`}>
-              <div className={`w-4 h-4 rounded-full shadow-sm transform transition-transform ${isDarkMode ? 'bg-[#0B101E]' : 'bg-primary'}`} />
+            Edit profile
+          </Link>
+        </div>
+
+        {/* Current Booking Section */}
+        <div>
+          <h3 className="text-[12px] font-extrabold text-muted-foreground uppercase tracking-widest mb-3">
+            Current booking
+          </h3>
+          <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+            <div className="flex items-center space-x-4 flex-1">
+              <img 
+                src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=400&q=80" 
+                alt="Tanko Hostel" 
+                className="w-[110px] h-[85px] rounded-[18px] object-cover shrink-0" 
+              />
+              <div>
+                <div className="flex items-center space-x-2 mb-1">
+                  <h4 className="font-extrabold text-[18px] text-foreground">Tanko Hostel</h4>
+                  <span className="bg-[#E6F4EA] text-[#137333] text-[11px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center space-x-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#137333]" />
+                    <span>APPROVED</span>
+                  </span>
+                </div>
+                <p className="text-[13px] text-muted-foreground font-medium mb-3">
+                  Room 402B · Premium Studio · Move-in Jan 12, 2026
+                </p>
+                <div className="flex items-center space-x-6">
+                  <div>
+                    <span className="text-[11px] text-muted-foreground font-medium block">Paid</span>
+                    <span className="text-[15px] font-extrabold text-[#137333]">GHS 8,500</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] text-muted-foreground font-medium block">Semester</span>
+                    <span className="text-[15px] font-extrabold text-foreground">Spring 2026</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          {/* Sign Out */}
-          <Link to="/login" className="flex items-center justify-between w-full px-5 py-4 bg-card rounded-[10px] shadow-sm border border-border/40 hover:bg-red-500/10 transition-colors group">
-            <div className="flex items-center space-x-4">
-              <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-500 transition-colors" />
-              <span className="font-bold text-[15px] text-red-400 group-hover:text-red-500 transition-colors">Sign Out</span>
-            </div>
-            <ChevronRight className="w-4 h-4 text-red-400 opacity-50 group-hover:opacity-100 transition-opacity" />
-          </Link>
-          
         </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col justify-between h-[120px]">
+            <Heart className="w-5 h-5 text-[#E09F5E]" />
+            <div>
+              <span className="text-[26px] font-extrabold text-foreground block leading-none mb-1">7</span>
+              <span className="text-[13px] font-medium text-muted-foreground">Saved hostels</span>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col justify-between h-[120px]">
+            <BedDouble className="w-5 h-5 text-[#E09F5E]" />
+            <div>
+              <span className="text-[26px] font-extrabold text-foreground block leading-none mb-1">2</span>
+              <span className="text-[13px] font-medium text-muted-foreground">Past bookings</span>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col justify-between h-[120px]">
+            <Star className="w-5 h-5 text-[#E09F5E]" />
+            <div>
+              <span className="text-[26px] font-extrabold text-foreground block leading-none mb-1">3</span>
+              <span className="text-[13px] font-medium text-muted-foreground">Reviews written</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Settings Links */}
+        <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] shadow-sm overflow-hidden divide-y divide-border/40">
+          <Link to="/settings" className="flex items-center justify-between p-5 hover:bg-accent/40 transition-colors cursor-pointer group">
+            <div className="flex items-center space-x-4">
+              <Settings className="w-5 h-5 text-[#8C5B4F]" />
+              <span className="font-bold text-[15px] text-foreground">Account settings</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </Link>
+
+          <Link to="/settings" className="flex items-center justify-between p-5 hover:bg-accent/40 transition-colors cursor-pointer group">
+            <div className="flex items-center space-x-4">
+              <ShieldCheck className="w-5 h-5 text-[#8C5B4F]" />
+              <span className="font-bold text-[15px] text-foreground">Privacy & security</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </Link>
+
+          <Link to="/settings" className="flex items-center justify-between p-5 hover:bg-accent/40 transition-colors cursor-pointer group">
+            <div className="flex items-center space-x-4">
+              <Bell className="w-5 h-5 text-[#8C5B4F]" />
+              <span className="font-bold text-[15px] text-foreground">Notifications</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </Link>
+
+          <Link to="/login" className="flex items-center justify-between p-5 hover:bg-red-500/10 transition-colors cursor-pointer group">
+            <div className="flex items-center space-x-4">
+              <LogOut className="w-5 h-5 text-red-500" />
+              <span className="font-bold text-[15px] text-red-500">Log out</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-red-500 opacity-60 group-hover:opacity-100 transition-opacity" />
+          </Link>
+        </div>
+
       </div>
-      
     </div>
   );
 }

@@ -74,6 +74,7 @@ export default function Saved() {
       {/* Desktop Header */}
       <header className="hidden lg:flex items-center justify-between px-8 pt-6 pb-6 w-full border-b border-border/40">
         <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">Saved</h1>
+        <NotificationsDropdown />
       </header>
 
       <div className="px-5 lg:px-8 space-y-6 pt-24 lg:pt-8">
@@ -109,7 +110,7 @@ export default function Saved() {
         {filteredSaved.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-20 lg:mt-32">
             <div className={`w-24 h-24 rounded-full bg-[#FDFCFB] flex items-center justify-center mb-6 shadow-sm border border-border/40 ${searchQuery ? 'hidden' : 'flex'}`}>
-              <Bookmark className="w-8 h-8 text-[#A2705D]" />
+              <Bookmark className="w-8 h-8 text-[#E09F5E]" />
             </div>
             <Search className={`w-16 h-16 text-muted-foreground mb-4 opacity-50 ${searchQuery ? 'block' : 'hidden'}`} />
             
@@ -121,7 +122,7 @@ export default function Saved() {
             </p>
             
             {!searchQuery && (
-              <Link to="/explore" className="inline-flex items-center justify-center h-12 px-8 bg-[#A2705D] text-white font-bold rounded-full transition-colors shadow-sm text-[15px] hover:bg-[#8e6150]">
+              <Link to="/explore" className="inline-flex items-center justify-center h-12 px-8 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-bold rounded-full transition-colors shadow-sm text-[15px]">
                 <Search className="w-4 h-4 mr-2" />
                 Explore hostels
               </Link>

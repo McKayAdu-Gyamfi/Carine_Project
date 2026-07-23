@@ -77,36 +77,38 @@ export default function NotificationsDropdown() {
       {/* Bell Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)} 
-        className="w-10 h-10 bg-transparent sm:bg-white/10 dark:sm:bg-black/20 sm:backdrop-blur-md rounded-full flex items-center justify-center relative sm:shadow-sm sm:border sm:border-white/20 transition-colors hover:bg-accent group"
+        className="w-10 h-10 lg:w-[52px] lg:h-[52px] bg-white dark:bg-card border border-border/50 rounded-full flex items-center justify-center relative shadow-sm hover:bg-accent transition-colors cursor-pointer"
       >
-        <Bell className="w-6 h-6 sm:w-5 sm:h-5 text-muted-foreground transition-colors group-hover:text-foreground" />
+        <Bell className="w-5 h-5 text-[#5E5B58]" />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-sm">
-            {unreadCount}
-          </span>
+          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-[#E09F5E] rounded-full border-2 border-white" />
         )}
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-[-40px] sm:right-0 mt-3 w-[320px] sm:w-[360px] bg-card border border-border/50 rounded-[20px] shadow-2xl z-50 overflow-hidden flex flex-col origin-top-right animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute right-[-40px] sm:right-0 mt-3 w-[320px] sm:w-[360px] bg-white dark:bg-card border border-border/50 rounded-[24px] shadow-2xl z-50 overflow-hidden flex flex-col origin-top-right animate-in fade-in zoom-in-95 duration-200">
           
-          <div className="p-4 border-b border-border/50 flex items-center justify-between bg-card text-card-foreground">
-            <h3 className="font-bold text-lg">Notifications</h3>
+          <div className="p-4 border-b border-border/40 flex items-center justify-between bg-white dark:bg-card">
+            <h3 className="font-extrabold text-lg text-foreground">Notifications</h3>
             {unreadCount > 0 && (
-              <button onClick={markAllAsRead} className="text-xs font-bold text-primary hover:underline transition-colors mt-1">
+              <button onClick={markAllAsRead} className="text-xs font-extrabold text-[#E09F5E] hover:underline transition-colors mt-1 cursor-pointer">
                 Mark all as read
               </button>
             )}
           </div>
 
-          <div className="px-4 py-3 bg-muted/20 border-b border-border/40">
-            <div className="flex bg-accent/50 p-1 rounded-xl">
+          <div className="px-4 py-3 bg-[#F8F6F3] dark:bg-muted/20 border-b border-border/40">
+            <div className="flex bg-white dark:bg-card p-1 rounded-xl border border-border/40">
               {tabs.map((tab) => (
                 <button 
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 text-[11px] sm:text-xs font-semibold py-1.5 rounded-lg transition-all ${activeTab === tab ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                  className={`flex-1 text-[11px] sm:text-xs font-extrabold py-1.5 rounded-lg transition-all cursor-pointer ${
+                    activeTab === tab 
+                      ? "bg-[#E09F5E] text-white shadow-sm" 
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {tab}
                 </button>
@@ -120,15 +122,17 @@ export default function NotificationsDropdown() {
               <div 
                 key={n.id}
                 onClick={() => markAsRead(n.id)}
-                className={`p-3 rounded-2xl transition-colors cursor-pointer flex gap-4 ${n.read ? 'opacity-70 hover:bg-accent/30' : 'bg-primary/5 hover:bg-primary/10'}`}
+                className={`p-3 rounded-2xl transition-colors cursor-pointer flex gap-4 ${
+                  n.read ? 'opacity-70 hover:bg-accent/30' : 'bg-[#E09F5E]/10 border border-[#E09F5E]/20 hover:bg-[#E09F5E]/15'
+                }`}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border ${n.iconBg} ${n.iconColor}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border bg-[#E09F5E]/15 text-[#E09F5E] border-[#E09F5E]/30`}>
                   {n.icon}
                 </div>
                 <div className="flex-1 relative">
-                  {!n.read && <div className="absolute top-1 right-0 w-2 h-2 rounded-full bg-primary" />}
+                  {!n.read && <div className="absolute top-1 right-0 w-2 h-2 rounded-full bg-[#E09F5E]" />}
                   <div className="flex justify-between items-start mb-0.5">
-                    <h4 className={`font-bold text-[13px] ${n.read ? 'text-foreground/80' : 'text-foreground pr-4'}`}>{n.title}</h4>
+                    <h4 className={`font-extrabold text-[13px] ${n.read ? 'text-foreground/80' : 'text-foreground pr-4'}`}>{n.title}</h4>
                   </div>
                   <p className="text-[12px] text-muted-foreground leading-snug mb-1.5">{n.message}</p>
                   <span className="text-[10px] font-medium text-muted-foreground/80">{n.time}</span>

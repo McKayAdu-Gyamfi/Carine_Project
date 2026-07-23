@@ -76,66 +76,36 @@ export default function Home() {
           <input 
             type="text" 
             placeholder="Search hostels near Berekuso..." 
-            className="w-full h-[52px] pl-12 pr-4 bg-white/60 border border-border/50 rounded-full text-[15px] font-medium outline-none focus:ring-2 focus:ring-canyon/30 transition-all shadow-sm backdrop-blur-sm"
+            className="w-full h-[52px] pl-12 pr-4 bg-white/60 border border-border/50 rounded-full text-[15px] font-medium outline-none focus:ring-2 focus:ring-[#E09F5E]/30 transition-all shadow-sm backdrop-blur-sm"
           />
         </div>
         <div className="flex items-center space-x-4">
-          <button className="w-[52px] h-[52px] bg-white/60 border border-border/50 rounded-full flex items-center justify-center relative shadow-sm hover:bg-white transition-colors cursor-pointer">
-            <Bell className="w-[22px] h-[22px] text-[#5E5B58]" />
-            <span className="absolute top-3.5 right-3.5 w-2.5 h-2.5 bg-[#B17B6A] rounded-full border-2 border-white" />
-          </button>
-          <div className="w-[52px] h-[52px] bg-[#E5D0BA] rounded-full flex items-center justify-center font-bold text-[#6c5e57] shadow-sm text-lg cursor-pointer hover:opacity-90">
+          <NotificationsDropdown />
+          <Link to="/profile" className="w-[52px] h-[52px] bg-[#E5D0BA] rounded-full flex items-center justify-center font-bold text-[#6c5e57] shadow-sm text-lg cursor-pointer hover:opacity-90">
             SA
-          </div>
+          </Link>
         </div>
       </header>
 
       {/* Mobile Hero Section */}
-      <section className="lg:hidden relative px-4 pt-24 pb-8 mb-4 overflow-hidden">
-        {/* Background Room Image with Fade Carousel */}
-        <div className="absolute inset-0 z-0 bg-background pointer-events-none">
-          {carouselImages.map((img, idx) => {
-            const isCurrent = heroIndex === idx;
-            
-            return (
-              <img 
-                key={idx}
-                src={img}
-                alt="Hero Background" 
-                loading={idx === 0 ? "eager" : "lazy"}
-                style={{ willChange: 'opacity' }}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${isCurrent ? 'opacity-100 dark:opacity-40' : 'opacity-0'}`}
-              />
-            );
-          })}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/80 to-background" />
-        </div>
-        
-        <div className="relative z-10">
-          <p className="text-xs font-bold tracking-widest text-primary uppercase mb-1"><br/><br/><br/><br/>Welcome back</p><br/>
-          <h1 className="text-3xl font-bold text-foreground leading-tight mb-1">Hey User!</h1>
-          <h2 className="text-[28px] font-bold text-primary leading-[1.1] mb-8">Find your perfect<br/>room</h2>
-
-          {/* Search */}
-          {/* 
-          <div className="flex items-center bg-white/10 dark:bg-black/20 backdrop-blur-2xl border border-white/30 dark:border-white/10 rounded-[10px] p-1.5 mb-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]">
-            <Search className="w-6 h-6 text-primary ml-3 shrink-0" />
-            <Input 
-              placeholder="Search hostels" 
-              className="flex-1 bg-transparent border-none text-foreground placeholder:text-muted-foreground shadow-none focus-visible:ring-0 h-12 px-3 text-[15px]"
-            />
-            <button 
-              onClick={() => setIsFilterOpen(true)}
-              className="h-12 w-12 bg-primary rounded-[10px] flex items-center justify-center shrink-0 shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform active:scale-95"
-            >
-              <SlidersHorizontal className="w-6 h-6 text-primary-foreground" />
-            </button>
+      <section className="lg:hidden px-4 pt-20 pb-4 mb-2">
+        <div className="relative w-full rounded-[28px] overflow-hidden bg-gradient-to-br from-[#8C5B4F] to-[#5c3e35] p-6 text-white shadow-md">
+          <div className="absolute inset-0 opacity-[0.08]"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,1) 10px, rgba(255,255,255,1) 12px)',
+            }}
+          />
+          <div className="relative z-10">
+            <p className="text-[11px] font-extrabold tracking-[0.2em] text-[#E09F5E] uppercase mb-2">
+              WELCOME BACK
+            </p>
+            <h1 className="text-white text-[26px] font-extrabold leading-tight tracking-tight mb-5">
+              Find your perfect room
+            </h1>
+            <Link to="/explore" className="inline-flex items-center justify-center h-11 px-7 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-extrabold rounded-full transition-colors shadow-sm text-sm cursor-pointer">
+              Explore
+            </Link>
           </div>
-          */}
-
-          <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground font-bold rounded-xl shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform active:scale-95 mb-6 text-[15px]">
-            Explore More
-          </Link>
         </div>
       </section>
 
@@ -155,44 +125,53 @@ export default function Home() {
             <h1 className="text-white text-[48px] font-extrabold leading-[1.1] tracking-tight mb-8">
               Find your perfect room
             </h1>
-            <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-canyon hover:bg-[#c28446] text-white font-bold rounded-full transition-colors shadow-lg shadow-black/20 text-[16px] cursor-pointer">
+            <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-bold rounded-full transition-colors shadow-lg shadow-black/20 text-[16px] cursor-pointer">
               Explore hostels
             </Link>
-          </div>
-          {/* Badge */}
-          <div className="absolute bottom-1/2 left-1/2 translate-x-12 translate-y-16 z-10 hidden xl:block">
-             <span className="inline-block px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#6c5e57] bg-white/90 border border-white/25 rounded-full backdrop-blur-md shadow-sm">
-                CAMPUS / HOSTEL PHOTO
-              </span>
           </div>
         </div>
       </section>
 
       {/* Featured Hostels */}
-      <section className="py-2 lg:px-4">
-        <div className="flex items-center justify-between px-4 lg:px-4 mb-4 lg:mb-6">
-          <h3 className="text-xl lg:text-[24px] font-extrabold tracking-tight text-foreground">Featured hostels</h3>
-          <Link to="/explore" className="text-sm font-bold text-[#B17B6A] hover:underline cursor-pointer">View all</Link>
+      <section className="py-2 px-4 lg:px-4">
+        <div className="flex items-center justify-between mb-4 lg:mb-6">
+          <h3 className="text-xl lg:text-[24px] font-extrabold tracking-tight text-foreground">Featured</h3>
+          <Link to="/explore" className="text-sm font-bold text-[#E09F5E] hover:underline cursor-pointer">View all</Link>
         </div>
         
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex w-max space-x-4 px-4 pb-4 pt-1">
-            
-            {MOST_POPULAR.map((hostel) => (
-              <div key={hostel.id} className="block outline-none cursor-pointer">
-                <HostelCard 
-                  hostel={hostel} 
-                  onClick={() => setSelectedHostel(hostel)} 
-                  onSave={(e) => handleSave(e, hostel.id)}
-                  isSaved={savedHostels.includes(hostel.id)}
-                  showHeart={true}
-                />
-              </div>
-            ))}
+        {/* Mobile Vertical Stack */}
+        <div className="lg:hidden flex flex-col space-y-4">
+          {MOST_POPULAR.map((hostel) => (
+            <HostelCard 
+              key={hostel.id}
+              hostel={hostel} 
+              onClick={() => setSelectedHostel(hostel)} 
+              onSave={(e) => handleSave(e, hostel.id)}
+              isSaved={savedHostels.includes(hostel.id)}
+              showHeart={true}
+            />
+          ))}
+        </div>
 
-          </div>
-          <ScrollBar orientation="horizontal" className="hidden" />
-        </ScrollArea>
+        {/* Desktop Horizontal Scroll */}
+        <div className="hidden lg:block">
+          <ScrollArea className="w-full whitespace-nowrap">
+            <div className="flex w-max space-x-4 pb-4 pt-1">
+              {MOST_POPULAR.map((hostel) => (
+                <div key={hostel.id} className="w-[300px] shrink-0 block outline-none cursor-pointer">
+                  <HostelCard 
+                    hostel={hostel} 
+                    onClick={() => setSelectedHostel(hostel)} 
+                    onSave={(e) => handleSave(e, hostel.id)}
+                    isSaved={savedHostels.includes(hostel.id)}
+                    showHeart={true}
+                  />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" className="hidden" />
+          </ScrollArea>
+        </div>
       </section>
 
       {/* Recommended for you */}

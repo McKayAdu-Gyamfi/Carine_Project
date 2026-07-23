@@ -14,7 +14,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around h-[76px] px-4 bg-white/10 dark:bg-black/20 backdrop-blur-xl border-t border-x border-white/20 dark:border-white/10 rounded-t-[32px] shadow-[0_-15px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-15px_40px_rgba(0,0,0,0.4)] transition-colors">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around h-[72px] px-2 bg-white dark:bg-card border-t border-border/40 shadow-lg transition-colors">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.path;
@@ -24,12 +24,15 @@ export default function BottomNav() {
             key={item.name}
             to={item.path}
             className={cn(
-              "flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/80"
+              "flex flex-col items-center justify-center w-full h-full relative transition-colors cursor-pointer",
+              isActive ? "text-[#E09F5E]" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Icon className={cn("w-5 h-5", isActive && "fill-current drop-shadow-md")} />
-            <span className="text-[10px] font-medium">{item.name}</span>
+            {isActive && (
+              <span className="absolute top-2 w-1.5 h-1.5 bg-[#E09F5E] rounded-full" />
+            )}
+            <Icon className={cn("w-5 h-5 mb-1", isActive && "stroke-[2.5]")} />
+            <span className="text-[11px] font-extrabold">{item.name}</span>
           </Link>
         );
       })}

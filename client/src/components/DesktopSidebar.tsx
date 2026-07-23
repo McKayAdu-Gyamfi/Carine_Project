@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
-import { Home, Compass, Bookmark, BedDouble, User } from "lucide-react";
+import { Home, Compass, Bookmark, BedDouble, User, LogOut } from "lucide-react";
 import { TygerAvatar } from 'tyger-avatar';
 
 export default function DesktopSidebar() {
@@ -44,7 +44,7 @@ export default function DesktopSidebar() {
             >
               {/* Active vertical marker */}
               {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#A2705D] rounded-r-md" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#E09F5E] rounded-r-md" />
               )}
               
               <Icon className={`w-6 h-6 shrink-0 ${isActive ? 'text-canyon' : 'text-[#8C8A88]'}`} strokeWidth={isActive ? 2.5 : 2} />
@@ -56,20 +56,29 @@ export default function DesktopSidebar() {
 
       {/* User Profile */}
       <div className="px-5 mt-auto pt-8 border-t border-border/40 min-w-[260px]">
-        <div className="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
-          <div className="w-12 h-12 ring-2 ring-background flex items-center justify-center bg-[#E5D0BA] shadow-sm rounded-full overflow-hidden p-0 shrink-0">
-            {userAvatar?.startsWith("Tr") ? (
-               <TygerAvatar name={userAvatar as any} size="lg" />
-            ) : userAvatar?.startsWith("http") ? (
-               <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
-            ) : (
-               <span className="text-[#6c5e57] font-bold text-[16px]">SA</span>
-            )}
-          </div>
-          <div className="flex flex-col opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap">
-            <span className="font-bold text-[15px] text-foreground leading-tight">Sarah Adjei</span>
-            <span className="text-[12px] font-medium text-muted-foreground">Student</span>
-          </div>
+        <div className="flex items-center justify-between">
+          <Link to="/profile" className="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity">
+            <div className="w-12 h-12 ring-2 ring-background flex items-center justify-center bg-[#E5D0BA] shadow-sm rounded-full overflow-hidden p-0 shrink-0">
+              {userAvatar?.startsWith("Tr") ? (
+                 <TygerAvatar name={userAvatar as any} size="lg" />
+              ) : userAvatar?.startsWith("http") ? (
+                 <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                 <span className="text-[#6c5e57] font-bold text-[16px]">SA</span>
+              )}
+            </div>
+            <div className="flex flex-col opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap">
+              <span className="font-bold text-[15px] text-foreground leading-tight">Sarah Adjei</span>
+              <span className="text-[12px] font-medium text-muted-foreground">Student</span>
+            </div>
+          </Link>
+          <Link 
+            to="/login" 
+            title="Log out" 
+            className="opacity-0 group-hover:opacity-100 transition-all duration-300 text-muted-foreground hover:text-red-500 p-2 rounded-full hover:bg-red-500/10 cursor-pointer"
+          >
+            <LogOut className="w-5 h-5 shrink-0" />
+          </Link>
         </div>
       </div>
     </aside>

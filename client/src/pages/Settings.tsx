@@ -9,7 +9,7 @@ export default function SettingsPage() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans relative lg:pl-10">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans relative">
       
       {/* Header */}
       <div className="flex items-center px-4 lg:px-8 h-20 pt-6 lg:pt-8 mb-4">
@@ -19,7 +19,7 @@ export default function SettingsPage() {
         </button>
       </div>
 
-      <div className="px-5 lg:px-8 py-6 space-y-10 max-w-4xl">
+      <div className="px-5 lg:px-8 py-6 space-y-10 w-full">
         
         {/* Personal Information */}
         <div>
@@ -30,7 +30,7 @@ export default function SettingsPage() {
               <input 
                 type="text" 
                 defaultValue="Sarah Adjei"
-                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#E09F5E] shadow-sm transition-all"
               />
             </div>
             <div className="space-y-1.5">
@@ -38,7 +38,7 @@ export default function SettingsPage() {
               <input 
                 type="text" 
                 defaultValue="+233 24 123 4567"
-                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#E09F5E] shadow-sm transition-all"
               />
             </div>
             <div className="space-y-1.5">
@@ -46,7 +46,7 @@ export default function SettingsPage() {
               <input 
                 type="email" 
                 defaultValue="sarah.adjei@ashesi.edu.gh"
-                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#E09F5E] shadow-sm transition-all"
               />
             </div>
             <div className="space-y-1.5">
@@ -54,7 +54,7 @@ export default function SettingsPage() {
               <input 
                 type="text" 
                 defaultValue="Ashesi University"
-                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#A2705D] shadow-sm transition-all"
+                className="w-full h-[52px] bg-white border border-border/60 rounded-xl px-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#E09F5E] shadow-sm transition-all"
               />
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function SettingsPage() {
             
             <div className="flex items-center justify-between p-5 border-b border-border/40">
               <div className="flex items-center space-x-4">
-                <Bell className="w-[22px] h-[22px] text-[#8C5E4D]" />
+                <Bell className="w-[22px] h-[22px] text-[#E09F5E]" />
                 <div>
                   <h3 className="font-bold text-[15px] text-foreground">Booking notifications</h3>
                   <p className="text-[12px] text-muted-foreground font-medium">Approvals, payment reminders</p>
@@ -76,7 +76,7 @@ export default function SettingsPage() {
               {/* Toggle Switch */}
               <button 
                 onClick={() => setNotifications(!notifications)}
-                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${notifications ? 'bg-[#A2705D]' : 'bg-[#D6CFC8]'}`}
+                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${notifications ? 'bg-[#E09F5E]' : 'bg-[#D6CFC8]'}`}
               >
                 <div className={`absolute top-1 w-[18px] h-[18px] bg-white rounded-full transition-transform ${notifications ? 'left-[26px]' : 'left-1'}`} />
               </button>
@@ -84,7 +84,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between p-5 border-b border-border/40">
               <div className="flex items-center space-x-4">
-                <Compass className="w-[22px] h-[22px] text-[#8C5E4D]" />
+                <Compass className="w-[22px] h-[22px] text-[#E09F5E]" />
                 <div>
                   <h3 className="font-bold text-[15px] text-foreground">New hostel alerts</h3>
                   <p className="text-[12px] text-muted-foreground font-medium">When rooms open near campus</p>
@@ -92,7 +92,7 @@ export default function SettingsPage() {
               </div>
               <button 
                 onClick={() => setAlerts(!alerts)}
-                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${alerts ? 'bg-[#A2705D]' : 'bg-[#D6CFC8]'}`}
+                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${alerts ? 'bg-[#E09F5E]' : 'bg-[#D6CFC8]'}`}
               >
                 <div className={`absolute top-1 w-[18px] h-[18px] bg-white rounded-full transition-transform ${alerts ? 'left-[26px]' : 'left-1'}`} />
               </button>
@@ -100,7 +100,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between p-5">
               <div className="flex items-center space-x-4">
-                <Moon className="w-[22px] h-[22px] text-[#8C5E4D]" />
+                <Moon className="w-[22px] h-[22px] text-[#E09F5E]" />
                 <div>
                   <h3 className="font-bold text-[15px] text-foreground">Dark mode</h3>
                   <p className="text-[12px] text-muted-foreground font-medium">Easier on the eyes at night</p>
@@ -108,7 +108,7 @@ export default function SettingsPage() {
               </div>
               <button 
                 onClick={() => setDarkMode(!darkMode)}
-                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${darkMode ? 'bg-[#A2705D]' : 'bg-[#D6CFC8]'}`}
+                className={`w-12 h-[26px] rounded-full relative transition-colors cursor-pointer ${darkMode ? 'bg-[#E09F5E]' : 'bg-[#D6CFC8]'}`}
               >
                 <div className={`absolute top-1 w-[18px] h-[18px] bg-white rounded-full transition-transform ${darkMode ? 'left-[26px]' : 'left-1'}`} />
               </button>
@@ -119,7 +119,7 @@ export default function SettingsPage() {
 
         {/* Buttons */}
         <div className="flex items-center space-x-4 pt-4">
-          <button className="h-[48px] px-8 bg-[#A2705D] text-white font-bold rounded-full transition-colors shadow-sm text-[15px] hover:bg-[#8e6150] cursor-pointer">
+          <button className="h-[48px] px-8 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-bold rounded-full transition-colors shadow-sm text-[15px] cursor-pointer">
             Save changes
           </button>
           <button className="h-[48px] px-8 bg-transparent border border-border/80 text-foreground font-bold rounded-full transition-colors text-[15px] hover:bg-accent/50 cursor-pointer">
