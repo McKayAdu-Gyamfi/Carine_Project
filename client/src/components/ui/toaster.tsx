@@ -37,12 +37,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div 
             key={t.id} 
-            className="pointer-events-auto bg-white dark:bg-card border border-[#E09F5E]/30 shadow-xl rounded-2xl p-4 min-w-[280px] max-w-md flex items-center justify-between animate-in slide-in-from-right-10 duration-300"
+            className="pointer-events-auto bg-white dark:bg-card border border-[#C56A30]/30 shadow-xl rounded-2xl p-4 min-w-[280px] max-w-md flex items-center justify-between animate-in slide-in-from-right-10 duration-300"
           >
             <div className="flex items-center gap-3">
-              {t.type === "success" && <CheckCircle2 className="w-5 h-5 text-[#E09F5E]" />}
+              {t.type === "success" && <CheckCircle2 className="w-5 h-5 text-[#C56A30]" />}
               {t.type === "error" && <XCircle className="w-5 h-5 text-red-500" />}
-              {t.type === "info" && <Info className="w-5 h-5 text-[#E09F5E]" />}
+              {t.type === "info" && <Info className="w-5 h-5 text-[#C56A30]" />}
               <span className="text-sm font-extrabold text-foreground">{t.message}</span>
             </div>
             <button onClick={() => removeToast(t.id)} className="p-1 hover:bg-accent rounded-full transition-colors ml-4">

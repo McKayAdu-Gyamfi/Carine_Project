@@ -9,14 +9,6 @@ import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
 import { MOST_POPULAR, NEARBY_PLACES, ALL_HOSTELS } from "../data/hostels";
 import { useToast } from "@/components/ui/toaster";
 
-const getBadgeStyle = (availability: string) => {
-  switch (availability?.toUpperCase()) {
-    case 'AVAILABLE': return { bg: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-500 animate-pulse' };
-    case 'FULL': return { bg: 'bg-destructive/20 text-destructive dark:text-red-400', dot: 'bg-destructive' };
-    default: return { bg: 'bg-amber-500/20 text-amber-600 dark:text-amber-400', dot: 'bg-amber-500' };
-  }
-};
-
 export default function Explore() {
   const { toast } = useToast();
   const location = useLocation();
@@ -76,7 +68,7 @@ export default function Explore() {
     <div className="flex flex-col min-h-screen bg-background pb-20 relative">
       {/* Mobile Top App Bar */}
       <div className="lg:hidden">
-        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+        <TopNav />
       </div>
 
       {/* Desktop Header */}
@@ -102,12 +94,12 @@ export default function Explore() {
               placeholder="Search address, or near you" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-14 bg-[#F8F6F3] rounded-[16px] pl-12 pr-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#E09F5E] shadow-none border-none transition-all"
+              className="w-full h-14 bg-[#F8F6F3] rounded-[16px] pl-12 pr-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#C56A30] shadow-none border-none transition-all"
             />
           </div>
           <button 
             onClick={() => setIsFilterOpen(true)}
-            className="w-14 h-14 flex items-center justify-center bg-[#E09F5E] hover:bg-[#c88b4d] text-white rounded-[16px] shadow-sm transition-transform active:scale-95 cursor-pointer"
+            className="w-14 h-14 flex items-center justify-center bg-[#C56A30] hover:bg-[#b05b26] text-white rounded-[16px] shadow-sm transition-transform active:scale-95 cursor-pointer"
           >
             <SlidersHorizontal className="w-5 h-5" />
           </button>
@@ -120,8 +112,8 @@ export default function Explore() {
               key={idx} 
               className={`px-5 py-2 rounded-full font-extrabold text-[13px] whitespace-nowrap transition-colors cursor-pointer ${
                 idx === 0 
-                  ? "bg-[#E09F5E] text-white shadow-sm" 
-                  : "bg-transparent text-[#E09F5E] hover:bg-[#E09F5E]/10"
+                  ? "bg-[#C56A30] text-white shadow-sm" 
+                  : "bg-transparent text-[#C56A30] hover:bg-[#C56A30]/10"
               }`}
             >
               {chip}

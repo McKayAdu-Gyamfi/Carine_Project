@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
 import { ALL_HOSTELS } from "../data/hostels";
-import { Heart, MapPin, Trash2, Search, SlidersHorizontal, Bookmark } from "lucide-react";
+import { Search, SlidersHorizontal, Bookmark, MapPin, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import FilterModal from "@/components/FilterModal";
 import HostelDetailsOverlay from "@/components/HostelDetailsOverlay";
@@ -68,7 +68,7 @@ export default function Saved() {
   return (
     <div className="flex flex-col min-h-screen bg-background transition-colors pb-20 relative">
       <div className="lg:hidden">
-        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+        <TopNav />
       </div>
       
       {/* Desktop Header */}
@@ -81,7 +81,7 @@ export default function Saved() {
         <div className="flex items-center justify-between lg:hidden">
           <h1 className="text-2xl font-bold text-foreground">Saved Hostels</h1>
           {savedHostelIds.length > 0 && (
-            <span className="bg-primary/10 text-primary text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">{savedHostelIds.length} Saved</span>
+            <span className="bg-[#C56A30]/10 text-[#C56A30] text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">{savedHostelIds.length} Saved</span>
           )}
         </div>
 
@@ -95,7 +95,7 @@ export default function Saved() {
                 placeholder="Search your saved list" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-14 bg-card rounded-2xl pl-12 pr-4 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary shadow-sm border border-border/50 transition-all"
+                className="w-full h-14 bg-card rounded-2xl pl-12 pr-4 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#C56A30] shadow-sm border border-border/50 transition-all"
               />
             </div>
             <button 
@@ -110,7 +110,7 @@ export default function Saved() {
         {filteredSaved.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-20 lg:mt-32">
             <div className={`w-24 h-24 rounded-full bg-[#FDFCFB] flex items-center justify-center mb-6 shadow-sm border border-border/40 ${searchQuery ? 'hidden' : 'flex'}`}>
-              <Bookmark className="w-8 h-8 text-[#E09F5E]" />
+              <Bookmark className="w-8 h-8 text-[#C56A30]" />
             </div>
             <Search className={`w-16 h-16 text-muted-foreground mb-4 opacity-50 ${searchQuery ? 'block' : 'hidden'}`} />
             
@@ -122,7 +122,7 @@ export default function Saved() {
             </p>
             
             {!searchQuery && (
-              <Link to="/explore" className="inline-flex items-center justify-center h-12 px-8 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-bold rounded-full transition-colors shadow-sm text-[15px]">
+              <Link to="/explore" className="inline-flex items-center justify-center h-12 px-8 bg-[#C56A30] hover:bg-[#b05b26] text-white font-bold rounded-full transition-colors shadow-sm text-[15px]">
                 <Search className="w-4 h-4 mr-2" />
                 Explore hostels
               </Link>
@@ -134,19 +134,19 @@ export default function Saved() {
               <div 
                 key={hostel.id} 
                 onClick={() => setSelectedHostel(hostel)}
-                className="w-full bg-card rounded-3xl p-3 shadow-md border border-border flex items-center justify-between group animate-in fade-in slide-in-from-bottom-4 duration-300 cursor-pointer hover:shadow-lg transition-all"
+                className="w-full bg-white dark:bg-card rounded-[24px] p-4 shadow-sm border border-border/40 flex items-center justify-between group animate-in fade-in slide-in-from-bottom-4 duration-300 cursor-pointer hover:shadow-md transition-all"
               >
                 <div className="flex items-center space-x-4">
-                  <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-20 h-20 rounded-2xl object-cover shadow-sm" />
+                  <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-20 h-20 rounded-[18px] object-cover shadow-sm" />
                   <div className="flex flex-col">
-                    <h3 className="font-bold text-base text-foreground mb-1">{hostel.name}</h3>
-                    <div className="flex items-center text-muted-foreground text-xs font-medium mb-1">
-                      <MapPin className="w-3.5 h-3.5 mr-1" />
-                      <span className="truncate max-w-[120px]">{hostel.location}</span>
+                    <h3 className="font-extrabold text-[16px] text-foreground mb-1">{hostel.name}</h3>
+                    <div className="flex items-center text-muted-foreground text-[12px] font-medium mb-1.5">
+                      <MapPin className="w-3.5 h-3.5 mr-1 text-[#C56A30]" />
+                      <span className="truncate max-w-[160px]">{hostel.location}</span>
                     </div>
                     <div className="flex items-baseline">
-                      <span className="text-primary font-bold text-sm">GHS {hostel.price}</span>
-                      <span className="text-muted-foreground text-[10px] ml-1">/ {hostel.priceFreq}</span>
+                      <span className="text-[#C56A30] font-extrabold text-sm">GHS {(hostel.startingPrice || hostel.price)?.toLocaleString()}</span>
+                      <span className="text-muted-foreground text-[10px] font-medium ml-1">/ {hostel.priceFreq || 'sem'}</span>
                     </div>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function Saved() {
                 <div className="flex flex-col items-center justify-center space-y-2 pr-2">
                   <button 
                     onClick={(e) => handleUnsave(e, hostel.id)}
-                    className="w-10 h-10 flex items-center justify-center rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-colors shadow-sm"
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-colors shadow-sm cursor-pointer"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>

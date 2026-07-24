@@ -44,7 +44,7 @@ export default function DesktopSidebar() {
             >
               {/* Active vertical marker */}
               {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#E09F5E] rounded-r-md" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#C56A30] rounded-r-md" />
               )}
               
               <Icon className={`w-6 h-6 shrink-0 ${isActive ? 'text-canyon' : 'text-[#8C8A88]'}`} strokeWidth={isActive ? 2.5 : 2} />

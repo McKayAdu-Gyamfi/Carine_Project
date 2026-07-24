@@ -12,7 +12,7 @@ export default function Profile() {
       
       {/* Mobile Header */}
       <div className="lg:hidden">
-        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+        <TopNav />
       </div>
 
       {/* Desktop Header */}
@@ -103,7 +103,7 @@ export default function Profile() {
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col justify-between h-[120px]">
-            <Heart className="w-5 h-5 text-[#E09F5E]" />
+            <Heart className="w-5 h-5 text-[#C56A30]" />
             <div>
               <span className="text-[26px] font-extrabold text-foreground block leading-none mb-1">7</span>
               <span className="text-[13px] font-medium text-muted-foreground">Saved hostels</span>
@@ -111,7 +111,7 @@ export default function Profile() {
           </div>
 
           <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col justify-between h-[120px]">
-            <BedDouble className="w-5 h-5 text-[#E09F5E]" />
+            <BedDouble className="w-5 h-5 text-[#C56A30]" />
             <div>
               <span className="text-[26px] font-extrabold text-foreground block leading-none mb-1">2</span>
               <span className="text-[13px] font-medium text-muted-foreground">Past bookings</span>
@@ -119,7 +119,7 @@ export default function Profile() {
           </div>
 
           <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-5 shadow-sm flex flex-col justify-between h-[120px]">
-            <Star className="w-5 h-5 text-[#E09F5E]" />
+            <Star className="w-5 h-5 text-[#C56A30]" />
             <div>
               <span className="text-[26px] font-extrabold text-foreground block leading-none mb-1">3</span>
               <span className="text-[13px] font-medium text-muted-foreground">Reviews written</span>

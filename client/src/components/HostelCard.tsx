@@ -55,7 +55,7 @@ export default function HostelCard({
         
         {/* Rating Badge Top Left */}
         <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center space-x-1 shadow-sm">
-          <Crown className="w-3.5 h-3.5 text-[#E09F5E] fill-[#E09F5E]" />
+          <Crown className="w-3.5 h-3.5 text-[#C56A30] fill-[#C56A30]" />
           <span className="text-xs font-extrabold text-white">{hostel.rating.toFixed(1)}</span>
         </div>
 
@@ -65,7 +65,7 @@ export default function HostelCard({
             onClick={onSave}
             className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md hover:bg-white transition-colors shadow-sm z-10 cursor-pointer"
           >
-            <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-[#E09F5E] text-[#E09F5E]' : 'text-gray-500'}`} />
+            <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-[#C56A30] text-[#C56A30]' : 'text-gray-500'}`} />
           </button>
         )}
         
@@ -81,7 +81,7 @@ export default function HostelCard({
 
       <div className="p-5 flex-1 flex flex-col justify-between bg-white dark:bg-card">
         <div>
-          <h4 className="font-extrabold text-foreground text-[18px] truncate mb-0.5 group-hover:text-[#E09F5E] transition-colors">
+          <h4 className="font-extrabold text-foreground text-[18px] truncate mb-0.5 group-hover:text-[#C56A30] transition-colors">
             {hostel.name}
           </h4>
           <p className="text-muted-foreground text-[13px] font-medium truncate mb-3">

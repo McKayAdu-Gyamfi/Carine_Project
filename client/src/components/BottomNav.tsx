@@ -25,11 +25,11 @@ export default function BottomNav() {
             to={item.path}
             className={cn(
               "flex flex-col items-center justify-center w-full h-full relative transition-colors cursor-pointer",
-              isActive ? "text-[#E09F5E]" : "text-muted-foreground hover:text-foreground"
+              isActive ? "text-[#C56A30]" : "text-muted-foreground hover:text-foreground"
             )}
           >
             {isActive && (
-              <span className="absolute top-2 w-1.5 h-1.5 bg-[#E09F5E] rounded-full" />
+              <span className="absolute top-2 w-1.5 h-1.5 bg-[#C56A30] rounded-full" />
             )}
             <Icon className={cn("w-5 h-5 mb-1", isActive && "stroke-[2.5]")} />
             <span className="text-[11px] font-extrabold">{item.name}</span>

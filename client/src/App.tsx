@@ -21,6 +21,14 @@ const ManagerProperties = React.lazy(() => import("./pages/manager/ManagerProper
 const ManagerBookings = React.lazy(() => import("./pages/manager/ManagerBookings"));
 const PaymentDetails = React.lazy(() => import("./pages/PaymentDetails"));
 
+const AdminLayout = React.lazy(() => import("./components/AdminLayout"));
+const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminUsers = React.lazy(() => import("./pages/admin/AdminUsers"));
+const AdminHostels = React.lazy(() => import("./pages/admin/AdminHostels"));
+const AdminSchools = React.lazy(() => import("./pages/admin/AdminSchools"));
+const AdminRoomTours = React.lazy(() => import("./pages/admin/AdminRoomTours"));
+const AdminSettings = React.lazy(() => import("./pages/admin/AdminSettings"));
+
 const ScreenLoader = () => (
   <div className="flex h-screen w-full items-center justify-center bg-background">
     <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -55,6 +63,17 @@ export default function App() {
           <Route path="/manager" element={<ManagerDashboard />} />
           <Route path="/manager/properties" element={<ManagerProperties />} />
           <Route path="/manager/bookings" element={<ManagerBookings />} />
+        </Route>
+
+        {/* Admin Routes */}
+        <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/hostels" element={<AdminHostels />} />
+          <Route path="/admin/schools" element={<AdminSchools />} />
+          <Route path="/admin/room-tours" element={<AdminRoomTours />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
         
         {/* Full-screen routes without bottom nav */}

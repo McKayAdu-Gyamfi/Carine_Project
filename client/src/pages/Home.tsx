@@ -1,5 +1,4 @@
-import { Star, Search, Bell } from "lucide-react";
-// import { Input } from "@/components/ui/input";
+import { Star, Search } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Link, useLocation } from "react-router-dom";
 import TopNav from "@/components/TopNav";
@@ -23,7 +22,6 @@ export default function Home() {
   const { toast } = useToast();
   const location = useLocation();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [heroIndex, setHeroIndex] = useState(0);
   const [selectedHostel, setSelectedHostel] = useState<any>(() => {
     return location.state?.restoreHostel ? ALL_HOSTELS.find(h => h.id === location.state.restoreHostel) || null : null;
   });
@@ -53,20 +51,11 @@ export default function Home() {
     localStorage.setItem("saved_hostels", JSON.stringify(newSaved));
   };
 
-  const carouselImages = ALL_HOSTELS.map(h => h.image);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % carouselImages.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [carouselImages.length]);
-
   return (
     <div className="flex flex-col min-h-screen bg-background pb-6 transition-colors">
       {/* Mobile Top App Bar */}
       <div className="lg:hidden">
-        <TopNav rightAction={<div className="hidden sm:block"><NotificationsDropdown /></div>} />
+        <TopNav />
       </div>
 
       {/* Desktop Header */}
@@ -76,7 +65,7 @@ export default function Home() {
           <input 
             type="text" 
             placeholder="Search hostels near Berekuso..." 
-            className="w-full h-[52px] pl-12 pr-4 bg-white/60 border border-border/50 rounded-full text-[15px] font-medium outline-none focus:ring-2 focus:ring-[#E09F5E]/30 transition-all shadow-sm backdrop-blur-sm"
+            className="w-full h-[52px] pl-12 pr-4 bg-white/60 border border-border/50 rounded-full text-[15px] font-medium outline-none focus:ring-2 focus:ring-[#C56A30]/30 transition-all shadow-sm backdrop-blur-sm"
           />
         </div>
         <div className="flex items-center space-x-4">
@@ -96,13 +85,13 @@ export default function Home() {
             }}
           />
           <div className="relative z-10">
-            <p className="text-[11px] font-extrabold tracking-[0.2em] text-[#E09F5E] uppercase mb-2">
+            <p className="text-[11px] font-extrabold tracking-[0.2em] text-[#C56A30] uppercase mb-2">
               WELCOME BACK
             </p>
             <h1 className="text-white text-[26px] font-extrabold leading-tight tracking-tight mb-5">
               Find your perfect room
             </h1>
-            <Link to="/explore" className="inline-flex items-center justify-center h-11 px-7 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-extrabold rounded-full transition-colors shadow-sm text-sm cursor-pointer">
+            <Link to="/explore" className="inline-flex items-center justify-center h-11 px-7 bg-[#C56A30] hover:bg-[#b05b26] text-white font-extrabold rounded-full transition-colors shadow-sm text-sm cursor-pointer">
               Explore
             </Link>
           </div>
@@ -119,13 +108,13 @@ export default function Home() {
             }}
           />
           <div className="relative z-10 max-w-xl">
-            <p className="text-[12px] font-bold tracking-[0.2em] text-[#E09F5E] uppercase mb-3">
+            <p className="text-[12px] font-bold tracking-[0.2em] text-[#C56A30] uppercase mb-3">
               WELCOME BACK, SARAH
             </p>
             <h1 className="text-white text-[48px] font-extrabold leading-[1.1] tracking-tight mb-8">
               Find your perfect room
             </h1>
-            <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-[#E09F5E] hover:bg-[#c88b4d] text-white font-bold rounded-full transition-colors shadow-lg shadow-black/20 text-[16px] cursor-pointer">
+            <Link to="/explore" className="inline-flex items-center justify-center h-14 px-8 bg-[#C56A30] hover:bg-[#b05b26] text-white font-bold rounded-full transition-colors shadow-lg shadow-black/20 text-[16px] cursor-pointer">
               Explore hostels
             </Link>
           </div>
@@ -136,7 +125,7 @@ export default function Home() {
       <section className="py-2 px-4 lg:px-4">
         <div className="flex items-center justify-between mb-4 lg:mb-6">
           <h3 className="text-xl lg:text-[24px] font-extrabold tracking-tight text-foreground">Featured</h3>
-          <Link to="/explore" className="text-sm font-bold text-[#E09F5E] hover:underline cursor-pointer">View all</Link>
+          <Link to="/explore" className="text-sm font-bold text-[#C56A30] hover:underline cursor-pointer">View all</Link>
         </div>
         
         {/* Mobile Vertical Stack */}

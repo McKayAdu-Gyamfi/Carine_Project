@@ -81,7 +81,7 @@ export default function NotificationsDropdown() {
       >
         <Bell className="w-5 h-5 text-[#5E5B58]" />
         {unreadCount > 0 && (
-          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-[#E09F5E] rounded-full border-2 border-white" />
+          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-[#C56A30] rounded-full border-2 border-white" />
         )}
       </button>
 
@@ -92,7 +92,7 @@ export default function NotificationsDropdown() {
           <div className="p-4 border-b border-border/40 flex items-center justify-between bg-white dark:bg-card">
             <h3 className="font-extrabold text-lg text-foreground">Notifications</h3>
             {unreadCount > 0 && (
-              <button onClick={markAllAsRead} className="text-xs font-extrabold text-[#E09F5E] hover:underline transition-colors mt-1 cursor-pointer">
+              <button onClick={markAllAsRead} className="text-xs font-extrabold text-[#C56A30] hover:underline transition-colors mt-1 cursor-pointer">
                 Mark all as read
               </button>
             )}
@@ -106,7 +106,7 @@ export default function NotificationsDropdown() {
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 text-[11px] sm:text-xs font-extrabold py-1.5 rounded-lg transition-all cursor-pointer ${
                     activeTab === tab 
-                      ? "bg-[#E09F5E] text-white shadow-sm" 
+                      ? "bg-[#C56A30] text-white shadow-sm" 
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -123,14 +123,14 @@ export default function NotificationsDropdown() {
                 key={n.id}
                 onClick={() => markAsRead(n.id)}
                 className={`p-3 rounded-2xl transition-colors cursor-pointer flex gap-4 ${
-                  n.read ? 'opacity-70 hover:bg-accent/30' : 'bg-[#E09F5E]/10 border border-[#E09F5E]/20 hover:bg-[#E09F5E]/15'
+                  n.read ? 'opacity-70 hover:bg-accent/30' : 'bg-[#C56A30]/10 border border-[#C56A30]/20 hover:bg-[#C56A30]/15'
                 }`}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border bg-[#E09F5E]/15 text-[#E09F5E] border-[#E09F5E]/30`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border bg-[#C56A30]/15 text-[#C56A30] border-[#C56A30]/30`}>
                   {n.icon}
                 </div>
                 <div className="flex-1 relative">
-                  {!n.read && <div className="absolute top-1 right-0 w-2 h-2 rounded-full bg-[#E09F5E]" />}
+                  {!n.read && <div className="absolute top-1 right-0 w-2 h-2 rounded-full bg-[#C56A30]" />}
                   <div className="flex justify-between items-start mb-0.5">
                     <h4 className={`font-extrabold text-[13px] ${n.read ? 'text-foreground/80' : 'text-foreground pr-4'}`}>{n.title}</h4>
                   </div>

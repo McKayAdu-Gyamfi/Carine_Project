@@ -338,7 +338,7 @@ export default function Login() {
               </button>
               <p className="text-center text-[13px] text-white/90 mt-4 font-medium">
                 Already have an account?{" "}
-                <button onClick={() => { setAuthMode('signin'); setShowMobileForm(true); }} className="text-[#E09F5E] font-bold cursor-pointer hover:underline">Sign in</button>
+                <button onClick={() => { setAuthMode('signin'); setShowMobileForm(true); }} className="text-[#C56A30] font-bold cursor-pointer hover:underline">Sign in</button>
               </p>
             </div>
 
