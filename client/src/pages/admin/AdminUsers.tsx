@@ -73,7 +73,7 @@ export default function AdminUsers() {
   return (
     <div className="space-y-6">
       {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-6 border-b border-solid border-border/80">
         <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">Users</h1>
         
         <div className="relative w-full sm:w-72">

@@ -15,7 +15,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Header Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-6 mb-6 border-b border-solid border-border/80">
         <div>
           <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">Platform overview</h1>
           <p className="text-[13px] text-muted-foreground font-medium">Spring term 2026 · updated 5 min ago</p>

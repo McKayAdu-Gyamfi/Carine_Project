@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { ArrowRight, Shield, HelpCircle, CheckCircle2, FileText, Lock, Eye, EyeOff, CheckCircle, Monitor, BookOpen, Search, ChevronLeft } from "lucide-react";
+import { Shield, CheckCircle2, Eye, EyeOff, CheckCircle, Monitor, BookOpen, Search, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
 import { Input } from "@/components/ui/input";
 
-import { TygerAvatar } from 'tyger-avatar';
+// import { TygerAvatar } from 'tyger-avatar';
 
 const AVATARS = [
   "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
@@ -17,7 +17,6 @@ export default function Login() {
   const [step, setStep] = useState<"institution" | "login" | "avatar">("institution");
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [institutionQuery, setInstitutionQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -47,7 +46,9 @@ export default function Login() {
 
   const handleLoginClick = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
-    setStep("avatar");
+    // setStep("avatar");
+    localStorage.setItem("userAvatar", "SA");
+    navigate("/");
   };
 
   const handleComplete = () => {
@@ -64,19 +65,19 @@ export default function Login() {
 
   if (step === "institution") {
     return (
-      <div className="flex flex-col h-[100dvh] w-full overflow-hidden relative font-sans bg-[#F8F6F3] sm:bg-[#9A6A56]">
+      <div className="flex flex-col h-[100dvh] w-full overflow-hidden relative font-sans bg-[#F8F6F3] sm:bg-gradient-to-br sm:from-[#4A2E1B] sm:to-[#2A1A0F]">
         {/* Floating background circles - Desktop Only */}
         <div 
           className="hidden sm:block absolute top-[-10%] right-[-15%] w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ backgroundColor: '#AC7B67', animation: 'float 15s ease-in-out infinite' }}
+          style={{ backgroundColor: '#6B4226', animation: 'float 15s ease-in-out infinite' }}
         />
         <div 
           className="hidden sm:block absolute bottom-[-15%] left-[-15%] w-[500px] h-[500px] rounded-full pointer-events-none"
-          style={{ backgroundColor: '#A2705D', animation: 'float 18s ease-in-out infinite 5s' }}
+          style={{ backgroundColor: '#5C361D', animation: 'float 18s ease-in-out infinite 5s' }}
         />
         <div 
           className="hidden sm:block absolute top-[20%] left-[20%] w-[350px] h-[350px] rounded-full pointer-events-none"
-          style={{ backgroundColor: '#8B5C4A', animation: 'float 22s ease-in-out infinite 2s' }}
+          style={{ backgroundColor: '#452714', animation: 'float 22s ease-in-out infinite 2s' }}
         />
 
         {/* Top Header - Desktop Only */}
@@ -88,41 +89,35 @@ export default function Login() {
         <div className="flex-1 flex items-center justify-center z-10 p-0 sm:p-6 h-full overflow-hidden">
           <div className="bg-transparent sm:bg-[#F8F6F3] sm:rounded-[28px] shadow-none sm:shadow-2xl sm:shadow-black/20 w-full h-full sm:h-auto max-w-[540px] p-6 pb-8 pt-8 sm:p-10 flex flex-col">
             
-            {/* Progress Bar & Mobile Back */}
+            {/* Progress Bar */}
             <div className="flex items-center w-full mb-8">
-              <button 
-                onClick={() => setStep("login")}
-                className="sm:hidden w-10 h-10 mr-4 bg-white rounded-full flex items-center justify-center shadow-sm border border-border text-foreground flex-shrink-0"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
               <div className="flex-1 flex items-center space-x-4">
-                <div className="flex-1 h-1.5 bg-border/60 rounded-full overflow-hidden">
+                <div className="flex-1 h-1.5 bg-[#E5E0D8] rounded-full overflow-hidden">
                   <div className="h-full bg-canyon rounded-full w-1/2"></div>
                 </div>
-                <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">2 / 4</span>
+                <span className="text-xs font-bold text-[#8C8279] whitespace-nowrap">2 / 4</span>
               </div>
             </div>
 
             {/* Header */}
             <div className="mb-6">
-              <h1 className="text-[28px] font-extrabold tracking-tight text-foreground mb-1.5">
+              <h1 className="text-[28px] font-extrabold tracking-tight text-[#463C38] mb-1.5">
                 Where do you study?
               </h1>
-              <p className="text-[15px] text-muted-foreground font-medium">
+              <p className="text-[15px] text-[#8C8279] font-medium">
                 We'll show hostels closest to your campus.
               </p>
             </div>
 
             {/* Search */}
             <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A29A91] w-5 h-5" />
               <Input 
                 type="text" 
                 placeholder="Search university..." 
                 value={institutionQuery}
                 onChange={(e) => setInstitutionQuery(e.target.value)}
-                className="h-12 w-full pl-12 pr-4 bg-white border-border/80 rounded-xl text-[15px] font-medium focus-visible:ring-2 focus-visible:ring-canyon/30 focus-visible:border-canyon placeholder:text-muted-foreground/50 transition-all shadow-sm"
+                className="h-12 w-full pl-12 pr-4 bg-white border-[#E5E0D8] rounded-xl text-[15px] font-medium text-[#463C38] focus-visible:ring-2 focus-visible:ring-canyon/30 focus-visible:border-canyon placeholder:text-[#A29A91] transition-all shadow-sm"
               />
             </div>
 
@@ -146,8 +141,8 @@ export default function Login() {
                       {inst.abbr}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-[13px] text-foreground truncate">{inst.name}</div>
-                      <div className="text-[11px] font-medium text-muted-foreground truncate">{inst.location}</div>
+                      <div className="font-bold text-[13px] text-[#463C38] truncate">{inst.name}</div>
+                      <div className="text-[11px] font-medium text-[#8C8279] truncate">{inst.location}</div>
                     </div>
                     {isSelected && (
                       <div className="ml-2 w-5 h-5 rounded-full bg-canyon flex items-center justify-center flex-shrink-0">
@@ -161,12 +156,6 @@ export default function Login() {
 
             {/* Bottom Buttons */}
             <div className="mt-auto pt-4 flex items-center space-x-4 w-full">
-              <button 
-                onClick={() => setStep("login")} 
-                className="hidden sm:block h-12 px-8 rounded-full font-bold text-[14px] border border-border/80 text-foreground hover:bg-white transition-all cursor-pointer shadow-sm"
-              >
-                Back
-              </button>
               <button 
                 onClick={() => {
                   if (selectedInstitution) setStep("login");
@@ -206,7 +195,8 @@ export default function Login() {
                     : 'bg-muted hover:bg-accent hover:scale-105'
                 }`}
               >
-                <TygerAvatar name={avatar as any} size="xl" />
+                {/* <TygerAvatar name={avatar as any} size="xl" /> */}
+                <span className="text-[20px] font-bold">{avatar.slice(2,4)}</span>
               </button>
             ))}
           </div>
@@ -360,10 +350,10 @@ export default function Login() {
           
           {/* Heading */}
           <div className="mb-5">
-            <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-foreground leading-tight mb-1.5">
+            <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-[#463C38] leading-tight mb-1.5">
               {authMode === 'signup' ? 'Create your account' : 'Welcome back'}
             </h1>
-            <p className="text-sm text-muted-foreground font-medium">
+            <p className="text-sm text-[#8C8279] font-medium">
               {authMode === 'signup' ? 'Join Kaya Campus and find your next home.' : 'Sign in to continue your search.'}
             </p>
           </div>
@@ -374,40 +364,40 @@ export default function Login() {
             {/* Full name */}
             {authMode === 'signup' && (
               <div className="space-y-1">
-                <label className="text-sm font-semibold text-foreground">Full name</label>
+                <label className="text-sm font-semibold text-[#463C38]">Full name</label>
                 <Input 
                   type="text" 
                   placeholder="Sarah Adjei" 
-                  className="h-11 rounded-lg bg-white border-border text-[14px] font-medium placeholder:text-muted-foreground/50 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
+                  className="h-11 rounded-lg bg-white border-[#E5E0D8] text-[#463C38] text-[14px] font-medium placeholder:text-[#A29A91] focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
                 />
               </div>
             )}
             
             {/* University email */}
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-foreground">University email</label>
+              <label className="text-sm font-semibold text-[#463C38]">University email</label>
               <Input 
                 type="email" 
                 required 
                 placeholder="sarah.adjei@ashesi.edu.gh" 
-                className="h-11 rounded-lg bg-white border-border text-[14px] font-medium placeholder:text-muted-foreground/50 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
+                className="h-11 rounded-lg bg-white border-[#E5E0D8] text-[#463C38] text-[14px] font-medium placeholder:text-[#A29A91] focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
               />
             </div>
             
             {/* Password */}
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-foreground">Password</label>
+              <label className="text-sm font-semibold text-[#463C38]">Password</label>
               <div className="relative">
                 <Input 
                   type={showPassword ? "text" : "password"} 
                   required 
                   placeholder="••••••••" 
-                  className="h-11 rounded-lg bg-white border-border text-[14px] font-medium placeholder:text-muted-foreground/50 pr-16 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
+                  className="h-11 rounded-lg bg-white border-[#E5E0D8] text-[#463C38] text-[14px] font-medium placeholder:text-[#A29A91] pr-16 focus-visible:ring-2 focus-visible:ring-burnt-umber/30 focus-visible:border-burnt-umber"
                 />
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs font-semibold flex items-center space-x-1 cursor-pointer transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8279] hover:text-[#463C38] text-xs font-semibold flex items-center space-x-1 cursor-pointer transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   <span>{showPassword ? "Hide" : "Show"}</span>
@@ -433,15 +423,15 @@ export default function Login() {
 
           {/* Divider */}
           <div className="flex items-center justify-center space-x-4 my-4">
-            <div className="h-px bg-border flex-1" />
-            <span className="text-xs text-muted-foreground font-medium">or</span>
-            <div className="h-px bg-border flex-1" />
+            <div className="h-px bg-[#E5E0D8] flex-1" />
+            <span className="text-xs text-[#8C8279] font-medium">or</span>
+            <div className="h-px bg-[#E5E0D8] flex-1" />
           </div>
 
           {/* Microsoft SSO */}
           <button 
             onClick={handleLoginClick} 
-            className="w-full bg-white border border-border shadow-sm hover:shadow-md hover:bg-accent text-foreground rounded-full h-11 flex items-center justify-center space-x-3 font-semibold text-[14px] transition-all cursor-pointer transform hover:-translate-y-0.5"
+            className="w-full bg-white border border-[#E5E0D8] shadow-sm hover:shadow-md hover:bg-[#F8F6F3] text-[#463C38] rounded-full h-11 flex items-center justify-center space-x-3 font-semibold text-[14px] transition-all cursor-pointer transform hover:-translate-y-0.5"
           >
             <div className="grid grid-cols-2 gap-0.5 w-4 h-4 mr-1">
               <div className="bg-[#F25022]" />
@@ -453,7 +443,7 @@ export default function Login() {
           </button>
 
           {/* Footer Toggle */}
-          <p className="text-center text-[12px] text-muted-foreground mt-4 font-medium">
+          <p className="text-center text-[12px] text-[#8C8279] mt-4 font-medium">
             {authMode === 'signup' ? (
               <>
                 Already have an account?{" "}
@@ -473,17 +463,17 @@ export default function Login() {
 
           {/* Terms footer (only on signup) */}
           {authMode === 'signup' && (
-            <p className="text-center text-[11px] text-muted-foreground mt-3">
+            <p className="text-center text-[11px] text-[#8C8279] mt-3">
               By continuing you agree to our{" "}
               <a href="#" className="font-semibold text-canyon hover:underline">Terms & Privacy Policy</a>.
             </p>
           )}
 
           {/* Manager login - subtle link */}
-          <div className="flex items-center justify-center mt-5 pt-4 border-t border-border/50">
+          <div className="flex items-center justify-center mt-5 pt-4 border-t border-[#E5E0D8]">
             <button 
               onClick={handleManagerLogin} 
-              className="text-xs text-muted-foreground hover:text-foreground font-semibold flex items-center space-x-1.5 cursor-pointer transition-colors"
+              className="text-xs text-[#8C8279] hover:text-[#463C38] font-semibold flex items-center space-x-1.5 cursor-pointer transition-colors"
             >
               <Shield className="w-3.5 h-3.5" />
               <span>Manager Login</span>

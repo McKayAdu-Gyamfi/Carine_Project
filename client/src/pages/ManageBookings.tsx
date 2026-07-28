@@ -1,147 +1,192 @@
-import { ChevronLeft, MoreHorizontal, Clock, DollarSign, MessageCircle, MapPin, Loader2, CheckCircle2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useBookings } from "@/contexts/BookingContext";
-import { useToast } from "@/components/ui/toaster";
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ManageBookings() {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { bookings, cancelBooking } = useBookings();
-  const myBookings = bookings.filter((b) => b.studentName === "Nana Osei");
+  const [activeTab, setActiveTab] = useState("Upcoming");
+  
+  // Toggle this to see the empty state from Image 2
+  const isEmpty = false;
 
-  const pendingBookings = myBookings.filter((b) => b.status === "Pending");
-  const approvedBookings = myBookings.filter((b) => b.status === "Approved");
+  const bookings = [
+    {
+      id: 1,
+      status: "CONFIRMED",
+      ref: "KC-4B29X",
+      hostelName: "Dufie Annex",
+      roomDetails: "Premium Studio · Rm 402B · ensuite",
+      moveIn: "Jan 12, 2026",
+      semester: "Spring 2026",
+      amountPaid: "GHS 8,400",
+      amountDue: null,
+      expiresIn: null
+    },
+    {
+      id: 2,
+      status: "PAYMENT DUE",
+      ref: "KC-7J14M",
+      hostelName: "Legon Heights",
+      roomDetails: "Shared Twin · Rm 118 · shared bath",
+      moveIn: "Jan 15, 2026",
+      semester: "Spring 2026",
+      amountPaid: null,
+      amountDue: "GHS 5,200",
+      expiresIn: "Hold expires in 46h"
+    }
+  ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
-      
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 h-20 border-b border-border/50 sticky top-0 bg-background z-50">
-        <button onClick={() => navigate(-1)} className="p-2 hover:bg-accent rounded-full transition-colors cursor-pointer">
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <h1 className="text-lg font-bold">Your Bookings</h1>
-        <button className="p-2 hover:bg-accent rounded-full transition-colors">
-          <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
-        </button>
-      </div>
-
-      <div className="px-5 py-6">
+    <div className="flex flex-col min-h-screen bg-[#F0EFEA] font-sans pb-12">
+      {/* Header Container */}
+      <div className="px-6 lg:px-10 pt-10 pb-6 w-full mx-auto flex flex-col h-full">
         
-        {myBookings.length === 0 && (
-           <div className="flex flex-col items-center justify-center mt-20 text-center space-y-4">
-             <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground/50">
-                <Clock className="w-8 h-8" />
-             </div>
-             <p className="font-bold text-muted-foreground">You don't have any bookings yet.</p>
-           </div>
-        )}
+        {/* Top Header Row */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold text-[#463C38]">My bookings</h1>
+          <Link 
+            to="/explore"
+            className="flex items-center space-x-2 bg-[#A84A1A] hover:bg-[#8F3E15] text-white px-5 py-2.5 rounded-full font-bold text-[14px] shadow-sm transition-colors"
+          >
+            <Search className="w-4 h-4" />
+            <span>Find a room</span>
+          </Link>
+        </div>
 
-        {/* Pending Approval Bookings */}
-        {pendingBookings.length > 0 && (
-          <div className="mb-8 space-y-4">
-            <h2 className="text-[13px] font-extrabold uppercase tracking-widest text-muted-foreground mb-4 pl-1 flex items-center">
-              <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin text-amber-500" />
-              Pending Verification
-            </h2>
+        {isEmpty ? (
+          /* Empty State (Image 2) */
+          <div className="flex-1 flex flex-col items-center justify-center mt-20 text-center max-w-md mx-auto">
+            <div className="w-20 h-20 rounded-full bg-[#F1E8DC] flex items-center justify-center text-[#A84A1A] mb-6">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+            </div>
+            <h2 className="text-[22px] font-bold text-[#463C38] mb-3">No bookings yet</h2>
+            <p className="text-[14px] font-medium text-[#8C8279] mb-8 leading-relaxed">
+              When you reserve a room it'll show up here with your move-in details, reference, and directions.
+            </p>
+            <Link 
+              to="/explore"
+              className="flex items-center space-x-2 bg-[#A84A1A] hover:bg-[#8F3E15] text-white px-6 py-3 rounded-full font-bold text-[14px] shadow-sm transition-colors"
+            >
+              <Search className="w-4 h-4" />
+              <span>Explore hostels</span>
+            </Link>
+          </div>
+        ) : (
+          /* Populated State (Image 1) */
+          <>
+            {/* Tabs */}
+            <div className="flex space-x-8 border-b border-[#E5E0D8] mb-6">
+              {[
+                { name: "Upcoming", count: 2 },
+                { name: "Past", count: 3 },
+                { name: "Cancelled", count: 1 }
+              ].map(tab => (
+                <button
+                  key={tab.name}
+                  onClick={() => setActiveTab(tab.name)}
+                  className={`pb-3 text-[15px] font-bold transition-colors relative flex items-center space-x-1 ${
+                    activeTab === tab.name ? 'text-[#A84A1A]' : 'text-[#A29A91] hover:text-[#8C8279]'
+                  }`}
+                >
+                  <span>{tab.name}</span>
+                  <span>{tab.count}</span>
+                  {activeTab === tab.name && (
+                    <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#A84A1A] rounded-t-full" />
+                  )}
+                </button>
+              ))}
+            </div>
 
-            {pendingBookings.map((b) => (
-               <div key={b.id} className="bg-card border border-amber-500/30 rounded-[28px] overflow-hidden shadow-lg p-5 relative">
-                  <div className="flex space-x-4 mb-4">
-                    <div className="w-20 h-20 shrink-0 rounded-2xl overflow-hidden">
-                      <img src={b.image} loading="lazy" className="w-full h-full object-cover" alt={b.hostelName} />
+            {/* Bookings List */}
+            <div className="space-y-5">
+              {bookings.map((booking) => (
+                <div key={booking.id} className="bg-white rounded-2xl shadow-sm p-4 flex flex-col md:flex-row gap-5 relative">
+                  
+                  {/* Thumbnail Placeholder */}
+                  <div className="w-full md:w-[240px] h-[160px] md:h-auto rounded-xl shrink-0 relative overflow-hidden bg-[repeating-linear-gradient(45deg,#E5D0BA,#E5D0BA_15px,#F1E8DC_15px,#F1E8DC_30px)] flex items-center justify-center border border-[#E5D0BA]/50">
+                    <div className="bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-[10px] font-extrabold tracking-widest text-[#8C8279] shadow-sm">
+                      HOSTEL
                     </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start">
-                         <h3 className="font-bold text-base tracking-tight">{b.hostelName}</h3>
-                         <button onClick={() => { cancelBooking(b.id); toast("Booking request canceled", "info"); }} className="text-[10px] font-bold text-red-500 bg-red-500/10 hover:bg-red-500/20 px-2 py-1 rounded-md transition-colors cursor-pointer">
-                           Cancel
-                         </button>
+                  </div>
+
+                  {/* Middle Content */}
+                  <div className="flex-1 py-1 flex flex-col justify-between">
+                    <div>
+                      {/* Status & Ref */}
+                      <div className="flex items-center space-x-3 mb-2">
+                        {booking.status === "CONFIRMED" ? (
+                          <span className="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-widest">
+                            {booking.status}
+                          </span>
+                        ) : (
+                          <span className="bg-amber-50 text-amber-600 px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-widest flex items-center">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>
+                            {booking.status}
+                          </span>
+                        )}
+                        <span className="text-[11px] font-bold text-[#A29A91]">Ref <span className="text-[#8C8279]">{booking.ref}</span></span>
                       </div>
-                      <p className="text-xs font-semibold text-muted-foreground mt-0.5 flex items-center">
-                        <MapPin className="w-3 h-3 mr-1" /> {b.roomNumber} ({b.roomLabel})
-                      </p>
-                      <p className="font-extrabold text-amber-500 text-sm mt-1.5">GHS {b.price.toLocaleString()}</p>
+                      
+                      <h2 className="text-xl font-bold text-[#463C38] mb-0.5">{booking.hostelName}</h2>
+                      <p className="text-[13px] font-medium text-[#8C8279] mb-5">{booking.roomDetails}</p>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="flex items-start space-x-8">
+                      <div>
+                        <p className="text-[10px] font-extrabold text-[#A29A91] tracking-widest uppercase mb-1">Move-in</p>
+                        <p className="text-[13px] font-bold text-[#463C38]">{booking.moveIn}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-extrabold text-[#A29A91] tracking-widest uppercase mb-1">Semester</p>
+                        <p className="text-[13px] font-bold text-[#463C38]">{booking.semester}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-extrabold text-[#A29A91] tracking-widest uppercase mb-1">{booking.amountPaid ? 'Paid' : 'Due'}</p>
+                        <p className={`text-[13px] font-bold ${booking.amountPaid ? 'text-emerald-600' : 'text-[#A84A1A]'}`}>
+                          {booking.amountPaid || booking.amountDue}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="bg-amber-500/10 p-3 rounded-xl border border-amber-500/20">
-                     <p className="text-[11px] font-medium text-amber-600 dark:text-amber-400">
-                       <span className="font-bold uppercase tracking-wider block mb-0.5">Manager Approval Required</span>
-                       Your payment is currently being verified by the property manager. You will be notified once approved.
-                     </p>
+
+                  {/* Right Actions */}
+                  <div className="w-full md:w-[180px] shrink-0 border-t md:border-t-0 md:border-l border-[#F0EFEA] pt-4 md:pt-0 md:pl-5 flex flex-col justify-center space-y-3">
+                    {booking.status === "CONFIRMED" ? (
+                      <>
+                        <button className="w-full bg-[#A84A1A] hover:bg-[#8F3E15] text-white py-2.5 rounded-full font-bold text-[13px] transition-colors shadow-sm">
+                          View booking
+                        </button>
+                        <button className="w-full bg-white border border-[#C8B09A] text-[#A84A1A] hover:bg-[#F8F6F3] py-2.5 rounded-full font-bold text-[13px] transition-colors flex items-center justify-center space-x-1.5">
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                          <span>Directions</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="w-full bg-[#A84A1A] hover:bg-[#8F3E15] text-white py-2.5 rounded-full font-bold text-[13px] transition-colors shadow-sm">
+                          Complete payment
+                        </button>
+                        <button className="w-full bg-white border border-[#C8B09A] text-[#A84A1A] hover:bg-[#F8F6F3] py-2.5 rounded-full font-bold text-[13px] transition-colors">
+                          View details
+                        </button>
+                        {booking.expiresIn && (
+                          <p className="text-[10px] font-medium text-[#A29A91] text-center mt-1">
+                            {booking.expiresIn}
+                          </p>
+                        )}
+                      </>
+                    )}
                   </div>
-               </div>
-            ))}
-          </div>
+                  
+                </div>
+              ))}
+            </div>
+          </>
         )}
-
-        {/* Active Approved Booking Cards */}
-        {approvedBookings.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-[13px] font-extrabold uppercase tracking-widest text-emerald-500 mb-4 pl-1 flex items-center">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
-              Active Bookings
-            </h2>
-            
-            {approvedBookings.map((b) => (
-              <div key={b.id} className="bg-card border border-primary/20 rounded-[32px] overflow-hidden shadow-xl mb-6">
-                 <div className="relative h-[180px] w-full">
-                   <img src={b.image} loading="lazy" className="w-full h-full object-cover" alt={b.hostelName} />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                   
-                   <div className="absolute top-4 left-4 bg-emerald-500 text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-md flex items-center space-x-1">
-                     <CheckCircle2 className="w-3 h-3" />
-                     <span>Approved</span>
-                   </div>
-                   
-                   <div className="absolute bottom-4 left-4 right-4">
-                     <h3 className="text-2xl font-bold text-white mb-1">{b.hostelName}</h3>
-                     <div className="flex items-center text-white/80 text-xs font-semibold space-x-1">
-                       <MapPin className="w-3 h-3" />
-                       <span>{b.roomNumber} • {b.roomLabel}</span>
-                     </div>
-                   </div>
-                 </div>
-
-                 <div className="p-5">
-                   <div className="flex items-center justify-between mb-6 pb-6 border-b border-border/50">
-                     <div>
-                       <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Check-in</p>
-                       <p className="font-bold text-sm">Official Start Date</p>
-                     </div>
-                     <div className="h-8 w-px bg-border/50" />
-                     <div className="text-right">
-                       <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Total Paid</p>
-                       <p className="font-extrabold text-sm text-green-500">GHS {b.price.toLocaleString()}</p>
-                     </div>
-                   </div>
-
-                   <div className="grid grid-cols-2 gap-3">
-                     <button className="h-12 bg-accent hover:bg-accent/80 border border-border/50 rounded-2xl flex items-center justify-center space-x-2 font-bold text-xs transition-colors cursor-pointer">
-                       <MessageCircle className="w-4 h-4 text-muted-foreground" />
-                       <span>Contact Host</span>
-                     </button>
-                     <button className="h-12 bg-accent hover:bg-accent/80 border border-border/50 rounded-2xl flex items-center justify-center space-x-2 font-bold text-xs transition-colors cursor-pointer">
-                       <DollarSign className="w-4 h-4 text-muted-foreground" />
-                       <span>View Receipt</span>
-                     </button>
-                   </div>
-                   
-                   <div className="mt-3">
-                     <button 
-                       onClick={() => { cancelBooking(b.id); toast("Booking canceled", "info"); }}
-                       className="w-full h-12 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center font-bold text-xs transition-colors cursor-pointer"
-                     >
-                       Cancel Booking
-                     </button>
-                   </div>
-                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-
       </div>
     </div>
   );
 }
+

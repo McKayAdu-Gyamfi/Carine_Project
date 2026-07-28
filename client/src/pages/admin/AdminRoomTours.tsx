@@ -16,7 +16,7 @@ export default function AdminRoomTours() {
   return (
     <div className="space-y-6">
       {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-6 border-b border-solid border-border/80">
         <div className="flex items-center space-x-3">
           <Link to="/admin/hostels" className="w-10 h-10 rounded-full bg-white dark:bg-card border border-border/50 flex items-center justify-center text-foreground hover:bg-accent transition-colors">
             <ChevronLeft className="w-5 h-5" />
@@ -45,9 +45,9 @@ export default function AdminRoomTours() {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-6 lg:gap-x-0">
         {/* Left Column: Scenes Sidebar */}
-        <div className="space-y-4">
+        <div className="space-y-4 lg:border-r border-border/80 lg:pr-6">
           <h3 className="text-xs font-extrabold tracking-wider text-muted-foreground uppercase">SCENES</h3>
           
           <div className="space-y-3">
@@ -85,7 +85,7 @@ export default function AdminRoomTours() {
         </div>
 
         {/* Right Area: 360 Canvas & Details */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-3 space-y-6 lg:pl-6">
           {/* 360° PREVIEW Canvas */}
           <div 
             className="w-full h-80 rounded-[28px] bg-[#E8DDD0] border border-[#D2BDA7]/60 relative overflow-hidden shadow-sm flex items-center justify-center"

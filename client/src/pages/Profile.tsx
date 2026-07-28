@@ -2,7 +2,7 @@ import { Heart, BedDouble, Star, Settings, ShieldCheck, Bell, ChevronRight, LogO
 import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import NotificationsDropdown from "@/components/NotificationsDropdown";
-import { TygerAvatar } from 'tyger-avatar';
+// import { TygerAvatar } from 'tyger-avatar';
 
 export default function Profile() {
   const userAvatar = localStorage.getItem("userAvatar");
@@ -29,12 +29,14 @@ export default function Profile() {
         </div>
 
         {/* Profile Hero Banner Card */}
-        <div className="w-full bg-[#8C5B4F] rounded-[28px] p-6 lg:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-white shadow-sm relative overflow-hidden">
-          <div className="flex items-center space-x-5">
+        <div className="w-full bg-gradient-to-r from-[#3D261B] via-[#7B3C1F] to-[#B85822] rounded-[28px] p-6 lg:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-white shadow-sm relative overflow-hidden">
+          
+          <div className="flex items-center space-x-5 z-10">
             <div className="w-20 h-20 rounded-full bg-[#E5D0BA] flex items-center justify-center text-[#6c5e57] font-extrabold text-2xl shadow-md border-2 border-white/20 shrink-0 overflow-hidden">
-              {userAvatar?.startsWith("Tr") ? (
+              {/* userAvatar?.startsWith("Tr") ? (
                 <TygerAvatar name={userAvatar as any} size="2xl" />
-              ) : userAvatar?.startsWith("http") ? (
+              ) : */}
+              {userAvatar?.startsWith("http") ? (
                 <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
               ) : (
                 <span>SA</span>
@@ -56,7 +58,7 @@ export default function Profile() {
 
           <Link 
             to="/settings" 
-            className="w-full md:w-auto text-center bg-white text-[#8C5B4F] hover:bg-white/90 font-extrabold text-[15px] px-6 py-2.5 rounded-full transition-all shadow-sm shrink-0 cursor-pointer"
+            className="w-full md:w-auto text-center bg-white text-[#3D261B] hover:bg-white/90 font-extrabold text-[15px] px-6 py-2.5 rounded-full transition-all shadow-sm shrink-0 cursor-pointer z-10"
           >
             Edit profile
           </Link>

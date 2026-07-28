@@ -94,7 +94,7 @@ export default function Explore() {
               placeholder="Search address, or near you" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-14 bg-[#F8F6F3] rounded-[16px] pl-12 pr-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#C56A30] shadow-none border-none transition-all"
+              className="w-full h-14 bg-[#F4ECE3] dark:bg-card rounded-[16px] pl-12 pr-4 text-[15px] font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-[#C56A30] shadow-none border border-transparent dark:border-border transition-all"
             />
           </div>
           <button 
@@ -113,7 +113,7 @@ export default function Explore() {
               className={`px-5 py-2 rounded-full font-extrabold text-[13px] whitespace-nowrap transition-colors cursor-pointer ${
                 idx === 0 
                   ? "bg-[#C56A30] text-white shadow-sm" 
-                  : "bg-transparent text-[#C56A30] hover:bg-[#C56A30]/10"
+                  : "bg-[#F4ECE3] dark:bg-card text-[#C56A30] hover:bg-[#EBE2D8]"
               }`}
             >
               {chip}

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ChevronLeft, Pencil, Check, X } from "lucide-react";
+import { ChevronLeft, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { TygerAvatar } from 'tyger-avatar';
+// import { TygerAvatar } from 'tyger-avatar';
 
 const PREFERENCES = [
   "Quiet / Low Noise",
@@ -11,17 +11,16 @@ const PREFERENCES = [
   "Backup Generator"
 ];
 
-const AVATARS = [
-  "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
-  "TrFranklin", "TrImran", "TrMaria", "TrRachel", "TrShamila", 
-  "TrAlex", "TrFelix", "TrEnrique", "TrSophia", "TrHarry", 
-  "TrHelen", "TrStu", "TrNancy", "TrChad"
-];
+// const AVATARS = [
+//   "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
+//   "TrFranklin", "TrImran", "TrMaria", "TrRachel", "TrShamila", 
+//   "TrAlex", "TrFelix", "TrEnrique", "TrSophia", "TrHarry", 
+//   "TrHelen", "TrStu", "TrNancy", "TrChad"
+// ];
 
 export default function EditProfile() {
   const navigate = useNavigate();
-  const [userAvatar, setUserAvatar] = useState<string>(localStorage.getItem("userAvatar") || "TrFelix");
-  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
+  const [userAvatar] = useState<string>(localStorage.getItem("userAvatar") || "TrFelix");
   const [selectedPrefs, setSelectedPrefs] = useState<string[]>([
     "Air-Conditioned", 
     "Wi-Fi Included", 
@@ -63,20 +62,21 @@ export default function EditProfile() {
         <div className="flex flex-col items-center mb-8">
           <div className="relative w-[100px] h-[100px] mb-4">
             <div className="w-full h-full rounded-full overflow-hidden bg-accent flex items-center justify-center border-2 border-border shadow-md p-1">
-              {userAvatar?.startsWith("Tr") ? (
+              {/* userAvatar?.startsWith("Tr") ? (
                 <TygerAvatar name={userAvatar as any} size="3xl" />
-              ) : userAvatar?.startsWith("http") ? (
+              ) : */}
+              {userAvatar?.startsWith("http") ? (
                 <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
               ) : (
                 <span className="text-[50px] leading-none mb-1">{userAvatar}</span>
               )}
             </div>
-            <button 
+            {/* <button 
               onClick={() => setIsAvatarPickerOpen(true)}
               className="absolute bottom-0 right-0 w-8 h-8 bg-primary hover:bg-primary/90 rounded-full flex items-center justify-center border-2 border-background shadow-lg transition-colors cursor-pointer"
             >
               <Pencil className="w-4 h-4 text-primary-foreground" />
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -167,7 +167,7 @@ export default function EditProfile() {
       </div>
 
       {/* Avatar Picker Overlay */}
-      {isAvatarPickerOpen && (
+      {/* {isAvatarPickerOpen && (
         <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-[100] flex flex-col p-6 overflow-y-auto">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-[20px] font-bold tracking-tight mt-10">Choose Avatar</h2>
@@ -194,7 +194,7 @@ export default function EditProfile() {
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
     </div>
   );

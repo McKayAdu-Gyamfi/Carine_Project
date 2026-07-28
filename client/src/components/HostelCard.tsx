@@ -1,5 +1,4 @@
-import { Star, MapPin, Bookmark, Crown } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Bookmark, Crown } from "lucide-react";
 
 interface HostelCardProps {
   hostel: any;
@@ -18,28 +17,6 @@ export default function HostelCard({
   showHeart = false,
   className = ""
 }: HostelCardProps) {
-  const getBadgeStyle = (availability: string) => {
-    switch (availability?.toUpperCase()) {
-      case 'AVAILABLE':
-        return {
-          bg: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
-          dot: 'bg-emerald-500'
-        };
-      case 'FULL':
-        return {
-          bg: 'bg-red-500/15 text-red-600 dark:text-red-400',
-          dot: 'bg-red-500'
-        };
-      case 'FEW ROOMS LEFT':
-      default:
-        return {
-          bg: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
-          dot: 'bg-amber-500'
-        };
-    }
-  };
-  const badgeStyle = getBadgeStyle(hostel.availability);
-
   return (
     <div 
       onClick={onClick}
