@@ -8,7 +8,7 @@ export default function ManagerPayouts() {
         <h1 className="text-xl lg:text-2xl font-bold text-[#463C38]">Payouts</h1>
       </div>
 
-      <div className="px-5 lg:px-8 space-y-6 max-w-4xl">
+      <div className="px-5 lg:px-8 space-y-6 w-full">
          
          <div className="bg-[#A84A1A] rounded-2xl p-6 lg:p-8 shadow-sm text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-10">

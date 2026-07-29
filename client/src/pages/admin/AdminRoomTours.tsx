@@ -88,7 +88,7 @@ export default function AdminRoomTours() {
         <div className="lg:col-span-3 space-y-6 lg:pl-6">
           {/* 360° PREVIEW Canvas */}
           <div 
-            className="w-full h-80 rounded-[28px] bg-[#E8DDD0] border border-[#D2BDA7]/60 relative overflow-hidden shadow-sm flex items-center justify-center"
+            className="w-full h-80 rounded-2xl bg-[#E8DDD0] border border-[#D2BDA7]/60 relative overflow-hidden shadow-sm flex items-center justify-center"
             style={{
               backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(197, 106, 48, 0.15) 14px, rgba(197, 106, 48, 0.15) 18px)'
             }}
@@ -120,7 +120,7 @@ export default function AdminRoomTours() {
           {/* Bottom Cards Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Scene details */}
-            <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-6 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-card border border-border/40 rounded-2xl p-6 shadow-sm space-y-4">
               <h3 className="font-extrabold text-base text-foreground">Scene details</h3>
 
               <div className="space-y-1.5">
@@ -146,7 +146,7 @@ export default function AdminRoomTours() {
             </div>
 
             {/* Hotspots */}
-            <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-6 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-card border border-border/40 rounded-2xl p-6 shadow-sm space-y-4">
               <h3 className="font-extrabold text-base text-foreground">Hotspots</h3>
 
               <div className="space-y-2.5">

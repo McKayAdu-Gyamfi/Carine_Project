@@ -64,7 +64,7 @@ export default function AdminSchools() {
         {/* Right Column: Selected School Details & Map */}
         <div className="lg:col-span-2 space-y-6 lg:pl-6">
           {/* Map Header Box */}
-          <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-6 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-card border border-border/40 rounded-2xl p-6 shadow-sm space-y-4">
             <div>
               <h2 className="text-[22px] font-extrabold text-foreground leading-tight">{selectedSchool}</h2>
               <p className="text-[13px] text-muted-foreground font-medium flex items-center space-x-1 mt-0.5">

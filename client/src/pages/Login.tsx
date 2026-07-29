@@ -87,7 +87,7 @@ export default function Login() {
 
         {/* Center Card */}
         <div className="flex-1 flex items-center justify-center z-10 p-0 sm:p-6 h-full overflow-hidden">
-          <div className="bg-transparent sm:bg-[#F8F6F3] sm:rounded-[28px] shadow-none sm:shadow-2xl sm:shadow-black/20 w-full h-full sm:h-auto max-w-[540px] p-6 pb-8 pt-8 sm:p-10 flex flex-col">
+          <div className="bg-transparent sm:bg-[#F8F6F3] sm:rounded-2xl shadow-none sm:shadow-2xl sm:shadow-black/20 w-full h-full sm:h-auto max-w-[540px] p-6 pb-8 pt-8 sm:p-10 flex flex-col">
             
             {/* Progress Bar */}
             <div className="flex items-center w-full mb-8">

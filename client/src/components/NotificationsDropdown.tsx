@@ -87,7 +87,7 @@ export default function NotificationsDropdown() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-[-40px] sm:right-0 mt-3 w-[320px] sm:w-[360px] bg-white dark:bg-card border border-border/50 rounded-[24px] shadow-2xl z-50 overflow-hidden flex flex-col origin-top-right animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute right-[-40px] sm:right-0 mt-3 w-[320px] sm:w-[360px] bg-white dark:bg-card border border-border/50 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col origin-top-right animate-in fade-in zoom-in-95 duration-200">
           
           <div className="p-4 border-b border-border/40 flex items-center justify-between bg-white dark:bg-card">
             <h3 className="font-extrabold text-lg text-foreground">Notifications</h3>

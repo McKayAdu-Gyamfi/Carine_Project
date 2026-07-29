@@ -20,7 +20,7 @@ export default function ManagerCancelRefund() {
         </div>
       </div>
 
-      <div className="px-5 lg:px-8 flex flex-col lg:flex-row gap-6 max-w-5xl">
+      <div className="px-5 lg:px-8 flex flex-col lg:flex-row gap-6 w-full">
         
         {/* Left Column (Booking Details) */}
         <div className="flex-1 space-y-6">

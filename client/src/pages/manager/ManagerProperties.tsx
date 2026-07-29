@@ -17,10 +17,10 @@ export default function ManagerProperties() {
         </button>
       </div>
 
-      <div className="px-5 lg:px-8 space-y-4 max-w-4xl">
+      <div className="px-5 lg:px-8 space-y-4 w-full">
         
         {/* Cover Card */}
-        <div className="bg-white rounded-[24px] p-5 shadow-sm flex flex-col sm:flex-row gap-5">
+        <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row gap-5">
           <div className="w-full sm:w-[200px] h-32 rounded-xl bg-[#E5D0BA] flex items-center justify-center relative shrink-0 overflow-hidden">
              <div className="absolute inset-0 pattern-diagonal-lines pattern-[#C8B09A] pattern-bg-transparent pattern-size-4 pattern-opacity-40" />
              <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-widest text-[#5C4538] relative z-10">COVER</span>
@@ -36,7 +36,7 @@ export default function ManagerProperties() {
         </div>
 
         {/* Pricing */}
-        <div className="bg-white rounded-[24px] p-6 shadow-sm">
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="mb-6">
             <h3 className="text-base font-bold text-[#463C38] mb-1">Pricing per semester</h3>
             <p className="text-[13px] font-medium text-[#8C8279]">Set the price for each room type. Applies to new bookings.</p>
@@ -59,7 +59,7 @@ export default function ManagerProperties() {
         </div>
 
         {/* Amenities */}
-        <div className="bg-white rounded-[24px] p-6 shadow-sm">
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="mb-6">
             <h3 className="text-base font-bold text-[#463C38] mb-1">Amenities</h3>
             <p className="text-[13px] font-medium text-[#8C8279]">Tap to include. These show on your listing.</p>
@@ -95,7 +95,7 @@ export default function ManagerProperties() {
         </div>
 
         {/* Rooms */}
-        <div className="bg-white rounded-[24px] p-6 shadow-sm flex items-center justify-between">
+        <div className="bg-white rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <h3 className="text-base font-bold text-[#463C38]">Rooms</h3>
           <button className="flex items-center space-x-1.5 border border-[#E5E0D8] px-4 py-2 rounded-full text-[13px] font-bold text-[#A84A1A] hover:bg-[#F8F6F3] transition-colors cursor-pointer">
             <Plus className="w-4 h-4" />

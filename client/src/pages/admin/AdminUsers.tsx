@@ -128,7 +128,7 @@ export default function AdminUsers() {
       </div>
 
       {/* Users Table Card */}
-      <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-card border border-border/40 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>

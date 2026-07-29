@@ -20,7 +20,7 @@ export default function HostelCard({
   return (
     <div 
       onClick={onClick}
-      className={`w-full bg-white dark:bg-card border border-border/40 rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`w-full bg-white dark:bg-card border border-border/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       <div className="relative h-[190px] w-full shrink-0 overflow-hidden bg-muted">
         <img 
