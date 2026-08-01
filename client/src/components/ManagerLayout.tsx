@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import ManagerBottomNav from "./ManagerBottomNav";
+import ManagerSidebar from "./ManagerSidebar";
 import { useEffect } from "react";
 
 export default function ManagerLayout() {
@@ -9,12 +10,17 @@ export default function ManagerLayout() {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [pathname]);
 
+  const hideBottomNav = pathname.includes('cancel-refund');
+
   return (
-    <div className="flex flex-col min-h-screen pb-20 bg-accent/20 dark:bg-black/20 text-foreground">
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <ManagerBottomNav />
+    <div className="flex min-h-screen bg-[#F0EFEA] text-foreground">
+      <ManagerSidebar />
+      <div className="flex-1 flex flex-col min-h-screen lg:ml-[260px] pb-20 lg:pb-0 relative">
+        <main className="flex-1 w-full lg:pr-4">
+          <Outlet />
+        </main>
+        {!hideBottomNav && <ManagerBottomNav />}
+      </div>
     </div>
   );
 }

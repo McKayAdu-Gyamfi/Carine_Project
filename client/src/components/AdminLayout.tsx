@@ -20,7 +20,7 @@ export default function AdminLayout() {
       <aside className="w-[260px] shrink-0 bg-[#251D1A] text-white flex flex-col h-screen sticky top-0 py-7 px-4 select-none z-40">
         
         {/* Logo Section */}
-        <div className="px-3 mb-10">
+        <div className="px-3 pb-6 mb-8 border-b border-solid border-white/20 mx-2">
           <div className="flex items-center space-x-3">
             <Logo 
               iconClassName="h-9 w-auto shrink-0" 

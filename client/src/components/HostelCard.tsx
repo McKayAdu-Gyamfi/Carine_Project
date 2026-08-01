@@ -1,5 +1,4 @@
-import { Star, MapPin, Bookmark, Crown } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Bookmark, Crown } from "lucide-react";
 
 interface HostelCardProps {
   hostel: any;
@@ -18,32 +17,10 @@ export default function HostelCard({
   showHeart = false,
   className = ""
 }: HostelCardProps) {
-  const getBadgeStyle = (availability: string) => {
-    switch (availability?.toUpperCase()) {
-      case 'AVAILABLE':
-        return {
-          bg: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
-          dot: 'bg-emerald-500'
-        };
-      case 'FULL':
-        return {
-          bg: 'bg-red-500/15 text-red-600 dark:text-red-400',
-          dot: 'bg-red-500'
-        };
-      case 'FEW ROOMS LEFT':
-      default:
-        return {
-          bg: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
-          dot: 'bg-amber-500'
-        };
-    }
-  };
-  const badgeStyle = getBadgeStyle(hostel.availability);
-
   return (
     <div 
       onClick={onClick}
-      className={`w-full bg-white dark:bg-card border border-border/40 rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`w-full bg-white dark:bg-card border border-border/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       <div className="relative h-[190px] w-full shrink-0 overflow-hidden bg-muted">
         <img 

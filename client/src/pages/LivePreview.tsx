@@ -153,7 +153,7 @@ export default function LivePreview() {
             <span className="text-sm font-bold tracking-wide text-white">LIVE PREVIEW</span>
           </div>
 
-          <div className="bg-black/40 backdrop-blur-xl border border-white/20 rounded-3xl p-4 shadow-xl pointer-events-auto">
+          <div className="bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-xl pointer-events-auto">
             <h2 className="text-lg font-bold text-primary mb-1">Premium Studio</h2>
             <p className="text-sm text-white/90 leading-snug">Experience the layout and natural lighting of your future home.</p>
           </div>
@@ -163,7 +163,7 @@ export default function LivePreview() {
       {/* Dimensions Overlay */}
       {!isFullscreen && (
         <div className="absolute top-[220px] left-4 z-10 pointer-events-none animate-in fade-in slide-in-from-left-4 duration-700 delay-500">
-          <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl p-4 flex flex-col space-y-4 shadow-2xl relative overflow-hidden">
+          <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-col space-y-4 shadow-2xl relative overflow-hidden">
             {/* Decorative background glow */}
             <div className="absolute -top-10 -right-10 w-20 h-20 bg-primary/20 rounded-full blur-2xl"></div>
             
@@ -233,7 +233,7 @@ export default function LivePreview() {
 
       {/* Glass Amenities Card (Right/Top) */}
       {!isFullscreen && summary?.amenities && summary.amenities.length > 0 && (
-        <div className="fixed top-6 right-20 sm:top-1/2 sm:right-20 sm:-translate-y-1/2 w-40 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/30 rounded-[24px] p-4 sm:p-5 shadow-2xl animate-in slide-in-from-right-10 duration-700 delay-300 z-[10000]">
+        <div className="fixed top-6 right-20 sm:top-1/2 sm:right-20 sm:-translate-y-1/2 w-40 sm:w-48 bg-white/10 backdrop-blur-xl border border-white/30 rounded-2xl p-4 sm:p-5 shadow-2xl animate-in slide-in-from-right-10 duration-700 delay-300 z-[10000]">
           <h3 className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary mb-3 sm:mb-4">Room Features</h3>
           <div className="space-y-2 sm:space-y-3">
             {summary.amenities.slice(0, 5).map((amenity: string, idx: number) => (
@@ -271,7 +271,7 @@ export default function LivePreview() {
 
           {/* Action Panel & Bottom Nav Wrapper */}
           {/* Using standard background variables here so the panel matches the system theme */}
-          <div className="w-full bg-background/95 text-foreground backdrop-blur-xl border border-border rounded-[32px] overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.5)] transition-colors">
+          <div className="w-full bg-background/95 text-foreground backdrop-blur-xl border border-border rounded-2xl overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.5)] transition-colors">
             <div className="p-4 flex items-center justify-between border-b border-border mx-2">
                <div className="flex flex-col ml-2">
                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Selected Room</span>

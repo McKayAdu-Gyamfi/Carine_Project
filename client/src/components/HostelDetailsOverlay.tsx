@@ -78,7 +78,7 @@ export default function HostelDetailsOverlay({ selectedHostel, setSelectedHostel
             <div className="flex-1 overflow-y-auto hide-scrollbar px-6 pb-28 z-20 relative -mt-16 pt-2">
               
               {/* Title Card Overlay-like visual */}
-              <div className="bg-card w-full rounded-[32px] p-6 shadow-xl border border-border mb-6 relative">
+              <div className="bg-card w-full rounded-2xl p-6 shadow-xl border border-border mb-6 relative">
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h2 className="text-2xl font-bold text-foreground mb-1">{selectedHostel.name}</h2>

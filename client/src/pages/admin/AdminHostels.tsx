@@ -57,7 +57,7 @@ export default function AdminHostels() {
   return (
     <div className="space-y-6">
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-6 mb-6 border-b border-solid border-border/80">
         <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">Hostels</h1>
         <button className="h-11 px-6 bg-[#C56A30] hover:bg-[#b05b26] text-white font-extrabold text-xs rounded-full transition-colors shadow-sm inline-flex items-center space-x-2 cursor-pointer">
           <Plus className="w-4 h-4" />
@@ -81,7 +81,7 @@ export default function AdminHostels() {
       </div>
 
       {/* Hostels Table Card */}
-      <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-card border border-border/40 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>

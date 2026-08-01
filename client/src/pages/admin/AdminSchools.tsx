@@ -21,7 +21,7 @@ export default function AdminSchools() {
   return (
     <div className="space-y-6">
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-6 mb-6 border-b border-solid border-border/80">
         <h1 className="text-[28px] font-extrabold tracking-tight text-foreground">Schools</h1>
         <button className="h-11 px-6 bg-[#C56A30] hover:bg-[#b05b26] text-white font-extrabold text-xs rounded-full transition-colors shadow-sm inline-flex items-center space-x-2 cursor-pointer">
           <Plus className="w-4 h-4" />
@@ -30,9 +30,9 @@ export default function AdminSchools() {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-6 lg:gap-x-0">
         {/* Left Column: School Selector List */}
-        <div className="space-y-3">
+        <div className="space-y-3 lg:border-r border-border/80 lg:pr-6">
           {schools.map((school) => {
             const isSelected = selectedSchool === school.name;
             return (
@@ -62,9 +62,9 @@ export default function AdminSchools() {
         </div>
 
         {/* Right Column: Selected School Details & Map */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6 lg:pl-6">
           {/* Map Header Box */}
-          <div className="bg-white dark:bg-card border border-border/40 rounded-[24px] p-6 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-card border border-border/40 rounded-2xl p-6 shadow-sm space-y-4">
             <div>
               <h2 className="text-[22px] font-extrabold text-foreground leading-tight">{selectedSchool}</h2>
               <p className="text-[13px] text-muted-foreground font-medium flex items-center space-x-1 mt-0.5">

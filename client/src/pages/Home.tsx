@@ -78,7 +78,7 @@ export default function Home() {
 
       {/* Mobile Hero Section */}
       <section className="lg:hidden px-4 pt-20 pb-4 mb-2">
-        <div className="relative w-full rounded-[28px] overflow-hidden bg-gradient-to-br from-[#8C5B4F] to-[#5c3e35] p-6 text-white shadow-md">
+        <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[#8C5B4F] to-[#5c3e35] p-6 text-white shadow-md">
           <div className="absolute inset-0 opacity-[0.08]"
             style={{
               backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,1) 10px, rgba(255,255,255,1) 12px)',
@@ -100,7 +100,7 @@ export default function Home() {
 
       {/* Desktop Hero Banner */}
       <section className="hidden lg:block px-8 mb-10">
-        <div className="relative w-full rounded-[32px] overflow-hidden bg-gradient-to-br from-[#6c5e57] to-[#4D4D4D] p-12 flex flex-col justify-center shadow-xl shadow-black/10" style={{ minHeight: '320px' }}>
+        <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-[#6c5e57] to-[#4D4D4D] p-12 flex flex-col justify-center shadow-xl shadow-black/10" style={{ minHeight: '320px' }}>
           {/* Diagonal stripe pattern overlay */}
           <div className="absolute inset-0 opacity-[0.08]"
             style={{

@@ -134,7 +134,7 @@ export default function Saved() {
               <div 
                 key={hostel.id} 
                 onClick={() => setSelectedHostel(hostel)}
-                className="w-full bg-white dark:bg-card rounded-[24px] p-4 shadow-sm border border-border/40 flex items-center justify-between group animate-in fade-in slide-in-from-bottom-4 duration-300 cursor-pointer hover:shadow-md transition-all"
+                className="w-full bg-white dark:bg-card rounded-2xl p-4 shadow-sm border border-border/40 flex items-center justify-between group animate-in fade-in slide-in-from-bottom-4 duration-300 cursor-pointer hover:shadow-md transition-all"
               >
                 <div className="flex items-center space-x-4">
                   <img src={hostel.image} alt={hostel.name} loading="lazy" className="w-20 h-20 rounded-[18px] object-cover shadow-sm" />

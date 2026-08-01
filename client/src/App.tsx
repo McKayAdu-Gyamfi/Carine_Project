@@ -19,6 +19,10 @@ const Saved = React.lazy(() => import("./pages/Saved"));
 const ManagerDashboard = React.lazy(() => import("./pages/manager/ManagerDashboard"));
 const ManagerProperties = React.lazy(() => import("./pages/manager/ManagerProperties"));
 const ManagerBookings = React.lazy(() => import("./pages/manager/ManagerBookings"));
+const ManagerClients = React.lazy(() => import("./pages/manager/ManagerClients"));
+const ManagerPayouts = React.lazy(() => import("./pages/manager/ManagerPayouts"));
+const ManagerCancelRefund = React.lazy(() => import("./pages/manager/ManagerCancelRefund"));
+const ManagerProfile = React.lazy(() => import("./pages/manager/ManagerProfile"));
 const PaymentDetails = React.lazy(() => import("./pages/PaymentDetails"));
 
 const AdminLayout = React.lazy(() => import("./components/AdminLayout"));
@@ -56,6 +60,7 @@ export default function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/manage-bookings" element={<ManageBookings />} />
         </Route>
 
         {/* Manager Routes */}
@@ -63,6 +68,10 @@ export default function App() {
           <Route path="/manager" element={<ManagerDashboard />} />
           <Route path="/manager/properties" element={<ManagerProperties />} />
           <Route path="/manager/bookings" element={<ManagerBookings />} />
+          <Route path="/manager/clients" element={<ManagerClients />} />
+          <Route path="/manager/payouts" element={<ManagerPayouts />} />
+          <Route path="/manager/profile" element={<ManagerProfile />} />
+          <Route path="/manager/cancel-refund/:id" element={<ManagerCancelRefund />} />
         </Route>
 
         {/* Admin Routes */}
@@ -79,7 +88,6 @@ export default function App() {
         {/* Full-screen routes without bottom nav */}
         <Route path="/login" element={<Login />} />
         <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-        <Route path="/manage-bookings" element={<ProtectedRoute><ManageBookings /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
         <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />

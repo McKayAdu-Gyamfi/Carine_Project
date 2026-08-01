@@ -135,7 +135,7 @@ export default function PaymentDetails() {
 
                <div className="grid grid-cols-1 gap-5">
                  {/* MoMo Card */}
-                 <Card className="bg-card border border-border/80 rounded-[28px] p-6 shadow-sm relative overflow-hidden group">
+                 <Card className="bg-card border border-border/80 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
                    <div className="flex justify-between items-start mb-6">
                      <div className="flex items-center space-x-3">
                        <div className="w-10 h-10 rounded-full bg-yellow-500/10 text-yellow-500 flex items-center justify-center">
@@ -166,7 +166,7 @@ export default function PaymentDetails() {
                  </Card>
 
                  {/* Bank Card */}
-                 <Card className="bg-card border border-border/80 rounded-[28px] p-6 shadow-sm relative overflow-hidden group">
+                 <Card className="bg-card border border-border/80 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
                    <div className="flex justify-between items-start mb-6">
                      <div className="flex items-center space-x-3">
                        <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center">
@@ -207,7 +207,7 @@ export default function PaymentDetails() {
           </div>
 
           <div className="space-y-6">
-              <Card className="bg-card border border-border/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-3xl p-6 sticky top-28 transition-colors">
+              <Card className="bg-card border border-border/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-2xl p-6 sticky top-28 transition-colors">
                 
                 <h3 className="font-bold text-foreground text-sm uppercase tracking-widest text-muted-foreground mb-4">Confirm Payment</h3>
 

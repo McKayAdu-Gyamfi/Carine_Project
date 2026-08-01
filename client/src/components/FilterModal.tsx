@@ -82,7 +82,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                 step="0.5" 
                 value={distance} 
                 onChange={(e) => setDistance(parseFloat(e.target.value))}
-                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary" 
+                className="w-full h-2 bg-[#F4ECE3] rounded-lg appearance-none cursor-pointer accent-[#C56A30]" 
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-2 font-medium">
                 <span>0.5 km</span>
@@ -99,7 +99,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                 <button 
                   key={item}
                   onClick={() => toggleAmenity(item)}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border cursor-pointer ${selectedAmenities.includes(item) ? 'bg-primary/10 border-primary text-primary shadow-sm' : 'bg-card border-border text-muted-foreground hover:border-primary/50 hover:text-foreground'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer ${selectedAmenities.includes(item) ? 'bg-[#C56A30] text-white shadow-sm' : 'bg-[#F4ECE3] dark:bg-card text-[#C56A30] hover:bg-[#EBE2D8]'}`}
                 >
                   {item}
                 </button>
@@ -120,7 +120,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                   onFocus={() => setFocusedInput("min")}
                   onBlur={() => setFocusedInput(null)}
                   onChange={(e) => setPriceRange([e.target.value === "" ? 0 : Number(e.target.value), priceRange[1]])}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none transition-all"
+                  className="w-full bg-[#F4ECE3] dark:bg-card border border-transparent rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-[#C56A30] outline-none transition-all"
                 />
               </div>
               <div className="text-muted-foreground font-bold mt-4">-</div>
@@ -133,7 +133,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
                   onFocus={() => setFocusedInput("max")}
                   onBlur={() => setFocusedInput(null)}
                   onChange={(e) => setPriceRange([priceRange[0], e.target.value === "" ? 0 : Number(e.target.value)])}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-primary outline-none transition-all"
+                  className="w-full bg-[#F4ECE3] dark:bg-card border border-transparent rounded-lg px-3 py-2 text-foreground font-medium focus:ring-2 focus:ring-[#C56A30] outline-none transition-all"
                 />
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters, initialFi
           </button>
           <button 
             onClick={handleApply}
-            className="flex-1 bg-primary text-primary-foreground rounded-2xl py-4 font-bold shadow-[0_4px_20px_rgba(59,130,246,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer"
+            className="flex-1 bg-[#C56A30] text-white rounded-2xl py-4 font-bold shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer"
           >
             Show Results
           </button>

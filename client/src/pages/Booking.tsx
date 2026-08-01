@@ -1,12 +1,14 @@
-import { ArrowLeft, Calendar as CalendarIcon, Lock, ChevronRight, Info, MapPin } from "lucide-react";
+import { ArrowLeft, Calendar as CalendarIcon, Lock, ChevronRight, Info, MapPin, Moon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import BookingProgress from "@/components/BookingProgress";
+import { useTheme } from "@/components/theme-provider";
 
 export default function Booking() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
   const summary = location.state || {
     hostelName: "Dufie Annex",
     location: "Berekuso",
@@ -29,11 +31,21 @@ export default function Booking() {
     <div className="min-h-screen bg-background text-foreground pb-12 transition-colors">
       {/* Header */}
       <header className="px-6 py-6 sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50">
-        <div className="max-w-6xl mx-auto flex items-center space-x-4">
-          <button onClick={handleBack} className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border text-foreground shadow-sm hover:bg-muted transition-colors cursor-pointer">
-            <ArrowLeft className="w-5 h-5" />
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <button onClick={handleBack} className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border text-foreground shadow-sm hover:bg-muted transition-colors cursor-pointer">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Complete Booking</h1>
+          </div>
+          
+          {/* Theme Toggle */}
+          <button 
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border text-foreground shadow-sm hover:bg-muted transition-colors cursor-pointer"
+          >
+            <Moon className="w-5 h-5" />
           </button>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Complete Booking</h1>
         </div>
       </header>
       
@@ -51,7 +63,7 @@ export default function Booking() {
           <div className="flex-1 space-y-10">
 
             {/* Selected Unit Summary */}
-            <Card className="bg-card border border-border/80 shadow-[0_4px_25px_rgba(0,0,0,0.03)] rounded-3xl overflow-hidden p-5 flex space-x-6 transition-colors">
+            <Card className="bg-card border border-border/80 shadow-[0_4px_25px_rgba(0,0,0,0.03)] rounded-2xl overflow-hidden p-5 flex space-x-6 transition-colors">
               <div className="w-32 h-32 rounded-2xl overflow-hidden shrink-0 shadow-sm">
                 <img src={summary.image} className="w-full h-full object-cover" alt="Selected Room" />
               </div>
@@ -70,7 +82,7 @@ export default function Booking() {
                 <h2 className="text-xl font-bold text-foreground tracking-tight">Semester Duration</h2>
               </div>
 
-              <Card className="bg-primary/5 border border-primary/20 shadow-sm rounded-3xl p-6 relative overflow-hidden transition-colors">
+              <Card className="bg-primary/5 border border-primary/20 shadow-sm rounded-2xl p-6 relative overflow-hidden transition-colors">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
                 
                 <div className="flex items-start space-x-5">
@@ -111,7 +123,7 @@ export default function Booking() {
           {/* Right Column - Summary & Action */}
           <div className="w-full md:w-[420px] shrink-0 mt-8 md:mt-0">
             <div className="sticky top-32 space-y-6">
-              <Card className="bg-card border border-border/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-3xl p-8 transition-colors">
+              <Card className="bg-card border border-border/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-2xl p-8 transition-colors">
                 <h2 className="text-2xl font-bold text-foreground tracking-tight mb-8">Booking Summary</h2>
                 
                 <div className="flex flex-col justify-center bg-muted/40 p-6 rounded-2xl border border-border/50 mb-8">
