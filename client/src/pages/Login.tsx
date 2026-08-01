@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Shield, CheckCircle2, Eye, EyeOff, CheckCircle, Monitor, BookOpen, Search, ChevronLeft } from "lucide-react";
+import { Shield, Eye, EyeOff, CheckCircle, Monitor, BookOpen, Search, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/Logo";
 import { Input } from "@/components/ui/input";

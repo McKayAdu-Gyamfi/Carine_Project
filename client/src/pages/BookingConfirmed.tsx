@@ -1,6 +1,5 @@
 import { Check, Bell, Navigation } from "lucide-react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 
 export default function BookingConfirmed() {
   const location = useLocation();

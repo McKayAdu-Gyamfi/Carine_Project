@@ -1,16 +1,12 @@
-import { ArrowLeft, CheckCircle2, ShieldCheck, MapPin, Landmark } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useBookings } from "@/contexts/BookingContext";
-import { useToast } from "@/components/ui/toaster";
 
 export default function PaymentDetails() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { addBooking } = useBookings();
   const [selectedMethod, setSelectedMethod] = useState<'momo' | 'card'>('momo');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -260,7 +256,7 @@ export default function PaymentDetails() {
         {/* Right Column (Desktop Order Summary) */}
         <div className="hidden md:block w-[380px] shrink-0 order-1 md:order-2">
           <div className="sticky top-[120px]">
-            <Card className="bg-white border border-[#E5E0D8] shadow-lg shadow-black/5 rounded-3xl p-7">
+            <div className="bg-white border border-[#E5E0D8] shadow-lg shadow-black/5 rounded-3xl p-7">
               
               <div className="flex items-center space-x-4 mb-6 pb-6 border-b border-[#E5E0D8]/60">
                 <div className="w-[72px] h-[72px] rounded-2xl overflow-hidden shrink-0">
@@ -308,7 +304,7 @@ export default function PaymentDetails() {
                 <ShieldCheck className="w-4 h-4" />
                 <span>Secure payment · free cancellation before move-in</span>
               </div>
-            </Card>
+            </div>
           </div>
         </div>
 
