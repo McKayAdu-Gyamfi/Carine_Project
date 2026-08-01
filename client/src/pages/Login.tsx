@@ -7,10 +7,9 @@ import { Input } from "@/components/ui/input";
 // import { TygerAvatar } from 'tyger-avatar';
 
 const AVATARS = [
-  "TrChelsea", "TrEric", "TrSamantha", "TrTorsten", "TrIggy", 
-  "TrFranklin", "TrImran", "TrMaria", "TrRachel", "TrShamila", 
-  "TrAlex", "TrFelix", "TrEnrique", "TrSophia", "TrHarry", 
-  "TrHelen", "TrStu", "TrNancy", "TrChad"
+  "#A3735D", "#3D261B", "#D3B78F", "#C56A30",
+  "#D49561", "#758356", "#577789", "#885973",
+  "#D6A327", "#4F5051", "#A16956", "#6C9482"
 ];
 
 export default function Login() {
@@ -46,9 +45,7 @@ export default function Login() {
 
   const handleLoginClick = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
-    // setStep("avatar");
-    localStorage.setItem("userAvatar", "SA");
-    navigate("/");
+    setStep("avatar");
   };
 
   const handleComplete = () => {
@@ -178,46 +175,73 @@ export default function Login() {
 
   if (step === "avatar") {
     return (
-      <div className="flex flex-col h-[100dvh] w-full overflow-hidden bg-background text-foreground p-6 justify-center items-center select-none animate-in fade-in slide-in-from-bottom-8 duration-500">
-        <div className="w-full max-w-[380px] bg-card border border-border rounded-lg p-8 shadow-xl flex flex-col items-center">
-          <Logo className="mb-6 scale-90" />
-          <h2 className="text-2xl font-extrabold mb-1 text-center tracking-tight">Choose your avatar</h2>
-          <p className="text-muted-foreground mb-8 text-center font-medium text-xs">Pick a fun profile character to represent you</p>
+      <div className="flex flex-col h-[100dvh] w-full overflow-hidden bg-[#F8F6F3] text-[#463C38] font-sans">
+        
+        {/* Header */}
+        <header className="px-6 py-6 flex items-center justify-between z-10">
+          <button onClick={() => setStep("login")} className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-[#E5E0D8] text-[#463C38] shadow-sm hover:bg-[#F8F6F3] transition-colors cursor-pointer shrink-0">
+            <ChevronLeft className="w-5 h-5" />
+          </button>
           
-          <div className="grid grid-cols-4 gap-3 w-full mb-10 max-h-[45vh] overflow-y-auto hide-scrollbar p-1">
-            {AVATARS.map((avatar, idx) => (
+          <div className="flex-1 flex items-center justify-end space-x-4 ml-6">
+            <div className="flex-1 h-1.5 bg-[#E5E0D8] rounded-full overflow-hidden max-w-[200px]">
+              <div className="h-full bg-[#C56A30] rounded-full w-3/4"></div>
+            </div>
+            <span className="text-xs font-bold text-[#8C8279] whitespace-nowrap">3 / 4</span>
+          </div>
+        </header>
+
+        <div className="flex-1 px-6 pt-2 pb-32 overflow-y-auto hide-scrollbar max-w-md mx-auto w-full">
+          <h1 className="text-3xl font-extrabold text-[#3D261B] mb-2 tracking-tight">Choose your avatar</h1>
+          <p className="text-[#8C8279] mb-10 font-medium">Pick a character to represent you.</p>
+          
+          {/* Active Avatar Preview */}
+          <div className="flex justify-center mb-10">
+            <div 
+              className="w-28 h-28 rounded-full border-4 border-[#C56A30] flex items-center justify-center text-white font-extrabold text-4xl shadow-md transition-colors"
+              style={{ backgroundColor: selectedAvatar || "#A3735D" }}
+            >
+              SA
+            </div>
+          </div>
+
+          {/* Color Grid */}
+          <div className="grid grid-cols-4 gap-4 w-full mb-8">
+            {AVATARS.map((color, idx) => (
               <button 
                 key={idx}
-                onClick={() => setSelectedAvatar(avatar)}
-                className={`aspect-square flex items-center justify-center p-1 rounded-lg transition-all duration-300 cursor-pointer overflow-hidden ${
-                  selectedAvatar === avatar 
-                    ? 'bg-primary ring-2 ring-primary ring-offset-2 ring-offset-background scale-105 z-10 shadow-lg' 
-                    : 'bg-muted hover:bg-accent hover:scale-105'
+                onClick={() => setSelectedAvatar(color)}
+                className={`aspect-square rounded-full transition-all duration-300 cursor-pointer ${
+                  selectedAvatar === color 
+                    ? 'ring-4 ring-[#C56A30] ring-offset-2 ring-offset-[#F8F6F3] scale-105' 
+                    : 'hover:scale-105 shadow-sm'
                 }`}
-              >
-                {/* <TygerAvatar name={avatar as any} size="xl" /> */}
-                <span className="text-[20px] font-bold">{avatar.slice(2,4)}</span>
-              </button>
+                style={{ backgroundColor: color }}
+                aria-label={`Select color ${color}`}
+              />
             ))}
           </div>
 
+          <button className="w-full h-14 rounded-xl border-2 border-dashed border-[#C56A30]/40 text-[#C56A30] font-bold text-[15px] flex items-center justify-center hover:bg-[#C56A30]/5 transition-colors cursor-pointer">
+            <span className="text-lg mr-2">+</span> Upload your own photo
+          </button>
+        </div>
+
+        {/* Fixed Bottom Continue Button */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E0D8] p-5 pb-8 z-50 rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.03)] max-w-md mx-auto w-full">
           <button 
             onClick={handleComplete}
             disabled={!selectedAvatar}
-            className={`w-full h-12 rounded-lg font-bold text-sm flex items-center justify-center transition-all duration-300 ${
+            className={`w-full h-14 rounded-full font-bold text-[16px] flex items-center justify-center transition-all ${
               selectedAvatar 
-                ? 'bg-primary text-primary-foreground shadow-md hover:opacity-90 active:scale-[0.98] cursor-pointer' 
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
+                ? 'bg-[#C56A30] text-white shadow-md cursor-pointer hover:bg-[#B85822]' 
+                : 'bg-[#E5E0D8] text-[#A29A91] cursor-not-allowed'
             }`}
           >
-            {selectedAvatar ? (
-              <span className="flex items-center space-x-2">
-                <span>Ready to go</span>
-                <CheckCircle2 className="w-4 h-4" />
-              </span>
-            ) : "Select an Avatar"}
+            Continue
           </button>
         </div>
+
       </div>
     );
   }

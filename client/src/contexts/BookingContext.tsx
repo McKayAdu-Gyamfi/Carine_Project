@@ -26,32 +26,7 @@ interface BookingContextType {
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
 // Initial state populated with a few static mock bookings for display purposes
-const initialBookings: Booking[] = [
-  {
-    id: "b-1",
-    studentName: "Nana Osei",
-    hostelName: "Tanko Hostel",
-    roomLabel: "2 in a room",
-    roomNumber: "Rm 402B",
-    price: 2400, 
-    date: "Jan 12, 2024, 10:30 AM",
-    status: "Approved",
-    image: "https://images.unsplash.com/photo-1598928506311-c55dd777589d?auto=format&fit=crop&q=80&w=400&h=400",
-    location: "Berekuso"
-  },
-  {
-    id: "b-2",
-    studentName: "Sarah Adjei",
-    hostelName: "New Hosanna",
-    roomLabel: "1 in a room",
-    roomNumber: "Rm 104",
-    price: 3500,
-    date: "Yesterday, 2:15 PM",
-    status: "Pending",
-    image: "https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&q=80&w=400&h=400",
-    location: "Berekuso"
-  }
-];
+const initialBookings: Booking[] = [];
 
 export function BookingProvider({ children }: { children: ReactNode }) {
   const [bookings, setBookings] = useState<Booking[]>(initialBookings);

@@ -24,6 +24,7 @@ const ManagerPayouts = React.lazy(() => import("./pages/manager/ManagerPayouts")
 const ManagerCancelRefund = React.lazy(() => import("./pages/manager/ManagerCancelRefund"));
 const ManagerProfile = React.lazy(() => import("./pages/manager/ManagerProfile"));
 const PaymentDetails = React.lazy(() => import("./pages/PaymentDetails"));
+const BookingConfirmed = React.lazy(() => import("./pages/BookingConfirmed"));
 
 const AdminLayout = React.lazy(() => import("./components/AdminLayout"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
@@ -92,6 +93,7 @@ export default function App() {
         <Route path="/live-preview" element={<ProtectedRoute><LivePreview /></ProtectedRoute>} />
         <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
         <Route path="/payment" element={<ProtectedRoute><PaymentDetails /></ProtectedRoute>} />
+        <Route path="/booking-confirmed" element={<ProtectedRoute><BookingConfirmed /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       </Suspense>
