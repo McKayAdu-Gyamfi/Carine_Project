@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Testing Uploads</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- You don't need the Pannellum JS/CSS imports here anymore since the iframe handles it! -->
+</head>
+
+<body>
+
+    <h2>Please upload your picture here</h2>
+    <p>It has to be jpeg</p>
+
+    <input type="file" id="file" accept="image/png, image/jpeg">
+    <button id="uploadBtn">Upload</button>
+    <br><br>
+
+    <!-- Added width, height, and display:none initially -->
+    <iframe id="pannellum" width="800" height="400" style="border: 1px solid #ccc; display: none;"></iframe>
+
+
+</body>
+
+<script>
+document.getElementById("uploadBtn").addEventListener("click", () => {
+    const myFileInput = document.getElementById("file");
+    const iframe = document.getElementById("pannellum");
+    
+    if (myFileInput.files.length === 0) {
+        alert("Please select a file first!");
+        return;
+    }
+
+    const file = myFileInput.files[0]; 
+    const formData = new FormData();
+    
+    formData.append("room_id", "lobby_123");
+    formData.append("image", file);
+
+    console.log("Uploading...");
+
+    fetch("http://localhost:10000/api/panorama/tour", {
+      method: "POST",
+      mode: "cors", 
+      body: formData 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Success:", data);
+        alert("Upload successful!");
+
+        // Show the iframe
+        iframe.style.display = "block";
+
+        /*
+         * UPDATE THE IFRAME HERE:
+         * Replace `data.image_url` or `data.config_url` with whatever key 
+         * your FastAPI server actually returns in the JSON response.
+         */
+        
+        // If your API returns a direct URL to the uploaded JPG:
+        if (data.image_url) {
+            iframe.src = `https://cdn.pannellum.org/2.5/pannellum.htm#panorama=${encodeURIComponent(data.image_url)}&autoLoad=true`;
+        } 
+        // OR: If your API returns a URL to a Pannellum JSON config file:
+        else if (data.config_url) {
+            iframe.src = `https://cdn.pannellum.org/2.5/pannellum.htm#config=${encodeURIComponent(data.config_url)}`;
+        }
+        // OR: If your API returns a ready-to-use viewer URL:
+        else if (data.viewer_url) {
+             iframe.src = data.viewer_url;
+        } else {
+             // Let's assume there's a tour_url
+             if (data.tour_url) {
+                 iframe.src = data.tour_url;
+             } else {
+                 console.warn("Check the console to see the data structure, then update the iframe.src logic!", data);
+             }
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Upload failed. If it's a CORS error, check your backend server!");
+    });
+});
+</script>
+</html>
