@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Building2, CalendarDays, Users2, Receipt, LogOut } from "lucide-react";
+import kaya from "../assets/Kaya.png";
 
 export default function ManagerSidebar() {
   const { pathname } = useLocation();
@@ -17,15 +18,12 @@ export default function ManagerSidebar() {
     <aside className="hidden lg:flex w-[260px] flex-col h-screen fixed top-0 left-0 bg-[#F8F6F3] border-r border-border/40 z-50 py-8 overflow-y-auto hide-scrollbar">
       {/* Top Logo */}
       <div className="px-6 pb-6 mb-6 border-b border-solid border-[#C8B09A]/40 flex items-center space-x-3 mx-2">
-        <div className="w-10 h-10 bg-gradient-to-br from-[#EAE1D7] to-[#D5C2AF] rounded-full flex items-center justify-center shadow-inner relative overflow-hidden">
-          <svg className="w-6 h-6 text-[#7E5743] opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </div>
+        <img src={kaya} alt="KayaCampus Logo" className="w-10 h-10 object-contain shrink-0" />
         <div className="flex flex-col">
-          <span className="text-[17px] font-extrabold tracking-tight text-[#5C4538] leading-tight">Kaya</span>
-          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#9C8271] leading-none">Manager</span>
+          <span className="text-[18px] font-extrabold tracking-tight text-[#5C4538] leading-tight">
+            Kaya<span className="text-canyon">Campus</span>
+          </span>
+          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#9C8271] leading-none mt-0.5">Manager</span>
         </div>
       </div>
 
